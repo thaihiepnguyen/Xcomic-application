@@ -24,7 +24,30 @@
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/bookcover"
             tools:layout_editor_absoluteX="46dp"
-            tools:layout_editor_absoluteY="213dp" />
+            tools:layout_editor_absoluteY="213dp" >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/badge_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="10dp"
+            android:background="@drawable/badge"
+            android:fontFamily="@font/poppins_light"
+            android:paddingHorizontal="10dp"
+            android:text="4.9"
+            android:gravity="center"
+            android:textSize="10dp" />
+        <ImageButton
+            android:id="@+id/favorite_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/love"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/white"
+            />
     </androidx.cardview.widget.CardView>
 
     <TextView

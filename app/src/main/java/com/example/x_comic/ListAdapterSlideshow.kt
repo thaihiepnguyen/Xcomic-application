@@ -1,5 +1,5 @@
 package com.example.x_comic
-
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 class ListAdapterSlideshow (
-
     private var bookList: MutableList<BookSneek>,
 ) : RecyclerView.Adapter<ListAdapterSlideshow.ViewHolder>()
 {
@@ -17,8 +16,8 @@ class ListAdapterSlideshow (
         var title = listItemView.findViewById(R.id.bookname) as TextView;
         var author = listItemView.findViewById(R.id.author) as TextView;
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
-
-
+        var rating = listItemView.findViewById(R.id.badge_rating) as TextView;
+        var love = listItemView.findViewById(R.id.favorite_book) as ImageButton;
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(bookList[adapterPosition])
@@ -43,10 +42,23 @@ class ListAdapterSlideshow (
         val title = holder.title;
         val author = holder.author;
         val cover = holder.cover;
+        val rating = holder.rating;
+        var love = holder.love;
+        var favourite = false;
+        title.setText(student.title);
+        author.setText(student.author);
+        cover.setImageResource(student.cover);
+        rating.text= Html.fromHtml("<font>${student.rating} </font>" +
+                "<font color='#FFC000'> ★ </font>")
 
-        title.setText(bookList[position].title);
-        author.setText(bookList[position].author);
-        cover.setImageResource(bookList[position].cover);
+        love.setOnClickListener{
+            favourite = !favourite;
+            if (favourite) {
+                love.setImageResource(R.drawable.love_clickable)
+            }else {
+                love.setImageResource(R.drawable.love)
+            }
+        }
 
     }
 

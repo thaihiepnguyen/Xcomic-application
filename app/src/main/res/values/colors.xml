@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="azure">#007FFF</color>
     <color name="trans">#80FFFFFF</color>
+    <color name="golden">#FFC000</color>
 </resources>
