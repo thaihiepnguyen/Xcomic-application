@@ -38,17 +38,17 @@ class ListAdapterSlideshow (
         return bookList.size;
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val student = bookList.get(position);
+        val book = bookList.get(position);
         val title = holder.title;
         val author = holder.author;
         val cover = holder.cover;
         val rating = holder.rating;
         var love = holder.love;
         var favourite = false;
-        title.setText(student.title);
-        author.setText(student.author);
-        cover.setImageResource(student.cover);
-        rating.text= Html.fromHtml("<font>${student.rating} </font>" +
+        title.setText(book.title);
+        author.setText(book.author);
+        cover.setImageResource(book.cover);
+        rating.text= Html.fromHtml("<font>${book.rating} </font>" +
                 "<font color='#FFC000'> ★ </font>")
 
         love.setOnClickListener{

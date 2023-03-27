@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -44,8 +45,18 @@ class Home : Fragment() {
         R.drawable.avatar_7
 
     )
+
+    val bookDetailList: MutableList<Book> = mutableListOf(
+
+        Book(bookList[0],253.2,125.5,20, arrayListOf("Romance","Thriller","Short Story","Humor")),
+        Book(bookList[1],154.4,100.3,50, arrayListOf("Fiction","Horror","Mystery","Humor")),
+        Book(bookList[2],179.6,122.2,13, arrayListOf("School Life","Humor","Short Story")),
+        Book(bookList[3],211.3,112.6,7, arrayListOf("Romance","Mystery","Short Story","Humor")),
+        Book(bookList[4],236.2,109.7,36, arrayListOf("Fiction","Thriller","Mystery","Horror","Humor","Romance"))
+    )
     var customSlideView: RecyclerView? = null;
     var customAvatarView: RecyclerView? = null;
+    var customBookListView: RecyclerView? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -63,15 +74,22 @@ class Home : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         customSlideView = view.findViewById(R.id.listView);
         customAvatarView = view.findViewById(R.id.avatarListView);
+        customBookListView = view.findViewById(R.id.popularListBook);
 
         val adapter = ListAdapterSlideshow(bookList);
         val avatarAdapter = AvatarListAdapter(avatarList);
+        val bookListAdapter = BookListAdapter(bookDetailList);
 
         customSlideView!!.adapter = adapter;
         customAvatarView!!.adapter = avatarAdapter;
+        customBookListView!!.adapter = bookListAdapter;
 
         customSlideView!!.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL, false);
         customAvatarView!!.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL, false);
+
+        customBookListView!!.layoutManager = LinearLayoutManager(this.context);
+        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        customBookListView?.addItemDecoration(itemDecoration)
         return view
     }
 
