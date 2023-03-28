@@ -208,7 +208,7 @@
                     app:tabIndicatorColor="@color/azure"
                     app:tabSelectedTextColor="@color/azure"
                     app:tabTextAppearance="@style/TabLayoutTextStyle"
-                    app:tabTextColor="@color/black"
+                    app:tabTextColor="#8A000000"
 
                     />
 
