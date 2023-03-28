@@ -24,9 +24,11 @@
             android:layout_height="40dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/oval"
             android:scaleType="centerInside"
             android:src="@drawable/avatar"
+            app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,14 +40,16 @@
             android:fontFamily="@font/poppins_medium"
             android:text="Hi, Alice"
             android:textColor="@color/white"
-            android:textSize="24dp"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/avatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/avatar" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title">
@@ -101,7 +105,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:text="Continue Reading"
                             android:textAlignment="textStart"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toEndOf="@+id/currentCard"
                             app:layout_constraintTop_toTopOf="@+id/currentCard" />
 
@@ -111,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="How to Burn The Bad Boy"
-                            android:textSize="20dp"
+                            android:textSize="20sp"
                             app:layout_constraintEnd_toEndOf="@+id/continue_reading"
                             app:layout_constraintStart_toStartOf="@+id/continue_reading"
                             app:layout_constraintTop_toBottomOf="@+id/continue_reading" />
@@ -122,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
                             android:text="alsophanie"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="@+id/book_title"
                             app:layout_constraintTop_toBottomOf="@+id/book_title" />
 
