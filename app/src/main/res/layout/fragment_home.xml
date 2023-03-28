@@ -155,7 +155,7 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
                     android:text="For You"
-                    android:textSize="25sp" />
+                    android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView"
@@ -177,7 +177,7 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
                     android:text="Suggested Author"
-                    android:textSize="25sp" />
+                    android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/avatarListView"
@@ -190,16 +190,20 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <TextView
-                    android:id="@+id/popular_book"
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs_book"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:text="Popular"
-                    android:textSize="25sp" />
+                    app:tabSelectedTextColor="@color/azure"
+                    app:tabIndicatorColor="@color/azure"
+                    app:tabTextColor="@color/black"
+                    app:tabIndicatorAnimationMode="elastic"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+
+                    />
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popularListBook"

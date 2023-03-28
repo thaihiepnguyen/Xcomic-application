@@ -9,14 +9,14 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 class AvatarListAdapter (
-    private var avatarList: MutableList<Int>,
+    private var avatarList: MutableList<Avatar>,
 ) : RecyclerView.Adapter<AvatarListAdapter.ViewHolder>()
 {
-    var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((Avatar) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var avatar = listItemView.findViewById(R.id.avatar_picture) as ImageButton;
-
+        var username = listItemView.findViewById(R.id.username) as TextView;
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(avatarList[adapterPosition])
@@ -39,7 +39,9 @@ class AvatarListAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val author = avatarList.get(position);
         val avatar = holder.avatar;
-        avatar.setImageResource(author);
+        val username = holder.username;
+        username.setText(author.username);
+        avatar.setImageResource(author.avatarPicture);
 
     }
 

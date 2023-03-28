@@ -111,14 +111,14 @@ class BookListAdapter (
                 }
                 else -> {
                     category_holder[category.indexOf(i)].setText(i)
-                  //  category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(R.color.lightgrey);
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.lightgrey));
                 }
 
 
             }
             }
 
-        rest.setText(if ((category.size-3)>0) "+ ${category.size -3}" else "");
+        rest.setText(if ((book.genres.size -3)>0) "+ ${book.genres.size -3} more" else "");
 
         love.setOnClickListener{
             favourite = !favourite;
