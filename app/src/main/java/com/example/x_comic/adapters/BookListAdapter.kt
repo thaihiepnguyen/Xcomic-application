@@ -1,4 +1,4 @@
-package com.example.x_comic
+package com.example.x_comic.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.x_comic.R
+import com.example.x_comic.models.Book
 
 class BookListAdapter (
     private var bookList: MutableList<Book>,
@@ -38,7 +40,7 @@ class BookListAdapter (
 
     }
 
-    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): BookListAdapter.ViewHolder {
+    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context;
         val inflater = LayoutInflater.from(context)
         var columnView =  inflater.inflate(R.layout.book_list, parent, false)
@@ -82,15 +84,21 @@ class BookListAdapter (
             when (i){
                 "Romance" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.love));
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                        R.color.love
+                    ));
                 }
                 "Fiction" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.yellow_green));
+                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                       R.color.yellow_green
+                   ));
                 }
                 "Short Story" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.light_blue));
+                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                       R.color.light_blue
+                   ));
                 }
                 "Mystery" -> {
                     category_holder[category.indexOf(i)].setText(i)
@@ -99,19 +107,27 @@ class BookListAdapter (
                 }
                 "Thriller" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                  category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.golden));
+                  category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                      R.color.golden
+                  ));
                 }
                 "Horror" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.purple_500));
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                        R.color.purple_500
+                    ));
                 }
                 "Humor" -> {
                     category_holder[category.indexOf(i)].setText(i)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.pink));
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                        R.color.pink
+                    ));
                 }
                 else -> {
                     category_holder[category.indexOf(i)].setText(i)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,R.color.lightgrey));
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                        R.color.lightgrey
+                    ));
                 }
 
 

@@ -1,10 +1,12 @@
-package com.example.x_comic
+package com.example.x_comic.adapters
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.x_comic.R
+import com.example.x_comic.models.BookSneek
 
 class ListAdapterSlideshow (
     private var bookList: MutableList<BookSneek>,
@@ -26,7 +28,7 @@ class ListAdapterSlideshow (
 
     }
 
-    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ListAdapterSlideshow.ViewHolder {
+    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context;
         val inflater = LayoutInflater.from(context)
         var columnView =  inflater.inflate(R.layout.book_cover_slideshow, parent, false)

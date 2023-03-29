@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Explore">
+    tools:context=".views.main.fragments.Explore">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -13,5 +13,11 @@
         android:textSize="26dp"
         android:layout_gravity="center"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:textSize="26dp"
+        android:layout_gravity="bottom"/>
 
 </FrameLayout>

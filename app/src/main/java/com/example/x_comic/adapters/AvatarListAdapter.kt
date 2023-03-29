@@ -1,12 +1,12 @@
-package com.example.x_comic
+package com.example.x_comic.adapters
 
-import android.graphics.drawable.Drawable
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.x_comic.R
+import com.example.x_comic.models.Avatar
 
 class AvatarListAdapter (
     private var avatarList: MutableList<Avatar>,
@@ -25,7 +25,7 @@ class AvatarListAdapter (
 
     }
 
-    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): AvatarListAdapter.ViewHolder {
+    override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context;
         val inflater = LayoutInflater.from(context)
         var columnView =  inflater.inflate(R.layout.avatar, parent, false)

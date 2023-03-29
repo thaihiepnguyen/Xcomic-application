@@ -1,9 +1,11 @@
-package com.example.x_comic
+package com.example.x_comic.views.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.x_comic.*
 import com.example.x_comic.databinding.ActivityMainBinding
+import com.example.x_comic.views.main.fragments.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

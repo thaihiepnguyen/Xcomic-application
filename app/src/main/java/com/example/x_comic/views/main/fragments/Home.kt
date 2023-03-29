@@ -1,4 +1,4 @@
-package com.example.x_comic
+package com.example.x_comic.views.main.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +10,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadhamwi.tabsync.TabbedListMediator
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+import com.example.x_comic.R
+import com.example.x_comic.adapters.AvatarListAdapter
+import com.example.x_comic.adapters.BookListAdapter
+import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.models.Avatar
+import com.example.x_comic.models.Book
+import com.example.x_comic.models.BookSneek
+import com.google.android.material.tabs.TabLayout
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [Home.newInstance] factory method to
@@ -28,14 +32,14 @@ class Home : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     val bookList: MutableList<BookSneek> = mutableListOf(
-        BookSneek("How to Burn The Bad Boy","alsophanie",R.drawable.bookcover, 4.9),
-        BookSneek("Temporarily","bbiboo123",R.drawable.book_cover_1, 4.5),
-        BookSneek("Rome Is Us","ann_beyond",R.drawable.book_cover_2, 4.0),
-        BookSneek("Fool Man","landyshere",R.drawable.book_cover_3, 4.7),
-        BookSneek("The Mind Of A Leader","vivianneee",R.drawable.book_cover_4, 4.3),
-        BookSneek("The Light Beyond The Garden Wall","pixiequinn",R.drawable.book_cover_5, 4.5),
-        BookSneek("The Secret At The Joneses","rhjulxie",R.drawable.book_cover_6, 3.9),
-        BookSneek("The Victim's Picture","gizashey",R.drawable.book_cover_7, 4.2)
+        BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
+        BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
+        BookSneek("Rome Is Us", "ann_beyond", R.drawable.book_cover_2, 4.0),
+        BookSneek("Fool Man", "landyshere", R.drawable.book_cover_3, 4.7),
+        BookSneek("The Mind Of A Leader", "vivianneee", R.drawable.book_cover_4, 4.3),
+        BookSneek("The Light Beyond The Garden Wall", "pixiequinn", R.drawable.book_cover_5, 4.5),
+        BookSneek("The Secret At The Joneses", "rhjulxie", R.drawable.book_cover_6, 3.9),
+        BookSneek("The Victim's Picture", "gizashey", R.drawable.book_cover_7, 4.2)
 
     )
 
@@ -52,29 +56,83 @@ class Home : Fragment() {
 
     var bookDetailList: MutableList<Book> = mutableListOf(
 
-        Book(bookList[0],253.2,125.5,20, arrayListOf("Romance","Thriller","Short Story","Humor")),
-        Book(bookList[1],154.4,100.3,50, arrayListOf("Fiction","Horror","Mystery","Humor")),
-        Book(bookList[2],179.6,122.2,13, arrayListOf("School Life","Humor","Short Story")),
-        Book(bookList[3],211.3,112.6,7, arrayListOf("Romance","Mystery","Short Story","Humor")),
-        Book(bookList[4],236.2,109.7,36, arrayListOf("Fiction","Thriller","Mystery","Horror","Humor","Romance"))
+        Book(
+            bookList[0],
+            253.2,
+            125.5,
+            20,
+            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
+        ),
+        Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
+        Book(bookList[2], 179.6, 122.2, 13, arrayListOf("School Life", "Humor", "Short Story")),
+        Book(
+            bookList[3],
+            211.3,
+            112.6,
+            7,
+            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
+        ),
+        Book(
+            bookList[4],
+            236.2,
+            109.7,
+            36,
+            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
+        )
     )
 
     private val bookLatestList: MutableList<Book> = mutableListOf(
 
-        Book(bookList[1],253.2,125.5,20, arrayListOf("Romance","Thriller","Short Story","Humor")),
-        Book(bookList[2],154.4,100.3,50, arrayListOf("Fiction","Horror","Mystery","Humor")),
-        Book(bookList[3],179.6,122.2,13, arrayListOf("School Life","Humor","Short Story")),
-        Book(bookList[4],211.3,112.6,7, arrayListOf("Romance","Mystery","Short Story","Humor")),
-        Book(bookList[5],236.2,109.7,36, arrayListOf("Fiction","Thriller","Mystery","Horror","Humor","Romance"))
+        Book(
+            bookList[1],
+            253.2,
+            125.5,
+            20,
+            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
+        ),
+        Book(bookList[2], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
+        Book(bookList[3], 179.6, 122.2, 13, arrayListOf("School Life", "Humor", "Short Story")),
+        Book(
+            bookList[4],
+            211.3,
+            112.6,
+            7,
+            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
+        ),
+        Book(
+            bookList[5],
+            236.2,
+            109.7,
+            36,
+            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
+        )
     )
 
     private val bookCompletedList: MutableList<Book> = mutableListOf(
 
-        Book(bookList[2],253.2,125.5,20, arrayListOf("Romance","Thriller","Short Story","Humor")),
-        Book(bookList[3],154.4,100.3,50, arrayListOf("Fiction","Horror","Mystery","Humor")),
-        Book(bookList[4],179.6,122.2,13, arrayListOf("School Life","Humor","Short Story")),
-        Book(bookList[5],211.3,112.6,7, arrayListOf("Romance","Mystery","Short Story","Humor")),
-        Book(bookList[7],236.2,109.7,36, arrayListOf("Fiction","Thriller","Mystery","Horror","Humor","Romance"))
+        Book(
+            bookList[2],
+            253.2,
+            125.5,
+            20,
+            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
+        ),
+        Book(bookList[3], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
+        Book(bookList[4], 179.6, 122.2, 13, arrayListOf("School Life", "Humor", "Short Story")),
+        Book(
+            bookList[5],
+            211.3,
+            112.6,
+            7,
+            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
+        ),
+        Book(
+            bookList[7],
+            236.2,
+            109.7,
+            36,
+            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
+        )
     )
 
     val tabsBook = mutableListOf(
@@ -121,11 +179,14 @@ class Home : Fragment() {
         customAvatarView!!.adapter = avatarAdapter;
         customBookListView!!.adapter = bookListAdapter;
 
-        customSlideView!!.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL, false);
-        customAvatarView!!.layoutManager = LinearLayoutManager(this.context,RecyclerView.HORIZONTAL, false);
+        customSlideView!!.layoutManager =
+            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
+        customAvatarView!!.layoutManager =
+            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
         customBookListView!!.layoutManager = LinearLayoutManager(this.context);
-        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        val itemDecoration: RecyclerView.ItemDecoration =
+            DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
         customBookListView?.addItemDecoration(itemDecoration)
 
     //    initMediator();
