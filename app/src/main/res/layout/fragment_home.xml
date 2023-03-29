@@ -159,15 +159,35 @@
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/for_you"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_height="match_parent"
                     android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:text="For You"
-                    android:textSize="16sp" />
+                    android:paddingRight="30dp">
+
+                    <TextView
+                        android:id="@+id/for_you"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="For You"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/view_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="View more"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:clickable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView"
@@ -224,6 +244,16 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
+                <TextView
+                    android:id="@+id/view_more_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:clickable="true"
+                    android:fontFamily="@font/poppins_medium"
+                    android:paddingVertical="5dp"
+                    android:text="View more"
+                    android:textAlignment="center" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

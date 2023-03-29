@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -82,6 +83,7 @@ class Home : Fragment() {
     var customAvatarView: RecyclerView? = null;
     var customBookListView: RecyclerView? = null;
     var tabLayout: TabLayout? = null;
+    var scrollView: NestedScrollView? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -100,6 +102,8 @@ class Home : Fragment() {
         customSlideView = view.findViewById(R.id.listView);
         customAvatarView = view.findViewById(R.id.avatarListView);
         customBookListView = view.findViewById(R.id.popularListBook);
+        scrollView = view.findViewById(R.id.nestedScrollView);
+
         tabLayout = view.findViewById(R.id.tabs_book);
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Popular"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Latest"))
@@ -129,6 +133,7 @@ class Home : Fragment() {
         tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
            {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                scrollView!!.smoothScrollTo(0,tabLayout!!.top);
                 when (tab?.position) {
                     //NEED SOLUTION HERE
                     tab?.position ->  {
