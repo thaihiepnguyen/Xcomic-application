@@ -27,9 +27,6 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.usernameET.text.toString()
             val password = binding.passwordET.text.toString()
 
-            Log.d("email",binding.usernameET.text.toString())
-            Log.d("password",binding.passwordET.text.toString())
-
             loginViewModel.login(email, password).observe(this, Observer { success ->
                 if (success) {
                     nextMainActivity()

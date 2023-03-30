@@ -16,7 +16,6 @@ class FirebaseAuthManager {
                 result.value = task.isSuccessful
             }
 
-        Log.d("result", result.value.toString())
         return result
     }
 }
