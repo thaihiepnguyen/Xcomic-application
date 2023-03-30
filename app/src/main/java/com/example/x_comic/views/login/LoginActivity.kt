@@ -24,8 +24,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         binding.loginBtn.setOnClickListener {
-            val email = binding.usernameET.text.toString()
-            val password = binding.passwordET.text.toString()
+            val email = binding.usernameET.text.toString().trim()
+            val password = binding.passwordET.text.toString().trim()
 
             loginViewModel.login(email, password).observe(this, Observer { success ->
                 if (success) {
@@ -36,6 +36,14 @@ class LoginActivity : AppCompatActivity() {
             })
         }
     }
+//
+//    private fun isEmailValid(email: String): Boolean {
+//        val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
+//        return emailRegex.matches(email)
+//    }
+//    private fun verify(email: String, password: String): Boolean {
+//        return isEmailValid(email) && (password.length > 6)
+//    }
 
     private fun nextMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
