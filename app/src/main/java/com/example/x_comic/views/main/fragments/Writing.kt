@@ -1,9 +1,11 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
@@ -17,6 +19,8 @@ import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookAuthor
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.views.main.MainActivity
+import com.example.x_comic.views.post.PostNewActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -82,6 +86,8 @@ class Writing : Fragment() {
 
     var customBookListView: RecyclerView? = null;
     var scrollView: NestedScrollView? = null;
+    var btnEditBook : Button? = null;
+    var btnNewBook : Button? = null;
 
     class BooksAdapter (private val books: MutableList<BookAuthor>) : RecyclerView.Adapter<BooksAdapter.ViewHolder>() {
         var onItemClick: ((book: BookAuthor, position: Int) -> Unit)? = null
@@ -144,12 +150,31 @@ class Writing : Fragment() {
         val view = inflater.inflate(R.layout.fragment_writing, container, false)
         customBookListView = view.findViewById(R.id.listViewWriting) as RecyclerView;
         scrollView = view.findViewById(R.id.nestedScrollView);
+        btnEditBook = view.findViewById(R.id.btnEditBook)
+        btnNewBook = view.findViewById(R.id.btnWriteNewBook)
+
         val bookListAdapter = BooksAdapter(bookAuthorlList);
         customBookListView!!.adapter = bookListAdapter;
         customBookListView!!.layoutManager = LinearLayoutManager(this.context);
         val itemDecoration: RecyclerView.ItemDecoration =
             DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
         customBookListView?.addItemDecoration(itemDecoration)
+
+        bookListAdapter!!.onItemClick = {book, position ->
+            // DO SOMETHING
+        }
+
+        btnNewBook?.setOnClickListener {
+            // DO SOMETHING
+
+            val intent = Intent(requireContext(), PostNewActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnEditBook?.setOnClickListener {
+            // DO SOMETHING
+        }
+
 //        return inflater.inflate(R.layout.fragment_writing, container, false)
         return view
     }
