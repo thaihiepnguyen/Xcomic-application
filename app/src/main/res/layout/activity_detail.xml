@@ -34,7 +34,7 @@
                         android:layout_width="200dp"
                         android:layout_height="260dp"
                         android:elevation="0dp"
-                        app:cardCornerRadius="20dp"
+
                         android:layout_marginTop="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
 
-                            android:background="@drawable/bookshape"
+
                             android:clipToOutline="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/bookcover"
@@ -69,7 +69,7 @@
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="200dp"
+                            android:layout_height="250dp"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentEnd="true"
 
@@ -80,7 +80,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             app:cardBackgroundColor="#E6FFFFFF"
-                            app:cardCornerRadius="10dp">
+                            >
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
@@ -125,6 +125,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/book_title" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
@@ -146,22 +147,24 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="200K view"
-                            android:textAlignment="center"
-                            />
+                            android:textAlignment="center" />
+
                         <ImageView
                             android:id="@+id/favoriteIcon"
-                            android:layout_width="wrap_content"
+                            android:layout_width="20dp"
                             android:layout_height="match_parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:srcCompat="@drawable/favorite_icon"
                             tools:layout_editor_absoluteY="49dp" />
+
                         <TextView
                             android:id="@+id/favoriteTextView"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="167K"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center" />
+
                         <ImageView
                             android:id="@+id/chapterIcon"
                             android:layout_width="wrap_content"
@@ -169,15 +172,62 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:srcCompat="@drawable/ic_list_chapter"
                             tools:layout_editor_absoluteY="49dp" />
+
                         <TextView
                             android:id="@+id/numOfChapterTextView"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="4 Chapter"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center" />
 
                     </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/readBtn"
+                        android:layout_width="176dp"
+                        android:layout_height="52dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/mybutton"
+                        android:padding="10dp"
+                        android:text="READ"
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/favorBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/favorBtn"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="48dp"
+                        android:background="@drawable/favorbutton"
+                        android:padding="10dp"
+                        android:text="ღ"
+                        android:textStyle=""
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+
+                        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+                    <EditText
+                        android:id="@+id/editTextTextPersonName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text=""
+                        android:editable="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/readBtn" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
