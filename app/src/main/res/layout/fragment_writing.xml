@@ -95,7 +95,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnWriteNewBook">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listView"
+                android:id="@+id/listViewWriting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
