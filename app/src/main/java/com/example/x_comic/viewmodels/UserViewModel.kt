@@ -15,7 +15,7 @@ class UserViewModel: ViewModel() {
     val data: LiveData<User>
         get() = _user
 
-    fun setUser(uid: String) {
+    fun setUser(uid: String) : UserViewModel {
         val database = Firebase.database
         val ref = database.reference.child("users").child(uid)
         ref.addValueEventListener(object : ValueEventListener {
@@ -36,10 +36,11 @@ class UserViewModel: ViewModel() {
 
                 _user.value = User(id, full_name, age, avatar, bio, dob, email, follow, is_hide, penname, phone, gender, role)
             }
-
             override fun onCancelled(error: DatabaseError) {
                 // Xử lý lỗi
             }
         })
+
+        return this
     }
 }
