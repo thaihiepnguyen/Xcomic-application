@@ -5,7 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
+import com.example.x_comic.adapters.CategoryAdapter
+import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.google.android.flexbox.AlignContent
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -19,6 +30,7 @@ class Explore : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -27,12 +39,29 @@ class Explore : Fragment() {
         }
     }
 
+
+    val category_list: MutableList<String> = mutableListOf("Romance","Poetry","Science Fiction","Teen Fiction","Short Story","Mystery","Adventure","Thriller","Horror","Humor","LGBT+","Non Fiction","Fanfiction","Historical Fiction","Contemporary Lit","Diverse Lit","Fantasy","Paranormal","New Adult")
+
+    var categoryView : RecyclerView? = null;
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false)
+        val view = inflater.inflate(R.layout.fragment_explore, container, false)
+        categoryView = view.findViewById(R.id.category_list);
+        val adapter = CategoryAdapter(category_list);
+
+        categoryView!!.adapter = adapter;
+        val layoutManager = FlexboxLayoutManager(context);
+        layoutManager!!.flexWrap = FlexWrap.WRAP;
+        layoutManager!!.flexDirection = FlexDirection.ROW;
+        layoutManager!!.alignItems = AlignItems.FLEX_START;
+
+        categoryView!!.layoutManager = layoutManager;
+
+
+        return view
     }
 
     companion object {
