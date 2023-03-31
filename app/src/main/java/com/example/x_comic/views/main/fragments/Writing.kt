@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -125,10 +126,13 @@ class Writing : Fragment() {
             // Set item views based on your views and data model
 
             holder.title.text = books[position].book.book.title
-            if (books[position].status == 0)
+            if (books[position].status == 0) {
                 holder.status.text = "In progress"
-            else
+                holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.yellow));
+            } else {
                 holder.status.text = "Done"
+                holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
+            }
             holder.chapter.text = "${books[position].chapterIsPosted} of ${books[position].book.chapter} Chapter was posted"
             holder.imageView.setImageResource(books[position].book.book.cover)
         }
@@ -167,8 +171,9 @@ class Writing : Fragment() {
         btnNewBook?.setOnClickListener {
             // DO SOMETHING
 
-            val intent = Intent(requireContext(), PostNewActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(requireContext(), PostNewActivity::class.java)
+//            startActivity(intent)
+            (activity as MainActivity).replaceFragment(PostNewActivity())
         }
 
         btnEditBook?.setOnClickListener {
