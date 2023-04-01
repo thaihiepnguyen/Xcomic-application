@@ -65,14 +65,21 @@ class CategoryAdapter (
                         R.color.azure
                     )
                 );
-            }
-            else {
-                genre.backgroundTintList = ColorStateList.valueOf(
+                genre.setTextColor(ColorStateList.valueOf(
                     ContextCompat.getColor(
                         context!!,
-                        R.color.lightgrey
-                    )
-                );
+                        R.color.white
+                    )))
+
+            }
+            else {
+                genre.backgroundTintList = null;
+
+                genre.setTextColor(ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        context!!,
+                        R.color.azure
+                    )))
             }
         }
 

@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="1"
-        android:background="@drawable/badge"
-        android:backgroundTint="@color/lightgrey"
+        android:background="@drawable/category"
+
         android:clickable="true"
         android:fontFamily="@font/poppins_semibold"
+        android:paddingHorizontal="10dp"
         android:text="Romance"
         android:textAlignment="center"
-        android:paddingHorizontal="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/azure"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
