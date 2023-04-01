@@ -7,16 +7,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
-import com.github.aakira.expandablelayout.ExpandableLayout
-import com.github.aakira.expandablelayout.ExpandableLinearLayout
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout
-import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
