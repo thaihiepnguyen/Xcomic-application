@@ -18,4 +18,15 @@ class FirebaseAuthManager {
 
         return result
     }
+
+    fun signup(email: String, password: String): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                result.value = task.isSuccessful
+            }
+
+        return result
+    }
 }
