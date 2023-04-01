@@ -11,8 +11,4 @@ class LoginViewModel : ViewModel() {
     fun login(email: String, password: String): LiveData<Boolean> {
         return firebaseAuthManager.login(email, password)
     }
-    fun getUser() : FirebaseUser? {
-        // get current user after logging successes
-        return FirebaseAuthManager.auth.currentUser
-    }
 }

@@ -15,7 +15,7 @@ class UserViewModel: ViewModel() {
     val data: LiveData<User>
         get() = _user
 
-    fun setUser(uid: String) : UserViewModel {
+    fun getUser(uid: String) : UserViewModel {
         val database = Firebase.database
         val ref = database.reference.child("users").child(uid)
         ref.addValueEventListener(object : ValueEventListener {
@@ -40,7 +40,14 @@ class UserViewModel: ViewModel() {
                 // Xử lý lỗi
             }
         })
-
         return this
+    }
+
+    fun addUser(user: User) {
+        val database = Firebase.database
+        database.reference
+            .child("users")
+            .child(user.id)
+            .setValue(user)
     }
 }
