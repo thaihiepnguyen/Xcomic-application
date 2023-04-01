@@ -1,11 +1,15 @@
 package com.example.x_comic.views.main.fragments
 
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
@@ -42,6 +46,7 @@ class Explore : Fragment() {
     val category_list: MutableList<String> = mutableListOf("Romance","Poetry","Science Fiction","Teen Fiction","Short Story","Mystery","Adventure","Thriller","Horror","Humor","LGBT+","Non Fiction","Fanfiction","Historical Fiction","Contemporary Lit","Diverse Lit","Fantasy","Paranormal","New Adult")
     var btnLength: TextView? = null;
     var btnStatus: TextView? = null;
+    var searchBtn: ImageButton? = null;
     var layoutExpand2 : ExpandableRelativeLayout? = null;
     var layoutExpand: ExpandableRelativeLayout? = null;
 
@@ -54,7 +59,7 @@ class Explore : Fragment() {
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
         categoryView = view.findViewById(R.id.category_list);
         val adapter = CategoryAdapter(category_list);
-
+        searchBtn = view.findViewById(R.id.searchBtn);
         categoryView!!.adapter = adapter;
         val layoutManager = FlexboxLayoutManager(context);
         layoutManager!!.flexWrap = FlexWrap.WRAP;
@@ -95,6 +100,24 @@ class Explore : Fragment() {
             }
         }
 
+
+        searchBtn!!.setOnClickListener{
+
+            val fragment = Search();
+
+            val oldFragment = view.findViewById<FrameLayout>(R.id.exploreLayout);
+            oldFragment.removeAllViews();
+
+
+            val fragmentManager = requireActivity().supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.detach(Explore());
+            transaction.remove(Explore());
+            transaction.replace(R.id.exploreLayout, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
 
         val checkBox1: CheckBox = view.findViewById(R.id.checkBox1);
         val checkBox2: CheckBox = view.findViewById(R.id.checkBox2);

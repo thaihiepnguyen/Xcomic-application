@@ -175,6 +175,8 @@ class Home : Fragment() {
         println(bookLatestList.iterator());
         println(bookCompletedList.iterator());
         println(tabsBook[1].iterator());
+
+
         customSlideView!!.adapter = adapter;
         customAvatarView!!.adapter = avatarAdapter;
         customBookListView!!.adapter = bookListAdapter;
