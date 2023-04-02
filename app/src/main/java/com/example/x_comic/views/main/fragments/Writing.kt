@@ -171,9 +171,9 @@ class Writing : Fragment() {
         btnNewBook?.setOnClickListener {
             // DO SOMETHING
 
-//            val intent = Intent(requireContext(), PostNewActivity::class.java)
-//            startActivity(intent)
-            (activity as MainActivity).replaceFragment(PostNewActivity())
+            val intent = Intent(requireContext(), PostNewActivity::class.java)
+            startActivity(intent)
+//            (activity as MainActivity).replaceFragment(PostNewActivity())
         }
 
         btnEditBook?.setOnClickListener {

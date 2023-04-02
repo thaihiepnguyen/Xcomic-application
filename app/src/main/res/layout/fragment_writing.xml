@@ -60,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/mybutton"
             android:drawableLeft="@drawable/quill"
             android:fontFamily="@font/poppins_medium"
@@ -73,6 +74,7 @@
         <Button
             android:id="@+id/btnWriteNewBook"
             android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/mybutton"
