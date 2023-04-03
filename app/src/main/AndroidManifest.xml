@@ -22,7 +22,7 @@
             android:name=".views.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".views.login.LoginActivity"
+            android:name=".views.detail.DetailActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,9 +37,9 @@
         <activity
             android:name=".views.post.PostNewActivity"
             android:exported="false" />
-        <activity
-            android:name=".views.detail.DetailActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".views.detail.DetailActivity"-->
+<!--            android:exported="false" />-->
 
         <meta-data
             android:name="preloaded_fonts"

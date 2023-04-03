@@ -383,16 +383,18 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                     android:background="@drawable/border">
 
 
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/chooseChapterBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:clickable="true"
+                        android:padding="16dp"
                         android:text="☰ 4 Chapters"
-                        android:editable="false"
                         android:textAlignment="center"
                         android:textSize="20sp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:background="?attr/selectableItemBackground"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
