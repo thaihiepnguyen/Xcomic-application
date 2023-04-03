@@ -41,7 +41,7 @@ class CollectionAdapter (
     private var FILL = 0;
     private var COL = 1;
     override fun getItemViewType(position: Int): Int {
-        if (position % 3 == 0){
+        if (checkNumberRule(position)){
 
             return FILL;
         }
@@ -66,7 +66,15 @@ class CollectionAdapter (
     override fun getItemCount(): Int {
         return CollectionList.size;
     }
-
+    fun checkNumberRule(num: Int): Boolean {
+        var curr = 0 // start with 0
+        var diff = 3 // initialize the difference between consecutive numbers to 3
+        while (curr < num) {
+            curr += diff // add the current difference to the previous number
+            diff = if (diff == 3) 4 else 3 // switch between adding 3 and 4 to the previous number
+        }
+        return curr == num // if the final number is equal to the input number, it satisfies the rule
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val collection = CollectionList.get(position);
 
@@ -75,13 +83,14 @@ class CollectionAdapter (
         var number = holder.number;
 
 
+        cover.setImageResource(collection.bookList[0].book.cover);
 
 
 
-        Glide.with(context!!)
-            .load(collection.bookList[0].book.cover)
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-            .into(cover)
+//        Glide.with(context!!)
+//            .load(collection.bookList[0].book.cover)
+//            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+//            .into(cover)
         title.setText(collection.name);
         number.setText(collection.bookList.size.toString());
 

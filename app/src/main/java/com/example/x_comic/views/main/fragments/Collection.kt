@@ -92,12 +92,22 @@ class Collection : Fragment() {
 
         collectionBook!!.adapter = adapter;
 
-        collectionBook!!.layoutManager = GridLayoutManager(this.context, 2)
+        collectionBook!!.layoutManager = GridLayoutManager(this.context, 3)
 
+        fun checkNumberRule(num: Int): Boolean {
+            var curr = 0 // start with 0
+            var diff = 3 // initialize the difference between consecutive numbers to 3
+            while (curr < num) {
+                curr += diff // add the current difference to the previous number
+                diff = if (diff == 3) 4 else 3 // switch between adding 3 and 4 to the previous number
+            }
+            return curr == num // if the final number is equal to the input number, it satisfies the rule
+        }
 
         val spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (position % 3 == 0) 2 else 1 // Make every third item span 2 columns
+          return if (checkNumberRule(position)) 2 else 1 // Make every third item span 2 columns
+
             }
         }
         (collectionBook!!.layoutManager as GridLayoutManager).spanSizeLookup = spanSizeLookup
