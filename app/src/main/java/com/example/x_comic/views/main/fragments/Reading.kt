@@ -45,12 +45,12 @@ class Reading : Fragment() {
             arrayListOf("Romance", "Thriller", "Short Story", "Humor")
         ),
         Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
-        Book(bookList[2], 179.6, 122.2, 13, arrayListOf("School Life", "Humor", "Short Story")),
+        Book(bookList[2], 179.6, 122.2, 25, arrayListOf("School Life", "Humor", "Short Story")),
         Book(
             bookList[3],
             211.3,
             112.6,
-            7,
+            34,
             arrayListOf("Romance", "Mystery", "Short Story", "Humor")
         ),
         Book(
@@ -64,7 +64,7 @@ class Reading : Fragment() {
     var listReadingOffline: MutableList<BookReading> = mutableListOf(
         BookReading(
             bookDetailList[1],
-            current = 2
+            current = 12
         ),
         BookReading(
             bookDetailList[0],
@@ -76,18 +76,34 @@ class Reading : Fragment() {
         ),
         BookReading(
             bookDetailList[3],
-            current = 5
+            current = 11
         ),
         BookReading(
             bookDetailList[2],
-            current = 2
+            current = 8
         )
 
     )
 
+    var listReading: MutableList<BookReading> = mutableListOf();
+    fun getListRead(){
+    repeat(50)
+    {
+        val bookReading = BookReading(
+            bookDetailList[it % 5],
+            current = listReadingOffline[it % 5].current
+        )
+        listReading.add(bookReading)
+    }
+    }
     var customOfflineBookList : RecyclerView? = null;
+    var customOnlineBookList: RecyclerView? = null;
+
     var btnOffline: TextView? = null;
+    var btnOnline: TextView? = null;
+
     var layoutExpand: ExpandableRelativeLayout? = null;
+    var layoutExpand2: ExpandableRelativeLayout? = null;
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,24 +112,54 @@ class Reading : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_reading, container, false)
 
         customOfflineBookList = view.findViewById(R.id.offline_books);
+        customOnlineBookList = view.findViewById(R.id.online_books);
+
+        getListRead();
+
+
 
         val adapter = BookReadingAdapter(listReadingOffline);
 
+        val OnlineAdapter = BookReadingAdapter(listReading);
+
+
         customOfflineBookList!!.adapter = adapter;
 
+        customOnlineBookList!!.adapter = OnlineAdapter;
 
 
         customOfflineBookList!!.layoutManager = GridLayoutManager(this.context,3);
+        customOnlineBookList!!.layoutManager = GridLayoutManager(this.context,3);
+
+
 
         btnOffline = view.findViewById(R.id.offline);
-        layoutExpand = view.findViewById(R.id.expandableLayout);
+        btnOnline = view.findViewById(R.id.online);
+
+        layoutExpand = view.findViewById(R.id.expandableLayoutOffline);
+
+
+        layoutExpand2 = view.findViewById(R.id.expandableLayoutOnline);
+
+
         btnOffline!!.setOnClickListener{
             layoutExpand!!.toggle();
             if (layoutExpand!!.isExpanded){
-                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevrondown,0)
+                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevronup,0)
             }
             else {
-                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevronup,0)
+                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevrondown,0)
+
+            }
+        }
+
+        btnOnline!!.setOnClickListener{
+            layoutExpand2!!.toggle();
+            if (layoutExpand2!!.isExpanded){
+                btnOnline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevronup,0)
+            }
+            else {
+                btnOnline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevrondown,0)
 
             }
         }
