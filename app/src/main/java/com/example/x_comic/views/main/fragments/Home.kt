@@ -40,7 +40,6 @@ class Home : Fragment() {
         BookSneek("The Light Beyond The Garden Wall", "pixiequinn", R.drawable.book_cover_5, 4.5),
         BookSneek("The Secret At The Joneses", "rhjulxie", R.drawable.book_cover_6, 3.9),
         BookSneek("The Victim's Picture", "gizashey", R.drawable.book_cover_7, 4.2)
-
     )
 
     val avatarList: MutableList<Avatar> = mutableListOf(

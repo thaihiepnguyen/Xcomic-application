@@ -56,4 +56,9 @@ class FirebaseAuthManager {
 
         return result
     }
+
+    fun resetPassword(email:String) {
+        auth.sendPasswordResetEmail(email)
+    }
+
 }

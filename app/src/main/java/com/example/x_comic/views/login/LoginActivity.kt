@@ -1,11 +1,17 @@
 package com.example.x_comic.views.login
 
+import android.app.Dialog
 import com.example.x_comic.R
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
+import android.view.Window
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.x_comic.databinding.ActivityLoginBinding
+import com.example.x_comic.databinding.LayoutDialogSendpassBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.LoginViewModel
 import com.example.x_comic.viewmodels.UserViewModel
@@ -23,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var bindingDialog: LayoutDialogSendpassBinding
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
 
@@ -31,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        bindingDialog = LayoutDialogSendpassBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val progressDialog = ProgressDialog(this)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
@@ -79,7 +88,53 @@ class LoginActivity : AppCompatActivity() {
         binding.signupTV.setOnClickListener {
             nextSignupActivity()
         }
+
+        binding.forgotPwdTV.setOnClickListener {
+            showSendEmailDialog()
+        }
     }
+
+    private fun showSendEmailDialog() {
+
+
+        var dialog: Dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_sendpass)
+
+        var window: Window? = dialog.window
+
+        if (window == null) {
+            return
+        }
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        var windowAttribution: WindowManager.LayoutParams = window.attributes
+
+        windowAttribution.gravity = Gravity.CENTER
+
+        window.attributes = windowAttribution
+
+
+        val sendBtn = dialog.findViewById<Button>(R.id.sendBtn)
+        val emailET = dialog.findViewById<EditText>(R.id.sendEmailET)
+
+        sendBtn.setOnClickListener {
+            val email: String = emailET.text.toString().trim()
+
+            FirebaseAuthManager.auth.sendPasswordResetEmail(email)
+                .addOnFailureListener {
+                    setEditTextBorderColor(emailET, Color.RED)
+                }
+                .addOnSuccessListener {
+                    dialog.dismiss()
+                    Toast.makeText(this, "Send", Toast.LENGTH_LONG).show()
+                }
+        }
+
+        dialog.show()
+    }
+
+
 
     fun setEditTextBorderColor(editText: EditText, color: Int) {
         val shape = GradientDrawable()
