@@ -61,7 +61,6 @@ class ListAdapterSlideshow (
                 love.setImageResource(R.drawable.love)
             }
         }
-
     }
 
 }
