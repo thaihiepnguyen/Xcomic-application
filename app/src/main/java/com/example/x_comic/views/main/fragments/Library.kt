@@ -24,7 +24,7 @@ class Library : Fragment() {
 
         var tabLayout: TabLayout = view.findViewById(R.id.tab_layout);
 
-        val fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager);
+        val fragmentAdapter = FragmentAdapter(childFragmentManager);
         fragmentAdapter.addFragment(Reading(),"Recent Reading");
         fragmentAdapter.addFragment(Collection(), "Collection");
 

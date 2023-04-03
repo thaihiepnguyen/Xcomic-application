@@ -23,20 +23,9 @@ import com.example.x_comic.models.BookSneek
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.post.PostNewActivity
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Writing.newInstance] factory method to
- * create an instance of this fragment.
- */
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
 
 class Writing : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     val bookList: MutableList<BookSneek> = mutableListOf(
         BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
         BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
@@ -138,13 +127,7 @@ class Writing : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -184,23 +167,5 @@ class Writing : Fragment() {
         return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Writing.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Writing().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }
