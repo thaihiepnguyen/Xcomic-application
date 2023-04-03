@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:outlineProvider="bounds"
             android:elevation="1dp"
+            android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
