@@ -52,7 +52,7 @@ class BookReadingAdapter (
     override fun getItemCount(): Int {
         return bookReadingList.size;
     }
-    
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val book = bookReadingList.get(position);
 
