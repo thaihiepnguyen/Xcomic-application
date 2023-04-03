@@ -18,6 +18,7 @@ import com.example.x_comic.models.BookReading
 
 class BookReadingAdapter (
     private var bookReadingList: MutableList<BookReading>,
+    private val isOnline: Boolean = false
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
@@ -38,15 +39,20 @@ class BookReadingAdapter (
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context;
         val inflater = LayoutInflater.from(context)
-        var columnView =  inflater.inflate(R.layout.book_reading, parent, false)
-        return ViewHolder(columnView)
 
+
+        var columnView = inflater.inflate(R.layout.book_reading, parent, false);
+        if (isOnline){
+            columnView = inflater.inflate(R.layout.book_reading_online, parent, false);
+        }
+
+        return ViewHolder(columnView);
     }
 
     override fun getItemCount(): Int {
         return bookReadingList.size;
     }
-
+    
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val book = bookReadingList.get(position);
 

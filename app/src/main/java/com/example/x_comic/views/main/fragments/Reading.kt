@@ -120,7 +120,7 @@ class Reading : Fragment() {
 
         val adapter = BookReadingAdapter(listReadingOffline);
 
-        val OnlineAdapter = BookReadingAdapter(listReading);
+        val OnlineAdapter = BookReadingAdapter(listReading, true);
 
 
         customOfflineBookList!!.adapter = adapter;
