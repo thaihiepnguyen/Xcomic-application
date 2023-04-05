@@ -13,37 +13,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
+import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookAuthor
 import com.example.x_comic.models.Chapter
 import com.example.x_comic.views.main.fragments.Writing
+import com.google.android.flexbox.FlexboxLayoutManager
 
-class MultiSelectSpinnerAdapter(context: Context, items: Array<String>) :
-    ArrayAdapter<String>(context, R.layout.spinner_item_layout, R.id.item_textView, items), SpinnerAdapter {
-
-    private val selectedItems = BooleanArray(items.size)
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.spinner_item_layout, parent, false)
-
-        val textView: TextView = view.findViewById(R.id.item_textView)
-        textView.text = getItem(position)
-        val checkBox: CheckBox = view.findViewById(R.id.checkbox)
-        checkBox.isChecked = selectedItems[position]
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
-            selectedItems[position] = isChecked
-        }
-
-        return view
-    }
-
-    fun getSelectedItems(): BooleanArray = selectedItems
-}
 class PostNewActivity : AppCompatActivity() {
 
-    private lateinit var adapter: MultiSelectSpinnerAdapter
-    private lateinit var spinner: Spinner
+    val category_list: MutableList<String> = mutableListOf("Romance","Poetry","Science Fiction","Teen Fiction","Short Story","Mystery","Adventure","Thriller","Horror","Humor","LGBT+","Non Fiction","Fanfiction","Historical Fiction","Contemporary Lit","Diverse Lit","Fantasy","Paranormal","New Adult")
+    var categoryView : RecyclerView? = null;
 
     var chapterList: MutableList<Chapter> = mutableListOf(
         Chapter("Chapter 1", "updated 1/1/2000"),
@@ -96,23 +76,16 @@ class PostNewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_new)
 
-        spinner = findViewById(R.id.spCategory)
+        val layoutManager = FlexboxLayoutManager(this);
+        categoryView = findViewById(R.id.category_list);
+        val adapter = CategoryAdapter(category_list);
+        categoryView!!.adapter = adapter;
+        categoryView!!.layoutManager = layoutManager;
 
-        val items = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
-        adapter = MultiSelectSpinnerAdapter(this, items)
-        spinner.adapter = adapter
 
         val nextButton = findViewById<Button>(R.id.btnNext)
         nextButton.setOnClickListener {
-            val selectedItems = adapter.getSelectedItems()
-            val selection = StringBuilder()
-            for (i in items.indices) {
-                println(i)
-                if (selectedItems[i]) {
-                    selection.append(items[i]).append(", ")
-                }
-            }
-            Toast.makeText(this, "Selected Items: ${selection}", Toast.LENGTH_SHORT).show()
+
             val intent = Intent(this, NewChapterActivity::class.java)
             startActivity(intent)
 

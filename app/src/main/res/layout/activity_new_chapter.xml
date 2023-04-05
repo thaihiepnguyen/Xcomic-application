@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.post.NewChapterActivity">
+    tools:context=".views.post.NewChapterActivity"
+    android:background="@drawable/pattern">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
@@ -41,16 +42,6 @@
             app:layout_constraintTop_toTopOf="@+id/btnNext" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:scaleType="fitStart"
-        android:src="@drawable/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
-
     <EditText
         android:id="@+id/etTitleChapter"
         android:layout_width="match_parent"
@@ -65,12 +56,12 @@
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/etContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@null"
+        android:layout_marginTop="40dp"
+        android:background="@color/white"
         android:ems="10"
         android:fontFamily="@font/poppins_light"
         android:inputType="textMultiLine"
@@ -78,6 +69,27 @@
         android:scrollbars="vertical"
         android:text="Start writting"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
+
+    <TextView
+        android:id="@+id/tvCountWords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:text="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
+
+    <Switch
+        android:id="@+id/sLockChapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Lock"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
 

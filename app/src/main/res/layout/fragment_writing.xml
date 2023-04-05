@@ -51,24 +51,8 @@
             android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:scaleType="fitStart"
-            android:src="@drawable/background"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            android:scaleType="fitXY"
 
-        <Button
-            android:id="@+id/btnEditBook"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/mybutton"
-            android:drawableLeft="@drawable/quill"
-            android:fontFamily="@font/poppins_medium"
-            android:padding="1dp"
-            android:text="Edit book"
-            android:textAlignment="textStart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <Button
@@ -79,14 +63,15 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/mybutton"
             android:drawableLeft="@drawable/notebook"
+            android:drawableTint="@color/white"
             android:fontFamily="@font/poppins_medium"
             android:padding="1dp"
-            android:text="Add new book"
+            android:text="Write new book"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditBook" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"

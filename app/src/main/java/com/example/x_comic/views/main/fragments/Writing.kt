@@ -137,7 +137,6 @@ class Writing : Fragment() {
         val view = inflater.inflate(R.layout.fragment_writing, container, false)
         customBookListView = view.findViewById(R.id.listViewWriting) as RecyclerView;
         scrollView = view.findViewById(R.id.nestedScrollView);
-        btnEditBook = view.findViewById(R.id.btnEditBook)
         btnNewBook = view.findViewById(R.id.btnWriteNewBook)
 
         val bookListAdapter = BooksAdapter(bookAuthorlList);
@@ -157,10 +156,6 @@ class Writing : Fragment() {
             val intent = Intent(requireContext(), PostNewActivity::class.java)
             startActivity(intent)
 //            (activity as MainActivity).replaceFragment(PostNewActivity())
-        }
-
-        btnEditBook?.setOnClickListener {
-            // DO SOMETHING
         }
 
 //        return inflater.inflate(R.layout.fragment_writing, container, false)
