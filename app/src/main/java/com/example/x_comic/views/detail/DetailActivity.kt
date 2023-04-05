@@ -7,10 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.views.main.fragments.*
+import jp.wasabeef.glide.transformations.BlurTransformation
 
 class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +25,14 @@ class DetailActivity : AppCompatActivity() {
         backBtn.setOnClickListener {
             finish()
         }
+
+        val backCover = findViewById<ImageView>(R.id.background)
+        backCover.setImageResource(R.drawable.bookcover);
+        Glide.with(this)
+            .load(R.drawable.bookcover)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+            .into(backCover)
+
         //open dialog feedback and rating
         val ratingBtn = findViewById<Button>(R.id.ratingBtn)
         ratingBtn.setOnClickListener {
