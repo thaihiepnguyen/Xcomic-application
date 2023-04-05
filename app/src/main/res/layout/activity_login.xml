@@ -66,6 +66,7 @@
             android:drawablePadding="20dp"
             android:hint="Email or username"
             android:padding="20dp"
+            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -77,6 +78,7 @@
             android:layout_margin="10dp"
             android:padding="20dp"
             android:hint="Password"
+            android:singleLine="true"
             android:inputType="textPassword"
             android:drawableStart="@drawable/baseline_lock_24"
             android:drawableEnd="@drawable/baseline_visibility_off_18"

@@ -25,7 +25,7 @@
             android:name=".views.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".views.detail.DetailActivity"
+            android:name=".views.login.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,13 +33,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity-->
-<!--            android:name=".views.detail.DetailActivity"-->
-<!--            android:exported="false" />-->
+
+        <activity
+            android:name=".views.detail.DetailActivity"
+            android:exported="false" />
         <activity
             android:name=".views.main.MainActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name=".views.profile.ProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".views.post.PostNewActivity"
             android:exported="false" /> <!-- <activity -->

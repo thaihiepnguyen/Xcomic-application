@@ -1,9 +1,12 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,7 +21,10 @@ import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.views.profile.ProfileActivity
+import com.example.x_comic.views.signup.SignupActivity
 import com.google.android.material.tabs.TabLayout
+
 
 
 class Home : Fragment() {
@@ -132,6 +138,7 @@ class Home : Fragment() {
     var customBookListView: RecyclerView? = null;
     var tabLayout: TabLayout? = null;
     var scrollView: NestedScrollView? = null;
+    var avatar: ImageButton? = null
 
 
     override fun onCreateView(
@@ -144,6 +151,7 @@ class Home : Fragment() {
         customAvatarView = view.findViewById(R.id.avatarListView);
         customBookListView = view.findViewById(R.id.popularListBook);
         scrollView = view.findViewById(R.id.nestedScrollView);
+        avatar = view.findViewById(R.id.avatar);
 
         tabLayout = view.findViewById(R.id.tabs_book);
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Popular"))
@@ -204,6 +212,11 @@ class Home : Fragment() {
                }
            })
 
+        // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
+        avatar!!.setOnClickListener {
+            nextProfileActivity()
+        }
+
 
         return view
     }
@@ -217,5 +230,9 @@ class Home : Fragment() {
         ).attach()
     }
 
-
+    // TODO:
+    private fun nextProfileActivity() {
+        val intent = Intent(context, ProfileActivity::class.java)
+        startActivity(intent)
+    }
 }

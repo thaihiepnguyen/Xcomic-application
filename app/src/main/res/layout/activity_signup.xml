@@ -56,7 +56,7 @@
 
         <EditText
             android:id="@+id/usernameET"
-
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -76,6 +76,7 @@
             android:layout_margin="10dp"
             android:padding="20dp"
             android:hint="Password"
+            android:singleLine="true"
             android:drawableEnd="@drawable/baseline_visibility_off_18"
             android:inputType="textPassword"
             android:drawableStart="@drawable/baseline_lock_24"
