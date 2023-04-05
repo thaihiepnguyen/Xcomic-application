@@ -50,4 +50,6 @@ class UserViewModel: ViewModel() {
             .child(user.id)
             .setValue(user)
     }
+
+
 }
