@@ -15,9 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31" >
-<!--        <activity-->
-<!--            android:name=".views.purchase.PurchaseActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".views.purchase.PurchaseActivity"
+            android:exported="false" />
         <activity
             android:name=".views.post.NewChapterActivity"
             android:exported="false" />
@@ -25,7 +25,7 @@
             android:name=".views.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".views.purchase.PurchaseActivity"
+            android:name=".views.detail.DetailActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".views.detail.DetailActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".views.detail.DetailActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".views.main.MainActivity"
             android:exported="false" >

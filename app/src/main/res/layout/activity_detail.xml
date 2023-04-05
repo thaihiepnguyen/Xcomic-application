@@ -39,7 +39,7 @@
                         android:textColor="@color/white"
                         android:textSize="30dp"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
+
                         android:background="?attr/selectableItemBackground"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +53,7 @@
                         android:textStyle="bold"
                         android:textSize="30dp"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
+
                         android:background="?attr/selectableItemBackground"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -412,7 +412,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:textAlignment="center"
                         android:textSize="20sp"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
+
                         android:background="?attr/selectableItemBackground"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
