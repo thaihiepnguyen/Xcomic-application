@@ -136,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    fun setEditTextBorderColor(editText: EditText, color: Int) {
+    private fun setEditTextBorderColor(editText: EditText, color: Int) {
         val shape = GradientDrawable()
         shape.setStroke(2, color) // set the border width and color
         shape.cornerRadius = 4f // set the corner radius
