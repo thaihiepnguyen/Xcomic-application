@@ -65,6 +65,30 @@
             android:textSize="10dp"
             app:layout_constraintStart_toStartOf="@+id/collection_name"
             app:layout_constraintTop_toBottomOf="@+id/collection_name" />
+
+            <TextView
+
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/dots"
+                android:backgroundTint="#FFFFFF"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/books_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/collection_name" />
+
+            <TextView
+
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/layers"
+                android:backgroundTint="#FFFFFF"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

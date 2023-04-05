@@ -1,15 +1,17 @@
 package com.example.x_comic.views.main.fragments
 
-import android.media.Image
+import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
-import android.widget.FrameLayout
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
@@ -19,8 +21,6 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
-
-
 
 
 class Explore : Fragment() {
@@ -85,7 +85,7 @@ class Explore : Fragment() {
 
 
         searchBtn!!.setOnClickListener{
-
+            hideKeyboard(view);
             val fragment = Search();
 
             //val oldFragment = view.findViewById<FrameLayout>(R.id.exploreLayout);
@@ -185,7 +185,39 @@ class Explore : Fragment() {
         }
 
 
+        view.findViewById<EditText>(R.id.searchEditText).setOnFocusChangeListener(OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(view)
+            }
+        })
+
+        view.findViewById<EditText>(R.id.searchEditText).setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                hideKeyboard(view)
+                val fragment = Search();
+
+                //val oldFragment = view.findViewById<FrameLayout>(R.id.exploreLayout);
+                //oldFragment.removeAllViews();
+
+
+                val fragmentManager = requireActivity().supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                //transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                transaction.detach(Explore());
+                transaction.remove(Explore());
+                transaction.replace(R.id.exploreLayout, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+                return@OnKeyListener true
+            }
+            false
+        })
+
         return view
     }
-
+    fun hideKeyboard(view: View) {
+        val inputMethodManager: InputMethodManager? =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }

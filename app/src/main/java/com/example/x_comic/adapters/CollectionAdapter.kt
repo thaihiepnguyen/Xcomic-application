@@ -38,43 +38,20 @@ class CollectionAdapter (
 
     }
 
-    private var FILL = 0;
-    private var COL = 1;
-    override fun getItemViewType(position: Int): Int {
-        if (checkNumberRule(position)){
-
-            return FILL;
-        }
-
-        return COL;
-    }
 
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context;
         val inflater = LayoutInflater.from(context)
 
 
-        var columnView : View? = null;
-        when(viewType){
-            COL -> columnView =  inflater.inflate(R.layout.collection_book, parent, false)
-            FILL -> columnView =  inflater.inflate(R.layout.collection_book_fill, parent, false)
-        }
-
-        return ViewHolder(columnView!!);
+       var columnView =  inflater.inflate(R.layout.collection_book, parent, false);
+        return ViewHolder(columnView);
     }
 
     override fun getItemCount(): Int {
         return CollectionList.size;
     }
-    fun checkNumberRule(num: Int): Boolean {
-        var curr = 0 // start with 0
-        var diff = 3 // initialize the difference between consecutive numbers to 3
-        while (curr < num) {
-            curr += diff // add the current difference to the previous number
-            diff = if (diff == 3) 4 else 3 // switch between adding 3 and 4 to the previous number
-        }
-        return curr == num // if the final number is equal to the input number, it satisfies the rule
-    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val collection = CollectionList.get(position);
 

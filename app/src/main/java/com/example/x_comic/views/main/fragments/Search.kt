@@ -1,10 +1,13 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -119,8 +122,18 @@ class Search : Fragment() {
             transaction.commit()
         }
 
+        view.findViewById<EditText>(R.id.searchEditText).setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard(view)
+            }
+        })
+
         return view
     }
 
-
+    fun hideKeyboard(view: View) {
+        val inputMethodManager: InputMethodManager? =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
