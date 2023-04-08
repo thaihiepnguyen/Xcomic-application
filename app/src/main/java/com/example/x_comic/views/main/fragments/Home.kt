@@ -230,7 +230,7 @@ class Home : Fragment() {
         ).attach()
     }
 
-    // TODO:
+    // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
         val intent = Intent(context, ProfileActivity::class.java)
         startActivity(intent)

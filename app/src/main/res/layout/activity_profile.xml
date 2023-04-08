@@ -39,7 +39,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/backImg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
@@ -49,7 +49,7 @@
                             app:srcCompat="@drawable/ic_back" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/settingImg"
                             android:layout_width="30dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
@@ -60,7 +60,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/avtImg"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:layout_marginTop="32dp"
@@ -70,7 +70,7 @@
                         app:srcCompat="@drawable/avatar_6" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/usernameTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -78,20 +78,20 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="@+id/imageView"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                        app:layout_constraintEnd_toEndOf="@+id/avtImg"
+                        app:layout_constraintStart_toStartOf="@+id/avtImg"
+                        app:layout_constraintTop_toBottomOf="@+id/avtImg" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/emailTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="nthiep@clc.fitus.edu.vn"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="@+id/textView5"
-                        app:layout_constraintStart_toStartOf="@+id/textView5"
-                        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                        app:layout_constraintEnd_toEndOf="@+id/usernameTV"
+                        app:layout_constraintStart_toStartOf="@+id/usernameTV"
+                        app:layout_constraintTop_toBottomOf="@+id/usernameTV" />
 
                     <ImageView
                         android:id="@+id/imageView2"
@@ -118,7 +118,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6">
+                        app:layout_constraintTop_toBottomOf="@+id/emailTV">
 
                         <LinearLayout
                             android:layout_width="match_parent"

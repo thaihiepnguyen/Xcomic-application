@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.x_comic.R
 import com.example.x_comic.databinding.ActivityLoginBinding
 import com.example.x_comic.databinding.LayoutDialogSendpassBinding
+import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.LoginViewModel
 import com.example.x_comic.viewmodels.UserViewModel
@@ -105,6 +106,8 @@ class LoginActivity : AppCompatActivity() {
         // code này để yêu cầu địa chỉ email của người dùng
         mClient = createRequest()
         // nhấn để login bằng google
+
+        // TODO: Xử lý code ở UI rất nhiều. Do có sử dụng Intent nên là chuyển sang thư mục khác khó xài
         binding.signInButton.setOnClickListener {
             signIn(mClient)
         }
@@ -137,26 +140,48 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleSignInResult(completedTask: com.google.android.gms.tasks.Task<GoogleSignInAccount>) {
-        try {
+        val progressDialog = ProgressDialog(this)
+        val account = completedTask.getResult(ApiException::class.java)
+        if (account.idToken != null) {
+            progressDialog.show()
+            loginViewModel.loginByGoogle(account.idToken!!).observe(this, Observer { success ->
+                if (success) {
+                    val userAuth = FirebaseAuthManager.getUser()
 
-            val account = completedTask.getResult(ApiException::class.java)
-//            account.idToken?.let { loginViewModel.loginByGoogle(it) }
-            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        //TODO: ở đây này, là người ta đăng nhập bằng GG thành công
-                        val user = FirebaseAuth.getInstance().currentUser
-                        // Lưu thông tin user lên Firebase Database nếu cần
-                    } else {
-                        // Đăng nhập thất bại
+                    if (userAuth != null) {
+                        // TODO: 1. kiểm tra ở Realtime đã có dữ liệu hay chưa
+                        // 2. nếu chưa có thì thêm mới rồi đăng nhập
+                        // 3. nếu có rồi thì đăng nhập luôn
+                        // 4. truyền dữ liệu ở realtime vào main ui
+
+                        val uid = userAuth.uid
+
+                        if (!userViewModel.isExist(uid)) {
+                            val user = User()
+                            user.id = userAuth.uid
+                            user.email = userAuth.email.toString()
+
+                            userViewModel.addUser(user)
+                        }
+                        // biến user này được lấy từ Realtime Db nhé!
+                        val user = userViewModel.getUser(uid)
+                        user.data.observe(this, Observer { User ->
+                            // TODO: Xử lý việc người dùng vừa đăng nhập xong
+                            // Lấy thông tin người dùng từ realtime db
+                            //
+
+                            Toast.makeText(this, User.email, Toast.LENGTH_LONG).show()
+                        })
+                        nextMainActivity()
                     }
+                    progressDialog.cancel()
+                } else {
+                    displayErrorMsg(FirebaseAuthManager.msg)
+                    progressDialog.cancel()
                 }
-
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            })
+        } else {
+            displayErrorMsg("Account idToken not found!")
         }
     }
     private fun showSendEmailDialog() {

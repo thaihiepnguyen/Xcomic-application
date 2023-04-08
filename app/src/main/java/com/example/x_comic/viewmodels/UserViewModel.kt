@@ -51,5 +51,25 @@ class UserViewModel: ViewModel() {
             .setValue(user)
     }
 
+    fun isExist(uid: String) : Boolean {
+        var result = false
+
+        val database = Firebase.database
+        val ref = database.reference.child("users").child(uid)
+
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                result = dataSnapshot.exists()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors here
+            }
+        })
+
+        return result
+    }
+
 
 }
