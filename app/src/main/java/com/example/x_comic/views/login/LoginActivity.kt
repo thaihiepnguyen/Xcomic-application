@@ -1,8 +1,8 @@
 package com.example.x_comic.views.login
 
 import android.app.Dialog
-import com.example.x_comic.R
 import android.app.ProgressDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.x_comic.R
 import com.example.x_comic.databinding.ActivityLoginBinding
 import com.example.x_comic.databinding.LayoutDialogSendpassBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
@@ -25,7 +26,15 @@ import com.example.x_comic.viewmodels.LoginViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.signup.SignupActivity
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 
 class LoginActivity : AppCompatActivity() {
@@ -33,7 +42,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var bindingDialog: LayoutDialogSendpassBinding
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
-
+    private var RC_SIGN_IN = 12321
+    private lateinit var mClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
         binding.loginBtn.setOnClickListener {
             val email = binding.usernameET.text.toString().trim()
             val password = binding.passwordET.text.toString().trim()
-
 
             val result = verify(email, password)
 
@@ -92,11 +101,65 @@ class LoginActivity : AppCompatActivity() {
         binding.forgotPwdTV.setOnClickListener {
             showSendEmailDialog()
         }
+
+        // code này để yêu cầu địa chỉ email của người dùng
+        mClient = createRequest()
+        // nhấn để login bằng google
+        binding.signInButton.setOnClickListener {
+            signIn(mClient)
+        }
     }
 
+    private fun createRequest() : GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(this, gso)
+    }
+
+    private fun signIn(mGoogleSignInClient: GoogleSignInClient) {
+        val signInIntent: Intent = mGoogleSignInClient.getSignInIntent()
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task: com.google.android.gms.tasks.Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: com.google.android.gms.tasks.Task<GoogleSignInAccount>) {
+        try {
+
+            val account = completedTask.getResult(ApiException::class.java)
+//            account.idToken?.let { loginViewModel.loginByGoogle(it) }
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        //TODO: ở đây này, là người ta đăng nhập bằng GG thành công
+                        val user = FirebaseAuth.getInstance().currentUser
+                        // Lưu thông tin user lên Firebase Database nếu cần
+                    } else {
+                        // Đăng nhập thất bại
+                    }
+                }
+
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+        }
+    }
     private fun showSendEmailDialog() {
-
-
         var dialog: Dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_dialog_sendpass)
@@ -130,11 +193,8 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Send", Toast.LENGTH_LONG).show()
                 }
         }
-
         dialog.show()
     }
-
-
 
     private fun setEditTextBorderColor(editText: EditText, color: Int) {
         val shape = GradientDrawable()
@@ -144,14 +204,6 @@ class LoginActivity : AppCompatActivity() {
 
         editText.background = shape // set the custom drawable as the background of the EditText
     }
-//
-    private fun isEmailValid(email: String): Boolean {
-        val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
-        return emailRegex.matches(email)
-    }
-//    private fun verify(email: String, password: String): Boolean {
-//        return isEmailValid(email) && (password.length > 6)
-//    }
 
     private fun verify(email: String, password: String): Pair<Boolean, String> {
         var isValid = true

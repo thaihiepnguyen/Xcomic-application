@@ -48,6 +48,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+    // google
+    implementation 'com.shobhitpuri.custombuttons:google-signin:1.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
     //fblogin
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 //    implementation 'com.facebook.android:facebook-login:5.15.3'

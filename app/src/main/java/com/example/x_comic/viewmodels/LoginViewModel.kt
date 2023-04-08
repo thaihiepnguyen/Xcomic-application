@@ -11,4 +11,9 @@ class LoginViewModel : ViewModel() {
     fun login(email: String, password: String): LiveData<Boolean> {
         return firebaseAuthManager.login(email, password)
     }
+
+    fun loginByGoogle(idToken: String) : LiveData<Boolean> {
+        return firebaseAuthManager.loginByGoogle(idToken)
+    }
+
 }

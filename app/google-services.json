@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "487181028520",
+    "firebase_url": "https://x-comic-db-default-rtdb.firebaseio.com",
     "project_id": "x-comic-db",
     "storage_bucket": "x-comic-db.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "487181028520-ck0hf25tlis7stl6t7l7p1hcfnnbh2gu.apps.googleusercontent.com",
+          "client_id": "487181028520-u6ro21fsguue52v6m1mq6e5u8sgdl6ka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.x_comic",
+            "certificate_hash": "8b0287de19d3c5e657c276f29faae9807668e4c4"
+          }
+        },
+        {
+          "client_id": "487181028520-m8jfar01cnuvmnu4n4fssla7vcj20qpm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
