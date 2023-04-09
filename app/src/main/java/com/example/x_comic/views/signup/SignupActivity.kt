@@ -32,7 +32,7 @@ class SignupActivity : AppCompatActivity() {
 
         binding = ActivitySignupBinding.inflate(layoutInflater)
         signupViewModel = ViewModelProvider(this).get(SignupViewModel::class.java)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userViewModel = UserViewModel()
 
         setContentView(binding.root)
         val progressDialog = ProgressDialog(this)

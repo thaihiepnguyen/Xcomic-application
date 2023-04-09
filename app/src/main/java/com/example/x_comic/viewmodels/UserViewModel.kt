@@ -1,45 +1,50 @@
 package com.example.x_comic.viewmodels
 
+import android.content.ContentValues
+import android.util.Log
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.x_comic.databinding.ActivityProfileBinding
 import com.example.x_comic.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class UserViewModel: ViewModel() {
-    private val _user = MutableLiveData<User>()
-    val data: LiveData<User>
-        get() = _user
+class UserViewModel {
+    companion object {
+        var user = User()
+        var ref: DatabaseReference? = null
+        fun updateUI(binding: ActivityProfileBinding) {
+            ref?.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    user = dataSnapshot.getValue(User::class.java)!!
+                    binding.user = user
+                }
 
-    fun getUser(uid: String) : UserViewModel {
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
+                }
+            })
+        }
+    }
+
+    fun setUser(uid: String) : UserViewModel {
         val database = Firebase.database
         val ref = database.reference.child("users").child(uid)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                var id = snapshot.child("id").value as String
-                var full_name = snapshot.child("full_name").value as String
-                var age = snapshot.child("age").value as Long
-                var avatar = snapshot.child("avatar").value as String
-                var bio = snapshot.child("bio").value as String
-                var dob = snapshot.child("dob").value as String
-                var email = snapshot.child("email").value as String
-                var follow = snapshot.child("follow").value as Long
-                var hide = snapshot.child("hide").value as Boolean
-                var penname = snapshot.child("penname").value as String
-                var phone = snapshot.child("phone").value as String
-                var gender = snapshot.child("gender").value as String
-                var role = snapshot.child("role").value as Long
-
-                _user.value = User(id, full_name, age, avatar, bio, dob, email, follow, hide, penname, phone, gender, role)
+                user = snapshot.getValue(User::class.java)!!
             }
             override fun onCancelled(error: DatabaseError) {
                 // Xử lý lỗi
             }
         })
+        UserViewModel.ref = ref
         return this
     }
 
@@ -51,25 +56,18 @@ class UserViewModel: ViewModel() {
             .setValue(user)
     }
 
-    fun isExist(uid: String) : Boolean {
-        var result = false
-
+    fun isExist(uid: String, callback: (Boolean) -> Unit) {
         val database = Firebase.database
         val ref = database.reference.child("users").child(uid)
 
-
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                result = dataSnapshot.exists()
+                callback(dataSnapshot.exists())
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Handle errors here
             }
         })
-
-        return result
     }
-
-
 }

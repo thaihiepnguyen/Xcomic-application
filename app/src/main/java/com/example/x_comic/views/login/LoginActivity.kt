@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         val progressDialog = ProgressDialog(this)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userViewModel = UserViewModel()
 
         binding.loginBtn.setOnClickListener {
             val email = binding.usernameET.text.toString().trim()
@@ -76,14 +76,14 @@ class LoginActivity : AppCompatActivity() {
 
                         if (userAuth != null) {
                             val uid = userAuth.uid
-                            val user = userViewModel.getUser(uid)
-                            user.data.observe(this, Observer { User ->
-                                // TODO: Xử lý việc người dùng vừa đăng nhập xong
-                                // Lấy thông tin người dùng từ realtime db
-                                //
-
-                                Toast.makeText(this, User.email, Toast.LENGTH_LONG).show()
-                            })
+                            val user = userViewModel.setUser(uid)
+//                            user.data.observe(this, Observer { User ->
+//                                // TODO: Xử lý việc người dùng vừa đăng nhập xong
+//                                // Lấy thông tin người dùng từ realtime db
+//                                //
+//
+//                                Toast.makeText(this, User.email, Toast.LENGTH_LONG).show()
+//                            })
                             nextMainActivity()
                         }
                         progressDialog.cancel()
@@ -156,22 +156,19 @@ class LoginActivity : AppCompatActivity() {
 
                         val uid = userAuth.uid
 
-                        if (!userViewModel.isExist(uid)) {
-                            val user = User()
-                            user.id = userAuth.uid
-                            user.email = userAuth.email.toString()
+                        userViewModel.isExist(uid) { result ->
+                            if (result) {
+                                // User exists
+                            } else {
+                                val user = User()
+                                user.id = userAuth.uid
+                                user.email = userAuth.email.toString()
 
-                            userViewModel.addUser(user)
+                                userViewModel.addUser(user)
+                            }
                         }
                         // biến user này được lấy từ Realtime Db nhé!
-                        val user = userViewModel.getUser(uid)
-                        user.data.observe(this, Observer { User ->
-                            // TODO: Xử lý việc người dùng vừa đăng nhập xong
-                            // Lấy thông tin người dùng từ realtime db
-                            //
-
-                            Toast.makeText(this, User.email, Toast.LENGTH_LONG).show()
-                        })
+                        val user = userViewModel.setUser(uid)
                         nextMainActivity()
                     }
                     progressDialog.cancel()
