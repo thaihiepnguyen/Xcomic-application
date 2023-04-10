@@ -1,9 +1,11 @@
 package com.example.x_comic.views.admin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.example.x_comic.R
+import com.example.x_comic.views.post.NewChapterActivity
 
 class HomeActivity : AppCompatActivity() {
     var btnBooksManager : Button? = null
@@ -22,6 +24,8 @@ class HomeActivity : AppCompatActivity() {
 
         btnAccountsManager?.setOnClickListener {
             // TODO: Màn hình quản lý tài khoản
+            val intent = Intent(this, AccountManagementActivity::class.java)
+            startActivity(intent)
         }
     }
 }
