@@ -34,7 +34,7 @@ class UserViewModel {
     }
 
     fun setUser(uid: String) : UserViewModel {
-        val database = Firebase.database
+        val database = Firebase.database // mẫu singleton design p
         val ref = database.reference.child("users").child(uid)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

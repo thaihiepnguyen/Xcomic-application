@@ -24,6 +24,7 @@ import com.example.x_comic.databinding.LayoutDialogSendpassBinding
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.LoginViewModel
+import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.signup.SignupActivity
