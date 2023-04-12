@@ -3,14 +3,14 @@ package com.example.x_comic.models
 import java.util.Date
 
 class Episode {
-    var id: Long = 0
+    var id: String = ""
     var is_lock: Boolean = false
     var content: String = ""
     var date_update: String = ""
     var name: String = ""
 
     constructor(
-        id: Long = 0,
+        id: String = "",
         is_lock: Boolean = false,
         content: String = "",
         date_update: String = "",

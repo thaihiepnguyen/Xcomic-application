@@ -22,7 +22,7 @@
          android:name=".views.read.ReadBookActivity"
          android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".views.login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".views.admin.HomeActivity"
@@ -38,7 +38,7 @@
             android:name=".views.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".views.login.LoginActivity"
+            android:name=".views.profile.EditProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

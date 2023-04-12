@@ -33,6 +33,7 @@ class UserViewModel {
         }
     }
 
+    // lay du lieu
     fun setUser(uid: String) : UserViewModel {
         val database = Firebase.database // mẫu singleton design p
         val ref = database.reference.child("users").child(uid)
@@ -48,6 +49,7 @@ class UserViewModel {
         return this
     }
 
+    // add
     fun addUser(user: User) {
         val database = Firebase.database
         database.reference
@@ -56,6 +58,7 @@ class UserViewModel {
             .setValue(user)
     }
 
+    // ton
     fun isExist(uid: String, callback: (Boolean) -> Unit) {
         val database = Firebase.database
         val ref = database.reference.child("users").child(uid)

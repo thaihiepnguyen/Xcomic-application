@@ -21,7 +21,16 @@ class ProfileActivity : AppCompatActivity() {
             nextMainActivity()
         }
 
+        binding.settingImg.setOnClickListener {
+            nextSettingActivity()
+        }
+
         UserViewModel.updateUI(binding)
+    }
+
+    private fun nextSettingActivity() {
+        val intent = Intent(this, EditProfileActivity::class.java)
+        startActivity(intent)
     }
 
     private fun nextMainActivity() {

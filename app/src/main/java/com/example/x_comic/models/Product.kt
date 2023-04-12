@@ -1,35 +1,32 @@
 package com.example.x_comic.models
 
 class Product {
-    var id: Long = 0
+    var id: String = ""
     var title: String = ""
-    var cover: Long = 0
+    var cover: String = ""
     var status: Boolean = false
     var tiny_des: String = ""
     var author: String = ""
     var view: Long = 0
     var rating: Double = 0.0
     var hide: Boolean = false
-    var age: Long = 0
-    var categories = ArrayList<Category>()
-    var chapters = ArrayList<Episode>()
+    var categories = ArrayList<Long>()
+    var chapters = ArrayList<HashMap<String, Episode>>()
     constructor(
-        id: Long = 0,
+        id: String = "",
         title: String = "",
-        cover: Long = 0,
+        cover: String = "",
         status: Boolean = false,
         tiny_des: String = "",
         author: String = "",
         view: Long = 0,
         rating: Double = 0.0,
         hide: Boolean = false,
-        age: Long = 0,
-        categories: ArrayList<Category>,
-        chapters: ArrayList<Episode>
+        categories: ArrayList<Long>,
+        chapters: ArrayList<HashMap<String, Episode>>
     ) {
         this.id = id
         this.title = title
-        this.age = age
         this.cover = cover
         this.status = status
         this.tiny_des = tiny_des
