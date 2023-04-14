@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.x_comic.databinding.ActivityProfileBinding
+import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,39 +15,37 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.net.UnknownServiceException
 
-class UserViewModel {
-    companion object {
-        var user = User()
-        var ref: DatabaseReference? = null
-        fun updateUI(binding: ActivityProfileBinding) {
-            ref?.addValueEventListener(object : ValueEventListener {
+class UserViewModel : ViewModel() {
+    private val database = Firebase.database
+    val db = database.getReference("users")
+
+    private val _user = MutableLiveData<User>()
+    // TODO: biến này để truyền sang Activity khác
+    val userLiveData: LiveData<User>
+        get() = _user
+
+    // Hàm này sẽ chạy ở thread khác
+    fun callApi(uid: String) : MutableLiveData<User> {
+        if (_user.value == null) {
+            val ref = db.child(uid)
+            ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    user = dataSnapshot.getValue(User::class.java)!!
-                    binding.user = user
+
+                    var user: User = dataSnapshot.getValue(User::class.java)!!
+                    _user.value = user
+                    _user.postValue(user)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w(ContentValues.TAG, "loadPost:onCancelled", databaseError.toException())
+                    // TODO: Xử lý lỗi, bỏ thread đi
+                    db.removeEventListener(this)
                 }
             })
         }
-    }
 
-    // lay du lieu
-    fun setUser(uid: String) : UserViewModel {
-        val database = Firebase.database // mẫu singleton design p
-        val ref = database.reference.child("users").child(uid)
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                user = snapshot.getValue(User::class.java)!!
-            }
-            override fun onCancelled(error: DatabaseError) {
-                // Xử lý lỗi
-            }
-        })
-        UserViewModel.ref = ref
-        return this
+        return _user
     }
 
     // add

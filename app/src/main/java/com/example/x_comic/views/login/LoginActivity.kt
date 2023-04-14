@@ -22,10 +22,7 @@ import com.example.x_comic.R
 import com.example.x_comic.databinding.ActivityLoginBinding
 import com.example.x_comic.databinding.LayoutDialogSendpassBinding
 import com.example.x_comic.models.User
-import com.example.x_comic.viewmodels.FirebaseAuthManager
-import com.example.x_comic.viewmodels.LoginViewModel
-import com.example.x_comic.viewmodels.ProductViewModel
-import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.viewmodels.*
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.signup.SignupActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -44,6 +41,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var bindingDialog: LayoutDialogSendpassBinding
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var categoryViewModel: CategoryViewModel
     private var RC_SIGN_IN = 12321
     private lateinit var mClient: GoogleSignInClient
 
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         val progressDialog = ProgressDialog(this)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        userViewModel = UserViewModel()
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         binding.loginBtn.setOnClickListener {
             val email = binding.usernameET.text.toString().trim()
@@ -76,15 +75,6 @@ class LoginActivity : AppCompatActivity() {
                         val userAuth = FirebaseAuthManager.getUser()
 
                         if (userAuth != null) {
-                            val uid = userAuth.uid
-                            val user = userViewModel.setUser(uid)
-//                            user.data.observe(this, Observer { User ->
-//                                // TODO: Xử lý việc người dùng vừa đăng nhập xong
-//                                // Lấy thông tin người dùng từ realtime db
-//                                //
-//
-//                                Toast.makeText(this, User.email, Toast.LENGTH_LONG).show()
-//                            })
                             nextMainActivity()
                         }
                         progressDialog.cancel()
@@ -157,8 +147,8 @@ class LoginActivity : AppCompatActivity() {
 
                         val uid = userAuth.uid
 
-                        userViewModel.isExist(uid) { result ->
-                            if (result) {
+                        userViewModel.isExist(uid) { ok ->
+                            if (ok) {
                                 // User exists
                             } else {
                                 val user = User()
@@ -168,8 +158,6 @@ class LoginActivity : AppCompatActivity() {
                                 userViewModel.addUser(user)
                             }
                         }
-                        // biến user này được lấy từ Realtime Db nhé!
-                        val user = userViewModel.setUser(uid)
                         nextMainActivity()
                     }
                     progressDialog.cancel()

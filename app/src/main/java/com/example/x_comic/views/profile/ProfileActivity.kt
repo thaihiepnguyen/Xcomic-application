@@ -4,16 +4,22 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.x_comic.databinding.ActivityProfileBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.MainActivity
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var userViewModel: UserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         setContentView(binding.root)
 
@@ -25,7 +31,13 @@ class ProfileActivity : AppCompatActivity() {
             nextSettingActivity()
         }
 
-        UserViewModel.updateUI(binding)
+        val uid = FirebaseAuthManager.auth.uid
+        if (uid != null) {
+            userViewModel.callApi(uid)
+                .observe(this, Observer {
+                        user -> binding.user = user
+            })
+        }
     }
 
     private fun nextSettingActivity() {
