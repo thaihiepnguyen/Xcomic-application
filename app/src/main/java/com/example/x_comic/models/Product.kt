@@ -1,6 +1,6 @@
 package com.example.x_comic.models
 
-class Product : Cloneable {
+class Product:Cloneable {
     var id: String = ""
     var title: String = ""
     var cover: String = ""
@@ -8,22 +8,24 @@ class Product : Cloneable {
     var tiny_des: String = ""
     var author: String = ""
     var view: Long = 0
-    var rating: Long = 0
+    var rating: Double = 0.0
     var hide: Boolean = false
-    var categories = ArrayList<String>()
-    var chapters = ArrayList<Episode>()
+    var categories = ArrayList<Category>()
+    var chapters = ArrayList<Chapter>()
     constructor(
+        id: String = "",
         title: String = "",
         cover: String = "",
         status: Boolean = false,
         tiny_des: String = "",
         author: String = "",
         view: Long = 0,
-        rating: Long = 0,
+        rating: Double = 0.0,
         hide: Boolean = false,
-        categories: ArrayList<String>,
-        chapters: ArrayList<Episode>
+        categories: ArrayList<Category>,
+        chapters: ArrayList<Chapter>
     ) {
+        this.id = id
         this.title = title
         this.cover = cover
         this.status = status
@@ -38,6 +40,10 @@ class Product : Cloneable {
     constructor() {
 
     }
+    companion object{
+        var listBook = ArrayList<Product>()
+    }
+}
 
 //    fun toMap(): Map<String, Any?> {
 //        return mapOf(
@@ -54,4 +60,3 @@ class Product : Cloneable {
 //            "chapters" to chapters
 //        )
 //    }
-}

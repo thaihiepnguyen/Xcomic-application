@@ -26,12 +26,12 @@ class PostNewActivity : AppCompatActivity() {
     var categoryView : RecyclerView? = null;
 
     var chapterList: MutableList<Chapter> = mutableListOf(
-        Chapter("Chapter 1", "updated 1/1/2000"),
-        Chapter("Chapter 2", "updated 1/1/2000"),
-        Chapter("Chapter 3", "updated 1/1/2000"),
-        Chapter("Chapter 4", "updated 1/1/2000"),
-        Chapter("Chapter 5", "updated 1/1/2000"),
-        Chapter("Chapter 6", "updated 1/1/2000"),
+        Chapter("Chapter 1"),
+        Chapter("Chapter 2"),
+        Chapter("Chapter 3"),
+        Chapter("Chapter 4"),
+        Chapter("Chapter 5"),
+        Chapter("Chapter 6"),
         )
     var customChapterListView: RecyclerView? = null;
 
@@ -68,7 +68,7 @@ class PostNewActivity : AppCompatActivity() {
             // Set item views based on your views and data model
 
             holder.name.text = chapters[position].name
-            holder.dateUpdate.text = chapters[position].data_update
+
         }
     }
 
