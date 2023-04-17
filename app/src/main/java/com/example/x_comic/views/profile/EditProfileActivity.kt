@@ -33,6 +33,14 @@ class EditProfileActivity : AppCompatActivity() {
             nextResetPasswordActivity()
         }
 
+        binding.fullnameLayout.setOnClickListener {
+            nextChangeUsernameActivity()
+        }
+
+        binding.genderLayout.setOnClickListener {
+            nextChangeGenderActivity()
+        }
+
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -51,6 +59,14 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun nextResetPasswordActivity() {
         val intent = Intent(this, ResetPasswordActivity::class.java)
+        startActivity(intent)
+    }
+    private fun nextChangeUsernameActivity() {
+        val intent = Intent(this, ChangeUsernameActivity::class.java)
+        startActivity(intent)
+    }
+    private fun nextChangeGenderActivity() {
+        val intent = Intent(this, ChangeGenderActivity::class.java)
         startActivity(intent)
     }
 }

@@ -48,10 +48,15 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         // TODO: Lúc này người dùng đã đăng nhập rồi.
         if (FirebaseAuthManager.auth.currentUser != null) {
             nextMainActivity()
+            var currentUser = FirebaseAuthManager.getUser()
+            if (currentUser != null) {
+                userViewModel.callApi(currentUser.uid)
+            }
         }
     }
 
@@ -63,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         val progressDialog = ProgressDialog(this)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
 
         binding.loginBtn.setOnClickListener {
             val email = binding.usernameET.text.toString().trim()

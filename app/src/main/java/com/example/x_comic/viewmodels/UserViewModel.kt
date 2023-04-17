@@ -57,6 +57,53 @@ class UserViewModel : ViewModel() {
             .setValue(user)
     }
 
+    fun changeUsername(username: String) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("full_name")
+                .setValue(username)
+        }
+    }
+
+    fun changePenname(penname: String) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("penname")
+                .setValue(penname)
+        }
+    }
+
+    fun changePhone(phone: String) {
+        val database = Firebase.database
+        _user.value?.let {
+            database.reference
+                .child("users")
+                .child(it.id)
+                .child("phone")
+                .setValue(phone)
+        }
+    }
+
+    fun changeGender(gender: String) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("gender")
+                .setValue(gender)
+        }
+    }
+
     // ton
     fun isExist(uid: String, callback: (Boolean) -> Unit) {
         val database = Firebase.database
