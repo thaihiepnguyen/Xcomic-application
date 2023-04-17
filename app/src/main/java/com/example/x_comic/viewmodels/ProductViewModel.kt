@@ -25,6 +25,7 @@ class ProductViewModel : ViewModel() {
         // TODO: Kiểm tra là chỉ khi _products.value == null. Ý là mình chỉ chạy dòng ở dưới 1 lần thôi
         // lần đầu tiên khi _products.value còn là null
         if (_products.value == null) {
+            // tạo thread mới.
             db.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val products = ArrayList<Product>()

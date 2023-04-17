@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
             products -> Log.d("PRODUCT 1", products[0].title)
 //                TODO: Binding biến products ở đây vào UI
         })
-
     }
 
     fun replaceFragment(fragment: Fragment){

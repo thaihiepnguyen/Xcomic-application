@@ -208,7 +208,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="18"
+                                    android:text="@{String.valueOf(User.age)}"
                                     android:textSize="18sp"/>
                             </LinearLayout>
                             <LinearLayout
@@ -268,10 +268,10 @@
                                     android:layout_gravity="start"
                                     android:textSize="18sp" />
                                 <TextView
+                                    android:id="@+id/roleTV"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Member"
                                     android:textSize="18sp"/>
                             </LinearLayout>
                             <LinearLayout
@@ -292,7 +292,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="135"
+                                    android:text="@{String.valueOf(User.follow)}"
                                     android:textSize="18sp"/>
                             </LinearLayout>
                         </LinearLayout>

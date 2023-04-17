@@ -46,6 +46,15 @@ class LoginActivity : AppCompatActivity() {
     private var RC_SIGN_IN = 12321
     private lateinit var mClient: GoogleSignInClient
 
+    override fun onStart() {
+        super.onStart()
+
+        // TODO: Lúc này người dùng đã đăng nhập rồi.
+        if (FirebaseAuthManager.auth.currentUser != null) {
+            nextMainActivity()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -135,6 +144,7 @@ class LoginActivity : AppCompatActivity() {
         val account = completedTask.getResult(ApiException::class.java)
         if (account.idToken != null) {
             progressDialog.show()
+            progressDialog.setMessage("Loading...")
             loginViewModel.loginByGoogle(account.idToken!!).observe(this, Observer { success ->
                 if (success) {
                     val userAuth = FirebaseAuthManager.getUser()

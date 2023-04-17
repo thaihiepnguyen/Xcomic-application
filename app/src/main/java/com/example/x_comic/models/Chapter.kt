@@ -15,4 +15,5 @@ class Chapter {
         this.date_update = "2023"
         this.content = "This is the content of chapter"
     }
+    constructor() {}
 }

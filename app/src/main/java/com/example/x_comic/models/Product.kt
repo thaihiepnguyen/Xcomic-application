@@ -1,6 +1,7 @@
 package com.example.x_comic.models
 
-class Product:Cloneable {
+
+class Product {
     var id: String = ""
     var title: String = ""
     var cover: String = ""
