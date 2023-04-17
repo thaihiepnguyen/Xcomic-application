@@ -41,6 +41,10 @@ class EditProfileActivity : AppCompatActivity() {
             nextChangeGenderActivity()
         }
 
+        binding.ageLayout.setOnClickListener {
+            nextChangeAgeActivity()
+        }
+
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -67,6 +71,11 @@ class EditProfileActivity : AppCompatActivity() {
     }
     private fun nextChangeGenderActivity() {
         val intent = Intent(this, ChangeGenderActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextChangeAgeActivity() {
+        val intent = Intent(this, ChangeAgeActivity::class.java)
         startActivity(intent)
     }
 }

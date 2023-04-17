@@ -16,6 +16,9 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
+            android:name=".views.profile.ChangeAgeActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.profile.ChangeGenderActivity"
             android:exported="false" />
         <activity

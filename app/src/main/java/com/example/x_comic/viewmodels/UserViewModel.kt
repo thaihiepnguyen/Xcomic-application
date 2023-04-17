@@ -82,13 +82,26 @@ class UserViewModel : ViewModel() {
     }
 
     fun changePhone(phone: String) {
+        var currentUser = FirebaseAuthManager.getUser()
         val database = Firebase.database
-        _user.value?.let {
+        if (currentUser != null) {
             database.reference
                 .child("users")
-                .child(it.id)
+                .child(currentUser.uid)
                 .child("phone")
                 .setValue(phone)
+        }
+    }
+
+    fun changeAge(age: Long) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("age")
+                .setValue(age)
         }
     }
 
