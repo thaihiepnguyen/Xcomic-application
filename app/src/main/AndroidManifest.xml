@@ -16,11 +16,14 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
+            android:name=".views.profile.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.admin.AccountManagementActivity"
             android:exported="false" />
-         <activity
-         android:name=".views.read.ReadBookActivity"
-         android:exported="false" />
+        <activity
+            android:name=".views.read.ReadBookActivity"
+            android:exported="false" />
         <activity
             android:name=".views.profile.EditProfileActivity"
             android:exported="false" />

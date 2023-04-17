@@ -43,8 +43,6 @@ class ProfileActivity : AppCompatActivity() {
                             if (user.role.toInt() == 1) {
                                 binding.roleTV.text = "Member"
                             }
-                            Log.d("TEST",user.email)
-                            Log.d("TEST 1 ", " Hello ")
                         }
 
             })
