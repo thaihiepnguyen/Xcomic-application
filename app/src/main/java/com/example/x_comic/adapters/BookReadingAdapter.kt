@@ -1,5 +1,6 @@
 package com.example.x_comic.adapters
 
+import BookDialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.models.Book
@@ -22,8 +24,9 @@ class BookReadingAdapter (
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
+
     var context: Context? = null;
-    inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
+    inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
         var title = listItemView.findViewById(R.id.bookname) as TextView;
         var progressBar = listItemView.findViewById(R.id.progress_bar) as ProgressBar;
@@ -32,6 +35,8 @@ class BookReadingAdapter (
             listItemView.setOnClickListener {
                 onItemClick?.invoke(bookReadingList[adapterPosition])
             }
+
+
         }
 
     }
@@ -53,6 +58,8 @@ class BookReadingAdapter (
         return bookReadingList.size;
     }
 
+
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val book = bookReadingList.get(position);
 
@@ -69,6 +76,12 @@ class BookReadingAdapter (
         var current = book.current;
 
         progressbar.progress = current*100/total;
+
+        holder.itemView.setOnLongClickListener {
+            val dialog = BookDialog(book.book.book.title);
+            dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+            true // Return true to indicate the event has been consumed
+        }
 
 
 
