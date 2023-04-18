@@ -17,11 +17,8 @@ class ProductViewModel : ViewModel() {
     val productsLiveData: LiveData<ArrayList<Product>>
         get() = _products
 
-    init {
-        callApi()
-    }
 
-    private fun callApi() {
+    fun callApi():MutableLiveData<ArrayList<Product>>{
         // TODO: Kiểm tra là chỉ khi _products.value == null. Ý là mình chỉ chạy dòng ở dưới 1 lần thôi
         // lần đầu tiên khi _products.value còn là null
         if (_products.value == null) {
@@ -46,6 +43,7 @@ class ProductViewModel : ViewModel() {
                 }
             })
         }
+        return _products
     }
     fun addProduct(product: Product) {
         val newRef = db.push()

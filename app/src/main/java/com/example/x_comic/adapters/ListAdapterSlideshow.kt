@@ -1,4 +1,5 @@
 package com.example.x_comic.adapters
+import android.graphics.BitmapFactory
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +8,14 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.models.Product
+import com.google.firebase.storage.FirebaseStorage
 
 class ListAdapterSlideshow (
-    private var bookList: MutableList<BookSneek>,
+    private var bookList: MutableList<Product>,
 ) : RecyclerView.Adapter<ListAdapterSlideshow.ViewHolder>()
 {
-    var onItemClick: ((BookSneek) -> Unit)? = null
+    var onItemClick: ((Product) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var title = listItemView.findViewById(R.id.bookname) as TextView;
@@ -49,7 +52,18 @@ class ListAdapterSlideshow (
         var favourite = false;
         title.setText(book.title);
         author.setText(book.author);
-        cover.setImageResource(book.cover);
+        val storage = FirebaseStorage.getInstance()
+        val imageName = book.cover // Replace with your image name
+        val imageRef = storage.reference.child("book_cover/$imageName")
+        imageRef.getBytes(Long.MAX_VALUE)
+            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
+                // Set the Bitmap to the ImageView
+                cover.setImageBitmap(bitmap)
+            }.addOnFailureListener {
+                // Handle any errors
+            }
         rating.text= Html.fromHtml("<font>${book.rating} </font>" +
                 "<font color='#FFC000'> ★ </font>")
 
