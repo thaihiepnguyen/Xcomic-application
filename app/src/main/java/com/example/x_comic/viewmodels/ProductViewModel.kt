@@ -12,13 +12,13 @@ class ProductViewModel : ViewModel() {
     val database = Firebase.database
     val db = database.getReference("book")
     private val _products = MutableLiveData<ArrayList<Product>>()
-    private val _productsLatest = MutableLiveData<ArrayList<Product>>()
+    private val _productsCompleted = MutableLiveData<ArrayList<Product>>()
 
     // TODO: biến này để truyền sang Activity khác
     val productsLiveData: LiveData<ArrayList<Product>>
         get() = _products
-    val productsLatestLiveData: LiveData<ArrayList<Product>>
-        get() = _productsLatest
+    val productsCompletedLiveData: LiveData<ArrayList<Product>>
+        get() = _productsCompleted
 
 
     fun getAllBook():MutableLiveData<ArrayList<Product>>{
@@ -48,21 +48,21 @@ class ProductViewModel : ViewModel() {
         }
         return _products
     }
-    fun getLastestBook():MutableLiveData<ArrayList<Product>>{
-        if (_productsLatest.value == null) {
+    fun getCompletedBook():MutableLiveData<ArrayList<Product>>{
+        if (_productsCompleted.value == null) {
             // tạo thread mới.
             db.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val products = ArrayList<Product>()
+                    val products2 = ArrayList<Product>()
 
                     for (snapshot in dataSnapshot.children) {
-                        val product = snapshot.getValue(Product::class.java)
-                        if (product != null) {
-                            products.add(product)
+                        val product2 = snapshot.getValue(Product::class.java)
+                        if (product2 != null && product2.status) {
+                           products2.add(product2)
                         }
                     }
-                    _products.value = products
-                    _products.postValue(products)
+                    _productsCompleted.value = products2
+                    _productsCompleted.postValue(products2)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -71,7 +71,7 @@ class ProductViewModel : ViewModel() {
                 }
             })
         }
-        return _products
+        return _productsCompleted
     }
     fun addProduct(product: Product) {
         val newRef = db.push()

@@ -84,8 +84,13 @@ class Home : Fragment() {
                     //call funtion get book
                     bookList.addAll(products)
                     bookDetailList.addAll(products)
-                    bookCompletedList.addAll(products)
-                    bookLatestList.addAll(products)
+                    productViewModel.getCompletedBook().observe(this,Observer{
+                      completedProducts->run{
+                        bookCompletedList.clear()
+                        bookCompletedList.addAll(completedProducts)
+                    }
+                    })
+                    bookLatestList.add(products[1])
                     tabsBook = mutableListOf(
                         bookDetailList,bookLatestList,bookCompletedList);
 
@@ -122,12 +127,12 @@ class Home : Fragment() {
                                 //NEED SOLUTION HERE
                                 tab?.position ->  {
                                     bookDetailList.clear();
-                                    //bookListAdapter.notifyDataSetChanged();
+                                    bookListAdapter.notifyDataSetChanged();
                                     // println(1);
                                     bookDetailList.addAll(tabsBook[tab!!.position]);
                                     println(bookDetailList);
-                                    //bookListAdapter.notifyItemRangeChanged(0,bookDetailList.size);
-                                    //bookListAdapter.notifyItemRangeChanged(0,bookDetailList.count());
+                                    bookListAdapter.notifyItemRangeChanged(0,bookDetailList.size);
+                                    bookListAdapter.notifyItemRangeChanged(0,bookDetailList.count());
                                 }
 
                             }
