@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
             }
             else {
                 progressDialog.show()
+                progressDialog.setMessage("Loading...")
                 loginViewModel.login(email, password).observe(this, Observer { success ->
                     if (success) {
                         val userAuth = FirebaseAuthManager.getUser()

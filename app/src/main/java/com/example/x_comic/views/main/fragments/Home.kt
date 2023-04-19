@@ -1,6 +1,7 @@
 package com.example.x_comic.views.main.fragments
 
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadhamwi.tabsync.TabbedListMediator
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.BookListAdapter
@@ -23,7 +28,9 @@ import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
 
@@ -57,7 +64,9 @@ class Home : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var productViewModel: ProductViewModel
+        var userViewModel: UserViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         productViewModel.getAllBook()
             .observe(this, Observer {
@@ -148,6 +157,7 @@ class Home : Fragment() {
                         }
                     })
 
+
                     // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
                     avatar!!.setOnClickListener {
                         nextProfileActivity()
@@ -156,7 +166,17 @@ class Home : Fragment() {
 
             })
 
-
+        var currentUser = FirebaseAuthManager.getUser()
+        userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
+            run {
+                if (user.avatar !== "") {
+                    Glide.with(this)
+                        .load(user.avatar)
+                        .apply(RequestOptions().override(100, 100).transform(CenterCrop()).transform(RoundedCorners(150)))
+                        .into(avatar!!)
+                }
+            }
+        })
 
 
 
