@@ -2,7 +2,6 @@ package com.example.x_comic.models
 
 import android.util.Log
 
-
 class Product {
     var id: String = ""
     var title: String = ""
@@ -11,6 +10,7 @@ class Product {
     var tiny_des: String = ""
     var author: String = ""
     var view: Long = 0
+    var age: Int = 0
     var rating: Double = 0.0
     var hide: Boolean = false
     var categories = ArrayList<Category>()
@@ -23,6 +23,7 @@ class Product {
         tiny_des: String = "",
         author: String = "",
         view: Long = 0,
+        age: Int = 0,
         rating: Double = 0.0,
         hide: Boolean = false,
         categories: ArrayList<Category>,
@@ -35,6 +36,7 @@ class Product {
         this.tiny_des = tiny_des
         this.author = author
         this.view = view
+        this.age = age
         this.hide = hide
         this.rating = rating
         this.categories = categories
@@ -45,14 +47,14 @@ class Product {
     override fun toString(): String {
         val categoriesString = categories.joinToString("|") { it.toString() }
         val chaptersString = chapters.joinToString("|") { it.toString() }
-        return "$id,$title,$cover,$status,$tiny_des,$author,$view,$rating,$hide,[$categoriesString],[$chaptersString]"
+        return "$id<Product/>$title<Product/>$cover<Product/>$status<Product/>$tiny_des<Product/>$author<Product/>$view<Product/>$age<Product/>$rating<Product/>$hide<Product/>[$categoriesString]<Product/>[$chaptersString]"
     }
 
 
 
         companion object {
             fun fromString(string: String): Product {
-                val parts = string.split(",")
+                val parts = string.split("<Product/>")
                 val id = parts[0]
                 val title = parts[1]
                 val cover = parts[2]
@@ -60,24 +62,24 @@ class Product {
                 val tiny_des = parts[4]
                 val author = parts[5]
                 val view = parts[6].toLong()
-                val rating = parts[7].toDouble()
-                val hide = parts[8].toBoolean()
+                val age = parts[7].toInt()
+                val rating = parts[8].toDouble()
+                val hide = parts[9].toBoolean()
 
-                val categoriesString = parts[9].removeSurrounding("[", "]")
-                Log.i("CATEAAA",categoriesString)
+                val categoriesString = parts[10].removeSurrounding("[", "]")
+
                 val categories = categoriesString.split("|")
                 val cate_list = ArrayList<Category>()
                 for (cate in categories){
-                    Log.i("CATE",cate)
                     cate_list.add(Category.fromString(cate))
                 }
-                val chaptersString = parts[10].removeSurrounding("[", "]")
-                val chapters = chaptersString.split("|").map { Chapter.fromString(it) }.toMutableList()
-
-
+                val chaptersString = parts[11].removeSurrounding("[", "]")
+                val chapters = chaptersString.split("|")
                 val chap_list = ArrayList<Chapter>()
-                chap_list.addAll(chapters)
-                return Product(id, title, cover, status, tiny_des, author, view, rating, hide, cate_list, chap_list)
+                for (chap in chapters){
+                    chap_list.add(Chapter.fromString(chap))
+                }
+                return Product(id, title, cover, status, tiny_des, author, view, age, rating, hide, cate_list, chap_list)
             }
         }
     }

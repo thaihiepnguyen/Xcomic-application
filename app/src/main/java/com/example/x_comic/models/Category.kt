@@ -12,12 +12,12 @@ class Category {
     }
 
     override fun toString(): String {
-        return "$id;$name"
+        return "$id<Cate/>$name"
     }
 
     companion object {
         fun fromString(string: String): Category {
-            val parts = string.split(";")
+            val parts = string.split("<Cate/>")
             return Category(parts[0], parts[1])
         }
     }

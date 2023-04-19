@@ -19,12 +19,12 @@ class Chapter {
     constructor() {}
 
     override fun toString(): String {
-        return "$id;$name;$_lock;$date_update;$content"
+        return "$id<Chap/>$name<Chap/>$_lock<Chap/>$date_update<Chap/>$content"
     }
 
     companion object {
         fun fromString(string: String): Chapter {
-            val parts = string.split(";")
+            val parts = string.split("<Chap/>")
             val chapter = Chapter(parts[1])
             chapter.id = parts[0]
             chapter._lock = parts[2].toBoolean()

@@ -13,9 +13,14 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
+import com.example.x_comic.models.Category
+import com.example.x_comic.viewmodels.CategoryViewModel
+import com.example.x_comic.viewmodels.ProductViewModel
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -26,7 +31,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 class Explore : Fragment() {
 
 
-    val category_list: MutableList<String> = mutableListOf("Romance","Poetry","Science Fiction","Teen Fiction","Short Story","Mystery","Adventure","Thriller","Horror","Humor","LGBT+","Non Fiction","Fanfiction","Historical Fiction","Contemporary Lit","Diverse Lit","Fantasy","Paranormal","New Adult")
+//    val category_list: MutableList<String> = mutableListOf("Romance","Poetry","Science Fiction","Teen Fiction","Short Story","Mystery","Adventure","Thriller","Horror","Humor","LGBT+","Non Fiction","Fanfiction","Historical Fiction","Contemporary Lit","Diverse Lit","Fantasy","Paranormal","New Adult")
     var btnLength: TextView? = null;
     var btnStatus: TextView? = null;
     var searchBtn: ImageButton? = null;
@@ -38,19 +43,29 @@ class Explore : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_explore, container, false)
         categoryView = view.findViewById(R.id.category_list);
-        val adapter = CategoryAdapter(category_list);
+
         searchBtn = view.findViewById(R.id.searchBtn);
-        categoryView!!.adapter = adapter;
         val layoutManager = FlexboxLayoutManager(context);
-        layoutManager!!.flexWrap = FlexWrap.WRAP;
-        layoutManager!!.flexDirection = FlexDirection.ROW;
-        layoutManager!!.alignItems = AlignItems.FLEX_START;
+        var adapter = CategoryAdapter(ArrayList<Category>());
+        var categoryViewModel: CategoryViewModel
+        categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        categoryViewModel.getAll()
+            .observe(this, Observer { categories ->
+                run {
+                    adapter = CategoryAdapter(categories);
+                    categoryView!!.adapter = adapter;
 
+                    layoutManager!!.flexWrap = FlexWrap.WRAP;
+                    layoutManager!!.flexDirection = FlexDirection.ROW;
+                    layoutManager!!.alignItems = AlignItems.FLEX_START;
+                    categoryView!!.layoutManager = layoutManager;
+                }
+            })
 
-        categoryView!!.layoutManager = layoutManager;
 
         btnLength = view.findViewById(R.id.length);
         btnStatus = view.findViewById(R.id.status);

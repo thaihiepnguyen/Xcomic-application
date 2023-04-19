@@ -13,12 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.models.Book
+import com.example.x_comic.models.Category
 
 class CategoryAdapter (
-    private var categoryList: MutableList<String>,
+    private var categoryList: MutableList<Category>,
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>()
 {
-    var onItemClick: ((String) -> Unit)? = null
+    var onItemClick: ((Category) -> Unit)? = null
     var context: Context? = null;
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var genre = listItemView.findViewById(R.id.genre) as TextView;
@@ -52,7 +53,7 @@ class CategoryAdapter (
 
 
 
-        genre.setText(category);
+        genre.setText(category.name);
 
         var pick = false;
         genre.setOnClickListener{

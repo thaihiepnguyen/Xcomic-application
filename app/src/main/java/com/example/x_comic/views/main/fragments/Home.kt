@@ -35,14 +35,14 @@ class Home : Fragment() {
 
     val avatarList: MutableList<Avatar> = mutableListOf()
 
-    var bookDetailList: MutableList<Book> = mutableListOf()
+    var bookDetailList: MutableList<Product> = mutableListOf()
 
-    private val bookLatestList: MutableList<Book> = mutableListOf()
+    private val bookLatestList: MutableList<Product> = mutableListOf()
 
-    private val bookCompletedList: MutableList<Book> = mutableListOf()
+    private val bookCompletedList: MutableList<Product> = mutableListOf()
 
     var tabsBook = mutableListOf(
-        bookDetailList.map{it.copy()},bookLatestList.map{it.copy()},bookCompletedList.map{it.copy()});
+        bookDetailList,bookLatestList,bookCompletedList);
     var customSlideView: RecyclerView? = null;
     var customAvatarView: RecyclerView? = null;
     var customBookListView: RecyclerView? = null;
@@ -59,7 +59,7 @@ class Home : Fragment() {
         var productViewModel: ProductViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        productViewModel.callApi()
+        productViewModel.getAllBook()
             .observe(this, Observer {
                     products ->
                 run {
@@ -77,10 +77,21 @@ class Home : Fragment() {
                     tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
 
                     bookList.clear()
+                    bookDetailList.clear()
+                    bookCompletedList.clear()
+                    bookLatestList.clear()
+
+                    //call funtion get book
                     bookList.addAll(products)
+                    bookDetailList.addAll(products)
+                    bookCompletedList.addAll(products)
+                    bookLatestList.addAll(products)
+                    tabsBook = mutableListOf(
+                        bookDetailList,bookLatestList,bookCompletedList);
+
                     val adapter = ListAdapterSlideshow(requireActivity(), bookList);
                     val avatarAdapter = AvatarListAdapter(avatarList);
-                    val bookListAdapter = BookListAdapter(bookDetailList);
+                    val bookListAdapter = BookListAdapter(requireActivity(),bookDetailList);
 
 
                     println(bookDetailList.iterator());

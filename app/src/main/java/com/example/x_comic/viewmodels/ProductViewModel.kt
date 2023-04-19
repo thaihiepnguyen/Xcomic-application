@@ -12,16 +12,44 @@ class ProductViewModel : ViewModel() {
     val database = Firebase.database
     val db = database.getReference("book")
     private val _products = MutableLiveData<ArrayList<Product>>()
+    private val _productsLatest = MutableLiveData<ArrayList<Product>>()
 
     // TODO: biến này để truyền sang Activity khác
     val productsLiveData: LiveData<ArrayList<Product>>
         get() = _products
+    val productsLatestLiveData: LiveData<ArrayList<Product>>
+        get() = _productsLatest
 
 
-    fun callApi():MutableLiveData<ArrayList<Product>>{
+    fun getAllBook():MutableLiveData<ArrayList<Product>>{
         // TODO: Kiểm tra là chỉ khi _products.value == null. Ý là mình chỉ chạy dòng ở dưới 1 lần thôi
         // lần đầu tiên khi _products.value còn là null
         if (_products.value == null) {
+            // tạo thread mới.
+            db.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val products = ArrayList<Product>()
+
+                    for (snapshot in dataSnapshot.children) {
+                        val product = snapshot.getValue(Product::class.java)
+                        if (product != null) {
+                            products.add(product)
+                        }
+                    }
+                    _products.value = products
+                    _products.postValue(products)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    db.removeEventListener(this)
+                }
+            })
+        }
+        return _products
+    }
+    fun getLastestBook():MutableLiveData<ArrayList<Product>>{
+        if (_productsLatest.value == null) {
             // tạo thread mới.
             db.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {

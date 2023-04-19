@@ -55,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
         var rest = findViewById(R.id.rest) as TextView;
         var status = findViewById(R.id.statusTV) as TextView;
         var age = findViewById(R.id.ageTV) as TextView;
+        var descTextView = findViewById(R.id.descTextView) as TextView
         var ratingTextView = findViewById(R.id.ratingTV) as TextView;
         var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
 
@@ -87,14 +88,11 @@ class DetailActivity : AppCompatActivity() {
         }else{
             status.text = "Status: Ongoing"
         }
-        age.text = "16+"
+        age.text = bookData.age.toString() + "+"
+        descTextView.text = bookData.tiny_des
         ratingTextView.text = bookData.rating.toString()
 
-        val category_list: MutableList<String> = mutableListOf()
-        for (chapter in bookData.categories) {
-            category_list.add(chapter.name)
-        }
-        val adapter = CategoryAdapter(category_list);
+        val adapter = CategoryAdapter(bookData.categories);
         categoryView!!.adapter = adapter;
         val layoutManager = FlexboxLayoutManager(this);
         layoutManager!!.flexWrap = FlexWrap.WRAP;
@@ -125,7 +123,7 @@ class DetailActivity : AppCompatActivity() {
             val adapter = ChapterAdapter(this, bookData.chapters)
             chapterListView.adapter = adapter
             chapterListView.setOnItemClickListener { adapterView, view, i, l ->
-
+                //TODO: Code doc sach khi click vo chapter o day ne
             }
         }
         //open dialog feedback and rating
