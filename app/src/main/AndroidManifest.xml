@@ -16,6 +16,12 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
+            android:name=".views.profile.ChangePhoneNumberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.profile.ChangePennameActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.profile.ChangeAgeActivity"
             android:exported="false" />
         <activity

@@ -1,13 +1,15 @@
 package com.example.x_comic.viewmodels
 
-import android.content.ContentValues
-import android.util.Log
-import androidx.databinding.DataBindingUtil
+import android.graphics.Bitmap
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.x_comic.databinding.ActivityProfileBinding
-import com.example.x_comic.models.Product
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,6 +17,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
 import java.net.UnknownServiceException
 
 class UserViewModel : ViewModel() {
@@ -48,6 +53,57 @@ class UserViewModel : ViewModel() {
         return _user
     }
 
+    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView){
+        val storage = FirebaseStorage.getInstance()
+        val fileName = "${userID}.png"
+        val storageRef = storage.reference.child("users/$fileName")
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val data = baos.toByteArray()
+        val uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                val downloadUrl = uri.toString()
+                Glide.with(imgAvt.context)
+                    .load(downloadUrl)
+                    .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                    .into(imgAvt)
+            }
+
+
+        }.addOnFailureListener { exception ->
+            // Tải lên ảnh thất bại
+            exception.printStackTrace()
+        }
+    }
+
+    fun getAvt(userID: String, imgAvt: ImageView) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("users/$userID.png")
+
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
+            val downloadUrl = uri.toString()
+            Glide.with(imgAvt.context)
+                .load(downloadUrl)
+                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                .into(imgAvt)
+        }.addOnFailureListener {
+
+        }
+    }
+
+    fun getAvtForImageButton(userID: String, imgAvt: ImageButton) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("users/$userID.png")
+
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
+            val downloadUrl = uri.toString()
+            Glide.with(imgAvt.context)
+                .load(downloadUrl)
+                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                .into(imgAvt)
+        }
+    }
     // add
     fun addUser(user: User) {
         val database = Firebase.database
