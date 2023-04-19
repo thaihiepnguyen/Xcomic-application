@@ -1,17 +1,23 @@
 package com.example.x_comic.adapters
+import android.app.Activity
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
+import com.example.x_comic.views.detail.DetailActivity
 import com.google.firebase.storage.FirebaseStorage
 
 class ListAdapterSlideshow (
+    private  var context: Activity,
     private var bookList: MutableList<Product>,
 ) : RecyclerView.Adapter<ListAdapterSlideshow.ViewHolder>()
 {
@@ -74,6 +80,12 @@ class ListAdapterSlideshow (
             }else {
                 love.setImageResource(R.drawable.love)
             }
+        }
+        holder.itemView.setOnClickListener {
+            Log.i("String",book.toString())
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("book_data", book.toString())
+            ActivityCompat.startActivityForResult(context, intent, 302, null)
         }
     }
 

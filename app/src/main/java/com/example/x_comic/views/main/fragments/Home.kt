@@ -78,7 +78,7 @@ class Home : Fragment() {
 
                     bookList.clear()
                     bookList.addAll(products)
-                    val adapter = ListAdapterSlideshow(bookList);
+                    val adapter = ListAdapterSlideshow(requireActivity(), bookList);
                     val avatarAdapter = AvatarListAdapter(avatarList);
                     val bookListAdapter = BookListAdapter(bookDetailList);
 

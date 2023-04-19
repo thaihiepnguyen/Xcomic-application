@@ -86,7 +86,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:id="@+id/book"
+                            android:id="@+id/book_cover"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
 
@@ -316,56 +316,16 @@
                             app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView3" />
-                        <TextView
-                            android:id="@+id/category_tag"
-                            android:layout_width="60dp"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/category_list"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="10dp"
+                            android:paddingHorizontal="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line">
 
-                            android:layout_weight="1"
-                            android:background="@drawable/badge"
-                            android:backgroundTint="@color/love"
-                            android:clickable="true"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="Romance"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:id="@+id/category_tag2"
-                            android:layout_width="60dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-
-                            android:layout_weight="1"
-                            android:background="@drawable/badge"
-                            android:backgroundTint="@color/yellow_green"
-                            android:clickable="true"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="Fiction"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:id="@+id/category_tag3"
-                            android:layout_width="60dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-
-                            android:layout_weight="1"
-                            android:background="@drawable/badge"
-                            android:backgroundTint="@color/light_blue"
-                            android:clickable="true"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="Short Story"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
+                        </androidx.recyclerview.widget.RecyclerView>
 
                         <TextView
                             android:id="@+id/rest"

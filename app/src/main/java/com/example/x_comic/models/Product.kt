@@ -1,5 +1,7 @@
 package com.example.x_comic.models
 
+import android.util.Log
+
 
 class Product {
     var id: String = ""
@@ -38,26 +40,46 @@ class Product {
         this.categories = categories
         this.chapters = chapters
     }
-    constructor() {
+    constructor() {}
 
+    override fun toString(): String {
+        val categoriesString = categories.joinToString("|") { it.toString() }
+        val chaptersString = chapters.joinToString("|") { it.toString() }
+        return "$id,$title,$cover,$status,$tiny_des,$author,$view,$rating,$hide,[$categoriesString],[$chaptersString]"
     }
-    companion object{
-        var listBook = ArrayList<Product>()
-    }
-}
 
-//    fun toMap(): Map<String, Any?> {
-//        return mapOf(
-//            "id" to id,
-//            "author" to author,
-//            "title" to title,
-//            "cover" to cover,
-//            "status" to status,
-//            "tiny_des" to tiny_des,
-//            "view" to view,
-//            "rating" to rating,
-//            "hide" to hide,
-//            "categories" to categories,
-//            "chapters" to chapters
-//        )
-//    }
+
+
+        companion object {
+            fun fromString(string: String): Product {
+                val parts = string.split(",")
+                val id = parts[0]
+                val title = parts[1]
+                val cover = parts[2]
+                val status = parts[3].toBoolean()
+                val tiny_des = parts[4]
+                val author = parts[5]
+                val view = parts[6].toLong()
+                val rating = parts[7].toDouble()
+                val hide = parts[8].toBoolean()
+
+                val categoriesString = parts[9].removeSurrounding("[", "]")
+                Log.i("CATEAAA",categoriesString)
+                val categories = categoriesString.split("|")
+                val cate_list = ArrayList<Category>()
+                for (cate in categories){
+                    Log.i("CATE",cate)
+                    cate_list.add(Category.fromString(cate))
+                }
+                val chaptersString = parts[10].removeSurrounding("[", "]")
+                val chapters = chaptersString.split("|").map { Chapter.fromString(it) }.toMutableList()
+
+
+                val chap_list = ArrayList<Chapter>()
+                chap_list.addAll(chapters)
+                return Product(id, title, cover, status, tiny_des, author, view, rating, hide, cate_list, chap_list)
+            }
+        }
+    }
+
+

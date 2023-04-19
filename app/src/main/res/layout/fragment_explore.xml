@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="60dp"
-                    android:fontFamily="@font/poppins_medium"
+
                     android:text="Explore"
                     android:textColor="@color/white"
                     android:textSize="24sp"
@@ -98,7 +98,6 @@
                         android:layout_height="wrap_content"
                         android:text="Category"
                         android:textSize="16sp"
-                        android:fontFamily="@font/poppins_semibold"
                         app:layout_constraintStart_toStartOf="parent"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
@@ -138,7 +137,6 @@
                         android:layout_height="wrap_content"
                         android:text="Length"
                         android:textSize="16sp"
-                        android:fontFamily="@font/poppins_semibold"
                         app:layout_constraintStart_toStartOf="parent"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
@@ -195,7 +193,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="1-10" />
 
                                     <CheckBox
@@ -203,7 +200,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="10-20" />
 
                                     <CheckBox
@@ -211,7 +207,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="20-50" />
 
                                     <CheckBox
@@ -219,7 +214,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="50+" />
 
                                     <CheckBox
@@ -227,7 +221,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:checked="true"
                                         android:text="All" />
                                 </GridLayout>
@@ -248,7 +241,6 @@
                         android:layout_height="wrap_content"
                         android:text="Status"
                         android:textSize="16sp"
-                        android:fontFamily="@font/poppins_semibold"
                         app:layout_constraintStart_toStartOf="parent"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
@@ -302,7 +294,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="Completed" />
 
                                     <CheckBox
@@ -310,7 +301,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="Pending" />
 
                                     <CheckBox
@@ -318,7 +308,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="Ongoing" />
 
                                     <CheckBox
@@ -326,7 +315,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
                                         android:text="Drop" />
 
                                     <CheckBox
@@ -335,7 +323,6 @@
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
                                         android:checked="true"
-                                        android:fontFamily="@font/poppins"
                                         android:text="All" />
                                 </GridLayout>
                             </FrameLayout>
