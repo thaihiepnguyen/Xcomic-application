@@ -83,6 +83,8 @@ class UserViewModel : ViewModel() {
 
         storageRef.downloadUrl.addOnSuccessListener { uri ->
             val downloadUrl = uri.toString()
+
+            changeAvt(downloadUrl)
             Glide.with(imgAvt.context)
                 .load(downloadUrl)
                 .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
@@ -170,6 +172,18 @@ class UserViewModel : ViewModel() {
                 .child(currentUser.uid)
                 .child("gender")
                 .setValue(gender)
+        }
+    }
+
+    fun changeAvt(avatar: String) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("avatar")
+                .setValue(avatar)
         }
     }
 

@@ -6,22 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
+import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.BookListAdapter
+import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookAuthor
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.post.PostNewActivity
+import com.google.android.material.tabs.TabLayout
 
 
 class Writing : Fragment() {
@@ -157,6 +170,25 @@ class Writing : Fragment() {
             startActivity(intent)
 //            (activity as MainActivity).replaceFragment(PostNewActivity())
         }
+        var avatar: ImageButton? = null
+        avatar = view.findViewById(R.id.avatar);
+        var userViewModel: UserViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        var currentUser = FirebaseAuthManager.getUser()
+        userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
+            run {
+                if (user.avatar !== "") {
+                    Glide.with(this)
+                        .load(user.avatar)
+                        .apply(
+                            RequestOptions().override(100, 100).transform(CenterCrop()).transform(
+                                RoundedCorners(150)
+                            ))
+                        .into(avatar!!)
+                }
+            }
+        })
 
 //        return inflater.inflate(R.layout.fragment_writing, container, false)
         return view
