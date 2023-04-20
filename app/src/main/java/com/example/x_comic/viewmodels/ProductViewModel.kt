@@ -164,7 +164,6 @@ class ProductViewModel : ViewModel() {
         return _productsLatest
     }
 
-
     fun addProduct(product: Product) {
         val newRef = db.push()
         val id = newRef.key
