@@ -33,6 +33,7 @@ import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
+import kotlin.random.Random
 
 
 class Home : Fragment() {
@@ -63,48 +64,62 @@ class Home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+
         var productViewModel: ProductViewModel
         var userViewModel: UserViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        customSlideView = view.findViewById(R.id.listView);
+        customAvatarView = view.findViewById(R.id.avatarListView);
+        customBookListView = view.findViewById(R.id.popularListBook);
+        scrollView = view.findViewById(R.id.nestedScrollView);
+        avatar = view.findViewById(R.id.avatar);
+
+        tabLayout = view.findViewById(R.id.tabs_book);
+
+        tabLayout!!.removeAllTabs()
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Popular"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Latest"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
+
         productViewModel.getAllBook()
-            .observe(this, Observer {
-                    products ->
+            .observe(this, Observer { products ->
                 run {
-                    customSlideView = view.findViewById(R.id.listView);
-                    customAvatarView = view.findViewById(R.id.avatarListView);
-                    customBookListView = view.findViewById(R.id.popularListBook);
-                    scrollView = view.findViewById(R.id.nestedScrollView);
-                    avatar = view.findViewById(R.id.avatar);
-
-                    tabLayout = view.findViewById(R.id.tabs_book);
-
-                    tabLayout!!.removeAllTabs()
-                    tabLayout!!.addTab(tabLayout!!.newTab().setText("Popular"))
-                    tabLayout!!.addTab(tabLayout!!.newTab().setText("Latest"))
-                    tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
-
                     bookList.clear()
-                    bookDetailList.clear()
-                    bookCompletedList.clear()
-                    bookLatestList.clear()
 
-                    //call funtion get book
+                    println(products)
                     bookList.addAll(products)
-                    bookDetailList.addAll(products)
-                    productViewModel.getCompletedBook().observe(this,Observer{
-                      completedProducts->run{
-                        bookCompletedList.clear()
-                        bookCompletedList.addAll(completedProducts)
-                    }
-                    })
-                    productViewModel.getLatestBook().observe(this,Observer{
-                            latestProducts->run{
-                        bookLatestList.clear()
-                        bookLatestList.addAll(latestProducts)
-                    }
-                    })
+
+                }
+            })
+
+        productViewModel.getLatestBook().observe(this,Observer{
+                popularProducts->run{
+            bookDetailList.clear()
+            bookDetailList.addAll(popularProducts)
+        }
+        })
+
+
+        productViewModel.getCompletedBook().observe(this,Observer{
+                completedProducts->run{
+            bookCompletedList.clear()
+            bookCompletedList.addAll(completedProducts)
+        }
+        })
+        productViewModel.getLatestBook().observe(this,Observer{
+                latestProducts->run{
+            bookLatestList.clear()
+            bookLatestList.addAll(latestProducts)
+        }
+        })
+
+
+        println("abc"+ bookList);
+
+
                     tabsBook = mutableListOf(
                         bookDetailList,bookLatestList,bookCompletedList);
 
@@ -167,9 +182,9 @@ class Home : Fragment() {
                     avatar!!.setOnClickListener {
                         nextProfileActivity()
                     }
-                }
 
-            })
+
+
 
         var currentUser = FirebaseAuthManager.getUser()
         userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
