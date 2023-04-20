@@ -21,12 +21,15 @@ class ProductViewModel : ViewModel() {
     val db = database.getReference("book")
     private val _products = MutableLiveData<ArrayList<Product>>()
     private val _productsCompleted = MutableLiveData<ArrayList<Product>>()
-
+    private val _productsLatest = MutableLiveData<ArrayList<Product>>()
     // TODO: biến này để truyền sang Activity khác
     val productsLiveData: LiveData<ArrayList<Product>>
         get() = _products
     val productsCompletedLiveData: LiveData<ArrayList<Product>>
         get() = _productsCompleted
+
+    val productLatestLiveData: LiveData<ArrayList<Product>>
+        get() = _productsLatest
 
 
     fun getAllBook():MutableLiveData<ArrayList<Product>>{
@@ -34,7 +37,7 @@ class ProductViewModel : ViewModel() {
         // lần đầu tiên khi _products.value còn là null
         if (_products.value == null) {
             // tạo thread mới.
-            db.addValueEventListener(object : ValueEventListener {
+            db.limitToFirst(5).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val products = ArrayList<Product>()
 
@@ -59,7 +62,7 @@ class ProductViewModel : ViewModel() {
     fun getCompletedBook():MutableLiveData<ArrayList<Product>>{
         if (_productsCompleted.value == null) {
             // tạo thread mới.
-            db.addValueEventListener(object : ValueEventListener {
+            db.limitToFirst(5).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val products2 = ArrayList<Product>()
 
@@ -133,6 +136,34 @@ class ProductViewModel : ViewModel() {
                 .setValue(cover)
         }
     }
+
+
+    fun getLatestBook():MutableLiveData<ArrayList<Product>>{
+        if (_productsLatest.value == null) {
+            // tạo thread mới.
+            db.limitToLast(5).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val products = ArrayList<Product>()
+
+                    for (snapshot in dataSnapshot.children) {
+                        val product = snapshot.getValue(Product::class.java)
+                        if (product != null) {
+                            products.add(product)
+                        }
+                    }
+                    _productsLatest.value = products
+                    _productsLatest.postValue(products)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    db.removeEventListener(this)
+                }
+            })
+        }
+        return _productsLatest
+    }
+
 
     fun addProduct(product: Product) {
         val newRef = db.push()
