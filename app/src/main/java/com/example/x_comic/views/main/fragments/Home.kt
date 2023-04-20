@@ -95,7 +95,7 @@ class Home : Fragment() {
                 }
             })
 
-        productViewModel.getLatestBook().observe(this,Observer{
+        productViewModel.getPopularBook().observe(this,Observer{
                 popularProducts->run{
             bookDetailList.clear()
             bookDetailList.addAll(popularProducts)
