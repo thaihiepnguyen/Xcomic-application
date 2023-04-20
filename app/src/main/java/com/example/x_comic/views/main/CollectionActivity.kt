@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.BookListAdapter
+import com.example.x_comic.adapters.CollectionBookList
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookSneek
 import com.google.android.material.appbar.AppBarLayout
@@ -97,9 +98,9 @@ class CollectionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_collection)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         val cover = findViewById(R.id.cover) as ImageView;
-        val btnOption = findViewById(R.id.btnOption) as ImageButton
-        val btnShare = findViewById(R.id.btnShare) as ImageButton
-
+        val btnOption = findViewById<ImageButton>(R.id.btnOption)
+        val btnShare = findViewById<ImageButton>(R.id.btnShare)
+        val btnReturn = findViewById<ImageButton>(R.id.btnReturn);
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
 
         val appBarLayout = findViewById<AppBarLayout>(R.id.appbar)
@@ -119,12 +120,20 @@ class CollectionActivity : AppCompatActivity() {
                     btnShare.backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(this@CollectionActivity,
                             R.color.black))
+
+                    btnShare.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.black))
                     isShow = true
                 } else if (isShow) {
                     collapsingToolbarLayout.title = "" // Set your desired title when fully expanded
                     btnOption.backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(this@CollectionActivity,
                             R.color.white))
+                    btnShare.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.white))
+
                     btnShare.backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(this@CollectionActivity,
                             R.color.white))
@@ -139,7 +148,7 @@ class CollectionActivity : AppCompatActivity() {
             .into(cover)
         setSupportActionBar(toolbar)
         customBookListView = findViewById(R.id.collectionBookList);
-        val bookListAdapter = BookListAdapter(bookDetailList);
+        val bookListAdapter = CollectionBookList(bookDetailList);
         customBookListView!!.adapter = bookListAdapter;
 
         customBookListView!!.layoutManager = LinearLayoutManager(this);
@@ -152,6 +161,9 @@ class CollectionActivity : AppCompatActivity() {
             showPopup(v)
         }
 
+        btnShare.setOnClickListener{
+            finish();
+        }
     }
     private fun showPopup(v: View) {
         val popup = PopupMenu(this, v)
