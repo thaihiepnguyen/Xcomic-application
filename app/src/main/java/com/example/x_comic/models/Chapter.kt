@@ -2,8 +2,9 @@ package com.example.x_comic.models
 
 import java.util.*
 
-class Chapter {
-    var id: String? = ""
+class Chapter : java.io.Serializable {
+    var id_book: String = ""
+    var id_chapter: String? = ""
     var name: String = ""
     var _lock: Boolean = false
     var date_update: String = "2023"
@@ -19,17 +20,20 @@ class Chapter {
     constructor() {}
 
     override fun toString(): String {
-        return "$id<Chap/>$name<Chap/>$_lock<Chap/>$date_update<Chap/>$content"
+        return "$id_book<Chap/>$id_chapter<Chap/>$name<Chap/>$_lock<Chap/>$date_update<Chap/>$content"
     }
 
     companion object {
+        const val MESSAGE1 = "message1"
+        const val MESSAGE2 = "message2"
         fun fromString(string: String): Chapter {
             val parts = string.split("<Chap/>")
-            val chapter = Chapter(parts[1])
-            chapter.id = parts[0]
-            chapter._lock = parts[2].toBoolean()
-            chapter.date_update = parts[3]
-            chapter.content = parts[4]
+            val chapter = Chapter(parts[2])
+            chapter.id_book = parts[0]
+            chapter.id_chapter = parts[1]
+            chapter._lock = parts[3].toBoolean()
+            chapter.date_update = parts[4]
+            chapter.content = parts[5]
             return chapter
         }
     }

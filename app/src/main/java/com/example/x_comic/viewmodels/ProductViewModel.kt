@@ -1,15 +1,23 @@
 package com.example.x_comic.viewmodels
 
 import android.R.id
+import android.graphics.Bitmap
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.models.Product
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class ProductViewModel : ViewModel() {
     val database = Firebase.database
@@ -113,6 +121,59 @@ class ProductViewModel : ViewModel() {
         return _productsPopular
     }
 
+    fun uploadCover(filename: String, bitmap: Bitmap, imgCov: ImageView){
+        val storage = FirebaseStorage.getInstance()
+        val fileName = "${filename}"
+        val storageRef = storage.reference.child("book_cover/$fileName")
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val data = baos.toByteArray()
+        val uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                val downloadUrl = uri.toString()
+                Glide.with(imgCov.context)
+                    .load(downloadUrl)
+                    .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                    .into(imgCov)
+            }
+
+
+        }.addOnFailureListener { exception ->
+            // Tải lên ảnh thất bại
+            exception.printStackTrace()
+        }
+    }
+
+    fun getCover(bookID: String, imgCov: ImageView) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("book_cover/$bookID.png")
+
+        storageRef.downloadUrl.addOnSuccessListener { uri ->
+            val downloadUrl = uri.toString()
+
+            changeCov(downloadUrl, bookID)
+            Glide.with(imgCov.context)
+                .load(downloadUrl)
+                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                .into(imgCov)
+        }.addOnFailureListener {
+
+        }
+    }
+
+    fun changeCov(cover: String, bookID: String) {
+        val database = Firebase.database
+        if (bookID != null) {
+            database.reference
+                .child("book")
+                .child(bookID)
+                .child("cover")
+                .setValue(cover)
+        }
+    }
+
+
     fun getLatestBook():MutableLiveData<ArrayList<Product>>{
         if (_productsLatest.value == null) {
             // tạo thread mới.
@@ -138,7 +199,6 @@ class ProductViewModel : ViewModel() {
         }
         return _productsLatest
     }
-
 
     fun addProduct(product: Product) {
         val newRef = db.push()
