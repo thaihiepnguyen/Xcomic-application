@@ -99,7 +99,7 @@ class BookListAdapter (
             }
 
         view.setText(book.view.toString());
-        //favorite.setText(book.favorite.toString());
+        favorite.setText(book.favorite.toString());
         chapter.setText(book.chapters.size.toString());
 
         val category = book.categories.take(3);

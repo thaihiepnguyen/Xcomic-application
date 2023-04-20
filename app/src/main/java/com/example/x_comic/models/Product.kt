@@ -10,6 +10,7 @@ class Product {
     var tiny_des: String = ""
     var author: String = ""
     var view: Long = 0
+    var favorite: Long = 0
     var age: Int = 0
     var rating: Double = 0.0
     var hide: Boolean = false
@@ -23,6 +24,7 @@ class Product {
         tiny_des: String = "",
         author: String = "",
         view: Long = 0,
+        favorite: Long = 0,
         age: Int = 0,
         rating: Double = 0.0,
         hide: Boolean = false,
@@ -36,6 +38,7 @@ class Product {
         this.tiny_des = tiny_des
         this.author = author
         this.view = view
+        this.favorite = favorite
         this.age = age
         this.hide = hide
         this.rating = rating
@@ -62,9 +65,10 @@ class Product {
                 val tiny_des = parts[4]
                 val author = parts[5]
                 val view = parts[6].toLong()
-                val age = parts[7].toInt()
-                val rating = parts[8].toDouble()
-                val hide = parts[9].toBoolean()
+                val favorite = parts[7].toLong()
+                val age = parts[8].toInt()
+                val rating = parts[9].toDouble()
+                val hide = parts[10].toBoolean()
 
                 val categoriesString = parts[10].removeSurrounding("[", "]")
 
@@ -79,7 +83,7 @@ class Product {
                 for (chap in chapters){
                     chap_list.add(Chapter.fromString(chap))
                 }
-                return Product(id, title, cover, status, tiny_des, author, view, age, rating, hide, cate_list, chap_list)
+                return Product(id, title, cover, status, tiny_des, author, view,favorite, age, rating, hide, cate_list, chap_list)
             }
         }
     }
