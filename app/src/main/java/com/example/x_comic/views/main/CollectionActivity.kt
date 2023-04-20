@@ -1,9 +1,18 @@
 package com.example.x_comic.views.main
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +25,7 @@ import com.example.x_comic.models.BookSneek
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import jp.wasabeef.glide.transformations.BlurTransformation
+
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -87,6 +97,8 @@ class CollectionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_collection)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         val cover = findViewById(R.id.cover) as ImageView;
+        val btnOption = findViewById(R.id.btnOption) as ImageButton
+        val btnShare = findViewById(R.id.btnShare) as ImageButton
 
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
 
@@ -101,9 +113,21 @@ class CollectionActivity : AppCompatActivity() {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.title = "Collection 1" // Set an empty title when fully collapsed
+                    btnOption.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                        R.color.black))
+                    btnShare.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.black))
                     isShow = true
                 } else if (isShow) {
                     collapsingToolbarLayout.title = "" // Set your desired title when fully expanded
+                    btnOption.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.white))
+                    btnShare.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.white))
                     isShow = false
                 }
             }
@@ -124,6 +148,16 @@ class CollectionActivity : AppCompatActivity() {
         customBookListView?.addItemDecoration(itemDecoration)
 
 
+        btnOption.setOnClickListener { v ->
+            showPopup(v)
+        }
 
     }
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(this, v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.option_collection_menu, popup.menu)
+        popup.show()
+    }
+
 }
