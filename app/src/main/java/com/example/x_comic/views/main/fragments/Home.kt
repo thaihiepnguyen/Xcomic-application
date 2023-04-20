@@ -99,7 +99,12 @@ class Home : Fragment() {
                         bookCompletedList.addAll(completedProducts)
                     }
                     })
-                    bookLatestList.add(products[1])
+                    productViewModel.getLatestBook().observe(this,Observer{
+                            latestProducts->run{
+                        bookLatestList.clear()
+                        bookLatestList.addAll(latestProducts)
+                    }
+                    })
                     tabsBook = mutableListOf(
                         bookDetailList,bookLatestList,bookCompletedList);
 
