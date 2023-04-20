@@ -1,5 +1,6 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookReading
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.CollectionBook
+import com.example.x_comic.views.main.CollectionActivity
 import kotlin.random.Random
 
 
@@ -93,6 +95,13 @@ class Collection : Fragment() {
         collectionBook!!.adapter = adapter;
 
         collectionBook!!.layoutManager = GridLayoutManager(this.context, 3)
+
+        adapter!!.onItemClick = { collection ->
+
+            val intent = Intent(getActivity(), CollectionActivity::class.java)
+            startActivityForResult(intent, 123)
+
+        }
 
         fun checkNumberRule(num: Int): Boolean {
             var curr = 0 // start with 0
