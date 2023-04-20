@@ -1,6 +1,7 @@
 package com.example.x_comic.views.main.fragments
 
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadhamwi.tabsync.TabbedListMediator
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.BookListAdapter
@@ -23,7 +28,9 @@ import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
 
@@ -35,14 +42,14 @@ class Home : Fragment() {
 
     val avatarList: MutableList<Avatar> = mutableListOf()
 
-    var bookDetailList: MutableList<Book> = mutableListOf()
+    var bookDetailList: MutableList<Product> = mutableListOf()
 
-    private val bookLatestList: MutableList<Book> = mutableListOf()
+    private val bookLatestList: MutableList<Product> = mutableListOf()
 
-    private val bookCompletedList: MutableList<Book> = mutableListOf()
+    private val bookCompletedList: MutableList<Product> = mutableListOf()
 
     var tabsBook = mutableListOf(
-        bookDetailList.map{it.copy()},bookLatestList.map{it.copy()},bookCompletedList.map{it.copy()});
+        bookDetailList,bookLatestList,bookCompletedList);
     var customSlideView: RecyclerView? = null;
     var customAvatarView: RecyclerView? = null;
     var customBookListView: RecyclerView? = null;
@@ -57,9 +64,11 @@ class Home : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var productViewModel: ProductViewModel
+        var userViewModel: UserViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        productViewModel.callApi()
+        productViewModel.getAllBook()
             .observe(this, Observer {
                     products ->
                 run {
@@ -77,10 +86,26 @@ class Home : Fragment() {
                     tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
 
                     bookList.clear()
+                    bookDetailList.clear()
+                    bookCompletedList.clear()
+                    bookLatestList.clear()
+
+                    //call funtion get book
                     bookList.addAll(products)
-                    val adapter = ListAdapterSlideshow(bookList);
+                    bookDetailList.addAll(products)
+                    productViewModel.getCompletedBook().observe(this,Observer{
+                      completedProducts->run{
+                        bookCompletedList.clear()
+                        bookCompletedList.addAll(completedProducts)
+                    }
+                    })
+                    bookLatestList.add(products[1])
+                    tabsBook = mutableListOf(
+                        bookDetailList,bookLatestList,bookCompletedList);
+
+                    val adapter = ListAdapterSlideshow(requireActivity(), bookList);
                     val avatarAdapter = AvatarListAdapter(avatarList);
-                    val bookListAdapter = BookListAdapter(bookDetailList);
+                    val bookListAdapter = BookListAdapter(requireActivity(),bookDetailList);
 
 
                     println(bookDetailList.iterator());
@@ -111,12 +136,12 @@ class Home : Fragment() {
                                 //NEED SOLUTION HERE
                                 tab?.position ->  {
                                     bookDetailList.clear();
-                                    //bookListAdapter.notifyDataSetChanged();
+                                    bookListAdapter.notifyDataSetChanged();
                                     // println(1);
                                     bookDetailList.addAll(tabsBook[tab!!.position]);
                                     println(bookDetailList);
-                                    //bookListAdapter.notifyItemRangeChanged(0,bookDetailList.size);
-                                    //bookListAdapter.notifyItemRangeChanged(0,bookDetailList.count());
+                                    bookListAdapter.notifyItemRangeChanged(0,bookDetailList.size);
+                                    bookListAdapter.notifyItemRangeChanged(0,bookDetailList.count());
                                 }
 
                             }
@@ -132,6 +157,7 @@ class Home : Fragment() {
                         }
                     })
 
+
                     // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
                     avatar!!.setOnClickListener {
                         nextProfileActivity()
@@ -140,7 +166,17 @@ class Home : Fragment() {
 
             })
 
-
+        var currentUser = FirebaseAuthManager.getUser()
+        userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
+            run {
+                if (user.avatar !== "") {
+                    Glide.with(this)
+                        .load(user.avatar)
+                        .apply(RequestOptions().override(100, 100).transform(CenterCrop()).transform(RoundedCorners(150)))
+                        .into(avatar!!)
+                }
+            }
+        })
 
 
 

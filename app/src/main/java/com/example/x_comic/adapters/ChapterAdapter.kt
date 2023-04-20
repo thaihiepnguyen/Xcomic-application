@@ -10,16 +10,19 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import com.example.x_comic.R
+import com.example.x_comic.models.Chapter
 
 class ChapterAdapter(
     private val context: Activity,
-    private val chapters: List<String>
-) : ArrayAdapter<String>(context, R.layout.chapter_status, chapters) {
+    private val chapters: List<Chapter>
+) : ArrayAdapter<Chapter>(context, R.layout.list_chapter_item_layout, chapters) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.layoutInflater
-        val rowView: View = inflater.inflate(R.layout.chapter_status, null, true)
+        val rowView: View = inflater.inflate(R.layout.list_chapter_item_layout, null, true)
         val chapterTV = rowView.findViewById(R.id.tvChapterName) as TextView
-        chapterTV.text = chapters[position]
+        chapterTV.text = chapters[position].name
+        val dateTV = rowView.findViewById(R.id.tvDate) as TextView
+        dateTV.text = chapters[position].date_update
         return rowView
     }
 }

@@ -45,6 +45,13 @@ class EditProfileActivity : AppCompatActivity() {
             nextChangeAgeActivity()
         }
 
+        binding.pennameLayout.setOnClickListener {
+            nextChangePennameActivity()
+        }
+
+        binding.phoneLayout.setOnClickListener {
+            nextChangePhoneNumberActivity()
+        }
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -56,6 +63,12 @@ class EditProfileActivity : AppCompatActivity() {
                 })
         }
     }
+
+    private fun nextChangePhoneNumberActivity() {
+        val intent = Intent(this, ChangePhoneNumberActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun nextLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
@@ -76,6 +89,11 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun nextChangeAgeActivity() {
         val intent = Intent(this, ChangeAgeActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextChangePennameActivity() {
+        val intent = Intent(this, ChangePennameActivity::class.java)
         startActivity(intent)
     }
 }

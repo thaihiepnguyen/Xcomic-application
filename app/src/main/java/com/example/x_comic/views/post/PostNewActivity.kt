@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +18,13 @@ import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookAuthor
+import com.example.x_comic.models.Category
 import com.example.x_comic.models.Chapter
+import com.example.x_comic.viewmodels.CategoryViewModel
 import com.example.x_comic.views.main.fragments.Writing
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 
 class PostNewActivity : AppCompatActivity() {
@@ -78,9 +85,18 @@ class PostNewActivity : AppCompatActivity() {
 
         val layoutManager = FlexboxLayoutManager(this);
         categoryView = findViewById(R.id.category_list);
-        val adapter = CategoryAdapter(category_list);
-        categoryView!!.adapter = adapter;
-        categoryView!!.layoutManager = layoutManager;
+        //val adapter = CategoryAdapter(category_list);
+        var adapter = CategoryAdapter(ArrayList<Category>());
+        var categoryViewModel: CategoryViewModel
+        categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        categoryViewModel.getAll()
+            .observe(this, Observer { categories ->
+                run {
+                    adapter = CategoryAdapter(categories);
+                    categoryView!!.adapter = adapter;
+                    categoryView!!.layoutManager = layoutManager;
+                }
+            })
 
 
         val nextButton = findViewById<Button>(R.id.btnNext)

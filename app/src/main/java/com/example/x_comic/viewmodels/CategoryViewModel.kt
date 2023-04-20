@@ -22,11 +22,8 @@ class CategoryViewModel : ViewModel() {
     val categoriesLiveData: LiveData<ArrayList<Category>>
         get() = _categories
 
-    init {
-        callApi()
-    }
 
-    private fun callApi() {
+    fun getAll():MutableLiveData<ArrayList<Category>> {
         // TODO: Ý là mình chỉ chạy dòng ở dưới 1 lần thôi
         // lần đầu tiên khi _categories.value còn là null
         if (_categories.value == null) {
@@ -42,6 +39,7 @@ class CategoryViewModel : ViewModel() {
                     }
                     _categories.value = categories
                     _categories.postValue(categories)
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -50,6 +48,7 @@ class CategoryViewModel : ViewModel() {
                 }
             })
         }
+        return _categories
     }
 
     // TODO: code id tăng dần mệt quá bỏ qua nhe :)
