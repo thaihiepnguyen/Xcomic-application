@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,7 @@ import com.example.x_comic.adapters.BookListAdapter
 import com.example.x_comic.adapters.CollectionBookList
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.viewmodels.ProductViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -102,6 +105,8 @@ class CollectionActivity : AppCompatActivity() {
         val btnShare = findViewById<ImageButton>(R.id.btnShare)
         val btnReturn = findViewById<ImageButton>(R.id.btnReturn);
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
+        var productViewModel: ProductViewModel
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         val appBarLayout = findViewById<AppBarLayout>(R.id.appbar)
         appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {

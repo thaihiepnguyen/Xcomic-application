@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,6 +20,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.ByteArrayOutputStream
 import java.net.UnknownServiceException
 
@@ -27,9 +29,12 @@ class UserViewModel : ViewModel() {
     val db = database.getReference("users")
 
     private val _user = MutableLiveData<User>()
+    private val _authors = MutableLiveData<ArrayList<User>>()
     // TODO: biến này để truyền sang Activity khác
     val userLiveData: LiveData<User>
         get() = _user
+    val authorLiveData: LiveData<ArrayList<User>>
+        get() = _authors
 
     // Hàm này sẽ chạy ở thread khác
     fun callApi(uid: String) : MutableLiveData<User> {
@@ -53,7 +58,7 @@ class UserViewModel : ViewModel() {
         return _user
     }
 
-    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView){
+    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView, bg: ImageView){
         val storage = FirebaseStorage.getInstance()
         val fileName = "${userID}.png"
         val storageRef = storage.reference.child("users/$fileName")
@@ -68,6 +73,11 @@ class UserViewModel : ViewModel() {
                     .load(downloadUrl)
                     .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
                     .into(imgAvt)
+
+                Glide.with(bg.context)
+                    .load(downloadUrl)
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                    .into(bg)
             }
 
 
@@ -77,7 +87,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun getAvt(userID: String, imgAvt: ImageView) {
+    fun getAvt(userID: String, imgAvt: ImageView, bg: ImageView) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference.child("users/$userID.png")
 
@@ -89,6 +99,10 @@ class UserViewModel : ViewModel() {
                 .load(downloadUrl)
                 .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
                 .into(imgAvt)
+            Glide.with(bg.context)
+                .load(downloadUrl)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                .into(bg)
         }.addOnFailureListener {
 
         }
@@ -113,6 +127,32 @@ class UserViewModel : ViewModel() {
             .child("users")
             .child(user.id)
             .setValue(user)
+    }
+
+    fun getAllAuthor() : MutableLiveData<ArrayList<User>> {
+        if (_authors.value == null) {
+            // tạo thread mới.
+            db.orderByChild("role").equalTo(2.0).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val authors = ArrayList<User>()
+
+                    for (snapshot in dataSnapshot.children) {
+                        val author = snapshot.getValue(User::class.java)
+                        if (author != null) {
+                            authors.add(author)
+                        }
+                    }
+                    _authors.value = authors
+                    _authors.postValue(authors)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    db.removeEventListener(this)
+                }
+            })
+        }
+        return _authors
     }
 
     fun changeUsername(username: String) {

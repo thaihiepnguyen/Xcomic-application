@@ -4,6 +4,7 @@ package com.example.x_comic.views.main.fragments
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +32,11 @@ import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.profile.MainProfileActivity
 import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
 import kotlin.random.Random
+import com.example.x_comic.models.User
 
 
 class Home : Fragment() {
@@ -42,6 +45,7 @@ class Home : Fragment() {
     val bookList: MutableList<Product> = mutableListOf()
 
     val avatarList: MutableList<Avatar> = mutableListOf()
+    val authorList: MutableList<User> = mutableListOf()
 
     var bookDetailList: MutableList<Product> = mutableListOf()
 
@@ -58,6 +62,7 @@ class Home : Fragment() {
     var tabLayout: TabLayout? = null;
     var scrollView: NestedScrollView? = null;
     var avatar: ImageButton? = null
+
 
 
     override fun onCreateView(
@@ -85,6 +90,20 @@ class Home : Fragment() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Latest"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
 
+        userViewModel.getAllAuthor()
+            .observe(this, Observer { authors ->
+                run {
+                    authorList.clear()
+
+                    authorList.addAll(authors)
+
+                    Log.d("AUTHOR", authors[0].full_name)
+
+                    val avatarAdapter = AvatarListAdapter(authorList);
+                    customAvatarView!!.adapter = avatarAdapter
+                }
+            })
+
         productViewModel.getAllBook()
             .observe(this, Observer { products ->
                 run {
@@ -100,10 +119,6 @@ class Home : Fragment() {
                         val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
                         avatarList.addAll(authorList)
                     }
-                    val avatarAdapter = AvatarListAdapter(avatarList);
-                    customAvatarView!!.adapter = avatarAdapter;
-
-
                 }
             })
 
@@ -164,75 +179,59 @@ class Home : Fragment() {
                     }
                 }
             })
+            println(bookDetailList.iterator());
+            println(bookLatestList.iterator());
+            println(bookCompletedList.iterator());
+            println(tabsBook[1].iterator());
 
+            customAvatarView!!.layoutManager =
+                LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
+            customBookListView!!.layoutManager = LinearLayoutManager(this.context);
+            val itemDecoration: RecyclerView.ItemDecoration =
+                DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+            customBookListView?.addItemDecoration(itemDecoration)
 
+            //    initMediator();
 
-
-
-
-
-
-
-                    println(bookDetailList.iterator());
-                    println(bookLatestList.iterator());
-                    println(bookCompletedList.iterator());
-                    println(tabsBook[1].iterator());
-
-
-
-
-                    customAvatarView!!.layoutManager =
-                        LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
-
-                    customBookListView!!.layoutManager = LinearLayoutManager(this.context);
-                    val itemDecoration: RecyclerView.ItemDecoration =
-                        DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
-                    customBookListView?.addItemDecoration(itemDecoration)
-
-                    //    initMediator();
-
-                    tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
-                    {
-                        override fun onTabSelected(tab: TabLayout.Tab?) {
-                            scrollView!!.smoothScrollTo(0,tabLayout!!.top);
-                            when (tab?.position) {
-                                //NEED SOLUTION HERE
-                                tab?.position ->  {
-                                    bookDetailList.clear();
-                                    bookListAdapter!!.notifyDataSetChanged();
-                                    // println(1);
-                                    bookDetailList.addAll(tabsBook[tab!!.position]);
-                                    println(bookDetailList);
-                                    bookListAdapter!!.notifyItemRangeChanged(0,bookDetailList.size);
-                                }
-
-                            }
-
+            tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
+            {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    scrollView!!.smoothScrollTo(0,tabLayout!!.top);
+                    when (tab?.position) {
+                        //NEED SOLUTION HERE
+                        tab?.position ->  {
+                            bookDetailList.clear();
+                            bookListAdapter!!.notifyDataSetChanged();
+                            // println(1);
+                            bookDetailList.addAll(tabsBook[tab!!.position]);
+                            println(bookDetailList);
+                            bookListAdapter!!.notifyItemRangeChanged(0,bookDetailList.size);
                         }
 
-                        override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-                        }
-
-                        override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                        }
-                    })
-
-
-                    // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
-                    avatar!!.setOnClickListener {
-                        nextProfileActivity()
                     }
 
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                }
+            })
 
 
+            // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
+            avatar!!.setOnClickListener {
+                nextProfileActivity()
+            }
 
         var currentUser = FirebaseAuthManager.getUser()
         userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
             run {
-                if (user.avatar !== "") {
+                if (user.avatar != "") {
                     Glide.with(this)
                         .load(user.avatar)
                         .apply(RequestOptions().override(100, 100).transform(CenterCrop()).transform(RoundedCorners(150)))
@@ -257,7 +256,7 @@ class Home : Fragment() {
 
     // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
-        val intent = Intent(context, ProfileActivity::class.java)
+        val intent = Intent(context, MainProfileActivity::class.java)
         startActivity(intent)
     }
 }

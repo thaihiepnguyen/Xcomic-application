@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +25,7 @@ import com.example.x_comic.adapters.ChapterAdapter
 import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.views.main.fragments.*
+import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -124,6 +126,10 @@ class DetailActivity : AppCompatActivity() {
             chapterListView.adapter = adapter
             chapterListView.setOnItemClickListener { adapterView, view, i, l ->
                 //TODO: Code doc sach khi click vo chapter o day ne
+                val intent = Intent(this, ReadBookActivity::class.java)
+                intent.putExtra("title",bookData.chapters[i].name)
+                intent.putExtra("content",bookData.chapters[i].content)
+                ActivityCompat.startActivityForResult(this, intent, 302, null)
             }
         }
         //open dialog feedback and rating

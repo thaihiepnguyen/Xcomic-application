@@ -5,14 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Avatar
+import com.example.x_comic.models.User
 
 class AvatarListAdapter (
-    private var avatarList: MutableList<Avatar>,
+    private var avatarList: MutableList<User>,
 ) : RecyclerView.Adapter<AvatarListAdapter.ViewHolder>()
 {
-    var onItemClick: ((Avatar) -> Unit)? = null
+    var onItemClick: ((User) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var avatar = listItemView.findViewById(R.id.avatar_picture) as ImageButton;
@@ -40,9 +45,11 @@ class AvatarListAdapter (
         val author = avatarList.get(position);
         val avatar = holder.avatar;
         val username = holder.username;
-        username.setText(author.username);
-        avatar.setImageResource(author.avatarPicture);
-
+        username.setText(author.full_name);
+        Glide.with(avatar.context)
+            .load(author.avatar)
+            .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+            .into(avatar)
     }
 
 }
