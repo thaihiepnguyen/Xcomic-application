@@ -96,6 +96,13 @@ class Home : Fragment() {
                     customSlideView!!.adapter = adapter;
                     customSlideView!!.layoutManager =
                         LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
+                    if (bookList.isNotEmpty()){
+                        val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
+                        avatarList.addAll(authorList)
+                    }
+                    val avatarAdapter = AvatarListAdapter(avatarList);
+                    customAvatarView!!.adapter = avatarAdapter;
+
 
                 }
             })
@@ -164,7 +171,6 @@ class Home : Fragment() {
 
 
 
-                    val avatarAdapter = AvatarListAdapter(avatarList);
 
 
 
@@ -173,7 +179,6 @@ class Home : Fragment() {
                     println(bookCompletedList.iterator());
                     println(tabsBook[1].iterator());
 
-                    customAvatarView!!.adapter = avatarAdapter;
 
 
 
