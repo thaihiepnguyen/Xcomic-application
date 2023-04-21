@@ -45,6 +45,7 @@ class Home : Fragment() {
 
     var bookDetailList: MutableList<Product> = mutableListOf()
 
+    private  val bookPopularList: MutableList<Product> = mutableListOf();
     private val bookLatestList: MutableList<Product> = mutableListOf()
 
     private val bookCompletedList: MutableList<Product> = mutableListOf()
@@ -95,43 +96,81 @@ class Home : Fragment() {
                     customSlideView!!.adapter = adapter;
                     customSlideView!!.layoutManager =
                         LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
+                    if (bookList.isNotEmpty()){
+                        val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
+                        avatarList.addAll(authorList)
+                    }
+                    val avatarAdapter = AvatarListAdapter(avatarList);
+                    customAvatarView!!.adapter = avatarAdapter;
+
 
                 }
             })
 
-        var bookListAdapter:BookListAdapter? = null;
-        productViewModel.getPopularBook().observe(this,Observer{
-                popularProducts->run{
-            bookDetailList.clear()
-            bookDetailList.addAll(popularProducts)
-            bookListAdapter = BookListAdapter(requireActivity(),bookDetailList);
-            customBookListView!!.adapter = bookListAdapter;
-        }
-        })
+        var bookListAdapter: BookListAdapter? = null;
+
+            productViewModel.getPopularBook().observe(this, Observer { popularProducts ->
+                run {
+                    bookDetailList.clear()
+                    bookDetailList.addAll(popularProducts);
+                    bookPopularList.clear();
+                    bookPopularList.addAll(popularProducts);
+                    bookListAdapter = BookListAdapter(requireActivity(), bookDetailList);
+                    customBookListView!!.adapter = bookListAdapter;
+                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
+                    ) {
+
+                        // All LiveData have emitted a value, assign to tabsBook
+                        tabsBook = mutableListOf(
+                            bookPopularList, bookLatestList, bookCompletedList
+                        );
+                        println("abc"+tabsBook);
+
+                    }
+                }
+            })
 
 
-        productViewModel.getCompletedBook().observe(this,Observer{
-                completedProducts->run{
-            bookCompletedList.clear()
-            bookCompletedList.addAll(completedProducts)
-        }
-        })
-        productViewModel.getLatestBook().observe(this,Observer{
-                latestProducts->run{
-            bookLatestList.clear()
-            bookLatestList.addAll(latestProducts)
-        }
-        })
+
+            productViewModel.getCompletedBook().observe(this, Observer { completedProducts ->
+                run {
+                    bookCompletedList.clear()
+                    bookCompletedList.addAll(completedProducts)
+                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
+                    ) {
+
+                        // All LiveData have emitted a value, assign to tabsBook
+                        tabsBook = mutableListOf(
+                            bookPopularList, bookLatestList, bookCompletedList
+                        );
+                        println("abc"+tabsBook);
+                    }
+                }
+            })
+
+            productViewModel.getLatestBook().observe(this, Observer { latestProducts ->
+                run {
+                    bookLatestList.clear()
+                    bookLatestList.addAll(latestProducts)
+                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
+                    ) {
+
+                        // All LiveData have emitted a value, assign to tabsBook
+                        tabsBook = mutableListOf(
+                            bookPopularList, bookLatestList, bookCompletedList
+                        );
+
+                        println("abc"+tabsBook);
+                    }
+                }
+            })
 
 
-        println("abc"+ bookList);
 
 
-                    tabsBook = mutableListOf(
-                        bookDetailList,bookLatestList,bookCompletedList);
 
 
-                    val avatarAdapter = AvatarListAdapter(avatarList);
+
 
 
 
@@ -140,7 +179,6 @@ class Home : Fragment() {
                     println(bookCompletedList.iterator());
                     println(tabsBook[1].iterator());
 
-                    customAvatarView!!.adapter = avatarAdapter;
 
 
 
@@ -167,7 +205,6 @@ class Home : Fragment() {
                                     bookDetailList.addAll(tabsBook[tab!!.position]);
                                     println(bookDetailList);
                                     bookListAdapter!!.notifyItemRangeChanged(0,bookDetailList.size);
-                                    bookListAdapter!!.notifyItemRangeChanged(0,bookDetailList.count());
                                 }
 
                             }
