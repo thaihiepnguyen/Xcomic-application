@@ -53,6 +53,9 @@ class Explore : Fragment() {
         var adapter = CategoryAdapter(ArrayList<Category>());
         var categoryViewModel: CategoryViewModel
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+
+     
+
         categoryViewModel.getAll()
             .observe(this, Observer { categories ->
                 run {

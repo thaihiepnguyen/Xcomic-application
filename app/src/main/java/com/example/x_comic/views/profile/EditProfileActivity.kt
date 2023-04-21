@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.databinding.ActivityEditProfileBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.UserViewModel
@@ -59,6 +63,10 @@ class EditProfileActivity : AppCompatActivity() {
                         user ->
                     run {
                         binding.user = user
+                        Glide.with(binding.avtImg.context)
+                            .load(user.avatar)
+                            .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                            .into(binding.avtImg)
                     }
                 })
         }

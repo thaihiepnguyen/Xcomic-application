@@ -21,6 +21,7 @@ class CategoryAdapter (
 {
     var onItemClick: ((Category) -> Unit)? = null
     var context: Context? = null;
+    private var _listCategory : ArrayList<Category> = ArrayList()
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var genre = listItemView.findViewById(R.id.genre) as TextView;
 
@@ -32,6 +33,9 @@ class CategoryAdapter (
 
     }
 
+    public fun getAllItem () : ArrayList<Category> {
+        return _listCategory
+    }
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context;
         val inflater = LayoutInflater.from(context)
@@ -71,7 +75,7 @@ class CategoryAdapter (
                         context!!,
                         R.color.white
                     )))
-
+                _listCategory.add(category)
             }
             else {
                 genre.backgroundTintList = null;
@@ -81,6 +85,7 @@ class CategoryAdapter (
                         context!!,
                         R.color.azure
                     )))
+                _listCategory.remove(category)
             }
         }
 

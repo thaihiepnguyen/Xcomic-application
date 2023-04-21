@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,9 +29,12 @@ class UserViewModel : ViewModel() {
     val db = database.getReference("users")
 
     private val _user = MutableLiveData<User>()
+    private val _authors = MutableLiveData<ArrayList<User>>()
     // TODO: biến này để truyền sang Activity khác
     val userLiveData: LiveData<User>
         get() = _user
+    val authorLiveData: LiveData<ArrayList<User>>
+        get() = _authors
 
     // Hàm này sẽ chạy ở thread khác
     fun callApi(uid: String) : MutableLiveData<User> {
@@ -123,6 +127,32 @@ class UserViewModel : ViewModel() {
             .child("users")
             .child(user.id)
             .setValue(user)
+    }
+
+    fun getAllAuthor() : MutableLiveData<ArrayList<User>> {
+        if (_authors.value == null) {
+            // tạo thread mới.
+            db.orderByChild("role").equalTo(2.0).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val authors = ArrayList<User>()
+
+                    for (snapshot in dataSnapshot.children) {
+                        val author = snapshot.getValue(User::class.java)
+                        if (author != null) {
+                            authors.add(author)
+                        }
+                    }
+                    _authors.value = authors
+                    _authors.postValue(authors)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    db.removeEventListener(this)
+                }
+            })
+        }
+        return _authors
     }
 
     fun changeUsername(username: String) {

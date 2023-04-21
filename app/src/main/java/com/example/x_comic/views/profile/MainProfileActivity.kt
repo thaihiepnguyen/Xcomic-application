@@ -77,15 +77,22 @@ class MainProfileActivity : AppCompatActivity() {
                         binding.emailTV.text = user.email
                         binding.usernameTV.text = user.full_name
 
-                        Glide.with(binding.avtImg.context)
-                            .load(user.avatar)
-                            .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
-                            .into(binding.avtImg)
+                        if (user.avatar != "") {
+                            Glide.with(binding.avtImg.context)
+                                .load(user.avatar)
+                                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                                .into(binding.avtImg)
 
-                        Glide.with(binding.background.context)
-                            .load(user.avatar)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                            .into(binding.background)
+                            Glide.with(binding.background.context)
+                                .load(user.avatar)
+                                .apply(RequestOptions.bitmapTransform(BlurTransformation(30, 3)))
+                                .into(binding.background)
+                        } else {
+                            Glide.with(binding.avtImg.context)
+                                .load(R.drawable.avatar)
+                                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                                .into(binding.avtImg)
+                        }
                     }
                 })
         }

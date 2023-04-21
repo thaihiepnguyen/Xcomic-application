@@ -178,16 +178,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
+                <TextView
                     android:id="@+id/editTextTextMultiLine"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
                     android:ems="10"
                     android:gravity="start|top"
-                    android:inputType="textMultiLine"
-                    android:clickable="false"
+                    android:textColor="@color/black"
                     android:text="Nguyễn thái hiệp\n :))))"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -202,6 +202,7 @@
                 android:layout_height="60dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:background="@drawable/border_top"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -239,6 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
+                android:layout_marginBottom="100dp"
                 android:paddingRight="10dp">
 
             </androidx.recyclerview.widget.RecyclerView>
