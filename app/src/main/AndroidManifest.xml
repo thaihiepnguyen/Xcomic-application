@@ -16,6 +16,9 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
+            android:name=".views.profile.MainProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.profile.ChangePhoneNumberActivity"
             android:exported="false" />
         <activity
@@ -67,7 +70,6 @@
         <activity
             android:name=".views.detail.DetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".views.main.CollectionActivity"
             android:exported="false" />

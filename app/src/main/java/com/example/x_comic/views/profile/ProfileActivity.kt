@@ -58,7 +58,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if (uid != null) {
-            userViewModel.getAvt(uid, binding.avtImg)
+//            userViewModel.getAvt(uid, binding.avtImg)
         }
     }
 
@@ -76,7 +76,7 @@ class ProfileActivity : AppCompatActivity() {
             val uid = FirebaseAuthManager.auth.uid
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             if (uid != null) {
-                userViewModel.uploadAvt(uid, bitmap, binding.avtImg)
+//                userViewModel.uploadAvt(uid, bitmap, binding.avtImg, binding.)
             }
         } catch (e: IOException) {
             e.printStackTrace()

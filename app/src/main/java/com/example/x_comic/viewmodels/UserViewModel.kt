@@ -19,6 +19,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.ByteArrayOutputStream
 import java.net.UnknownServiceException
 
@@ -53,7 +54,7 @@ class UserViewModel : ViewModel() {
         return _user
     }
 
-    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView){
+    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView, bg: ImageView){
         val storage = FirebaseStorage.getInstance()
         val fileName = "${userID}.png"
         val storageRef = storage.reference.child("users/$fileName")
@@ -68,6 +69,11 @@ class UserViewModel : ViewModel() {
                     .load(downloadUrl)
                     .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
                     .into(imgAvt)
+
+                Glide.with(bg.context)
+                    .load(downloadUrl)
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                    .into(bg)
             }
 
 
@@ -77,7 +83,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun getAvt(userID: String, imgAvt: ImageView) {
+    fun getAvt(userID: String, imgAvt: ImageView, bg: ImageView) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference.child("users/$userID.png")
 
@@ -89,6 +95,10 @@ class UserViewModel : ViewModel() {
                 .load(downloadUrl)
                 .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
                 .into(imgAvt)
+            Glide.with(bg.context)
+                .load(downloadUrl)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                .into(bg)
         }.addOnFailureListener {
 
         }

@@ -31,6 +31,7 @@ import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.profile.MainProfileActivity
 import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
 
@@ -68,6 +69,8 @@ class Home : Fragment() {
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        avatar = view.findViewById(R.id.avatar);
         productViewModel.getAllBook()
             .observe(this, Observer {
                     products ->
@@ -76,7 +79,7 @@ class Home : Fragment() {
                     customAvatarView = view.findViewById(R.id.avatarListView);
                     customBookListView = view.findViewById(R.id.popularListBook);
                     scrollView = view.findViewById(R.id.nestedScrollView);
-                    avatar = view.findViewById(R.id.avatar);
+
 
                     tabLayout = view.findViewById(R.id.tabs_book);
 
@@ -170,11 +173,10 @@ class Home : Fragment() {
                 }
 
             })
-
         var currentUser = FirebaseAuthManager.getUser()
         userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
             run {
-                if (user.avatar !== "") {
+                if (user.avatar != "") {
                     Glide.with(this)
                         .load(user.avatar)
                         .apply(RequestOptions().override(100, 100).transform(CenterCrop()).transform(RoundedCorners(150)))
@@ -199,7 +201,7 @@ class Home : Fragment() {
 
     // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
-        val intent = Intent(context, ProfileActivity::class.java)
+        val intent = Intent(context, MainProfileActivity::class.java)
         startActivity(intent)
     }
 }
