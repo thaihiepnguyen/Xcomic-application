@@ -54,19 +54,7 @@ class Explore : Fragment() {
         var categoryViewModel: CategoryViewModel
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
-        categoryViewModel.addCategory("Contemporary Lit")
-        categoryViewModel.addCategory("Diverse Lit")
-        categoryViewModel.addCategory("Fanfiction")
-        categoryViewModel.addCategory("Fantasy")
-        categoryViewModel.addCategory("Historical Fiction")
-        categoryViewModel.addCategory("LGBTQ+")
-        categoryViewModel.addCategory("New Adult")
-        categoryViewModel.addCategory("Non Fiction")
-        categoryViewModel.addCategory("Paranormal")
-        categoryViewModel.addCategory("Poetry")
-        categoryViewModel.addCategory("Science Fiction")
-        categoryViewModel.addCategory("Short Story")
-        categoryViewModel.addCategory("Teen Fiction")
+     
 
         categoryViewModel.getAll()
             .observe(this, Observer { categories ->
