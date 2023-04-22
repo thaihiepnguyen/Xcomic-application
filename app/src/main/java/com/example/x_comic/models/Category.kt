@@ -1,6 +1,6 @@
 package com.example.x_comic.models
 
-class Category {
+class Category :java.io.Serializable{
     var id: String = ""
     var name: String = ""
 

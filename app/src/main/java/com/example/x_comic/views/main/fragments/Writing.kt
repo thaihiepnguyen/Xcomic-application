@@ -2,6 +2,7 @@ package com.example.x_comic.views.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -22,23 +24,24 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.AvatarListAdapter
-import com.example.x_comic.adapters.BookListAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
-import com.example.x_comic.models.Avatar
-import com.example.x_comic.models.Book
-import com.example.x_comic.models.BookAuthor
-import com.example.x_comic.models.BookSneek
+import com.example.x_comic.adapters.*
+import com.example.x_comic.models.*
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.MainActivity
+import com.example.x_comic.views.post.NewChapterActivity
 import com.example.x_comic.views.post.PostNewActivity
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import com.google.android.material.tabs.TabLayout
 
 
 class Writing : Fragment() {
 
+    var REQUEST_CODE_PICK_PRODUCT = 1111
+    var REQUEST_CODE_PICK_UPDATE_PRODUCT = 2222
     val bookList: MutableList<BookSneek> = mutableListOf(
         BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
         BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
@@ -78,69 +81,15 @@ class Writing : Fragment() {
         )
     )
 
-    var bookAuthorlList: MutableList<BookAuthor> = mutableListOf(
-
-        BookAuthor(bookDetailList[0], 1, 0),
-        BookAuthor(bookDetailList[1], 2, 1),
-        BookAuthor(bookDetailList[2], 3, 1),
-        BookAuthor(bookDetailList[3], 4, 0),
-        BookAuthor(bookDetailList[4], 5, 1),
-    )
+    var bookAuthorlList: MutableList<Product> = mutableListOf()
 
     var customBookListView: RecyclerView? = null;
     var scrollView: NestedScrollView? = null;
     var btnEditBook : Button? = null;
     var btnNewBook : Button? = null;
 
-    class BooksAdapter (private val books: MutableList<BookAuthor>) : RecyclerView.Adapter<BooksAdapter.ViewHolder>() {
-        var onItemClick: ((book: BookAuthor, position: Int) -> Unit)? = null
-        var onButtonClick: ((BookAuthor) -> Unit)? = null
-        inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-            val title = listItemView.findViewById(R.id.book_list_title) as TextView
-            val imageView: ImageView = listItemView.findViewById(R.id.cover_book) as ImageView
-            val status = listItemView.findViewById(R.id.book_list_status) as TextView
-            val chapter = listItemView.findViewById(R.id.book_list_chapter) as TextView
-
-            init {
-                listItemView.setOnClickListener { onItemClick?.invoke(books[adapterPosition], adapterPosition) }
-
-            }
-
-        }
-
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val context = parent.context
-            val inflater = LayoutInflater.from(context)
-            // Inflate the custom layout
-            val studentView = inflater.inflate(R.layout.book_status_writting, parent, false)
-            // Return a new holder instance
-            return ViewHolder(studentView)
-        }
-
-        override fun getItemCount(): Int {
-            return books.size
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // Get the data model based on position
-            val s: BookAuthor = books.get(position)
-            // Set item views based on your views and data model
-
-            holder.title.text = books[position].book.book.title
-            if (books[position].status == 0) {
-                holder.status.text = "In progress"
-                holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.yellow));
-            } else {
-                holder.status.text = "Done"
-                holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
-            }
-            holder.chapter.text = "${books[position].chapterIsPosted} of ${books[position].book.chapter} Chapter was posted"
-            holder.imageView.setImageResource(books[position].book.book.cover)
-        }
-    }
-
-
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -148,26 +97,43 @@ class Writing : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_writing, container, false)
+
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
         customBookListView = view.findViewById(R.id.listViewWriting) as RecyclerView;
         scrollView = view.findViewById(R.id.nestedScrollView);
         btnNewBook = view.findViewById(R.id.btnWriteNewBook)
+        var _user : User = User()
+        userViewModel.callApi(FirebaseAuthManager.getUser()!!.uid)
+            .observe(this, Observer { user ->
+                run {
+                    _user = user
+                    productViewModel.getAuthBook(_user)
+                        .observe(this, Observer { products ->
+                            run {
+                                val bookListAdapter = BooksAuthAdapter(products);
+                                customBookListView!!.adapter = bookListAdapter;
+                                customBookListView!!.layoutManager = LinearLayoutManager(this.context);
+                                val itemDecoration: RecyclerView.ItemDecoration =
+                                    DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+                                customBookListView?.addItemDecoration(itemDecoration)
 
-        val bookListAdapter = BooksAdapter(bookAuthorlList);
-        customBookListView!!.adapter = bookListAdapter;
-        customBookListView!!.layoutManager = LinearLayoutManager(this.context);
-        val itemDecoration: RecyclerView.ItemDecoration =
-            DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
-        customBookListView?.addItemDecoration(itemDecoration)
-
-        bookListAdapter!!.onItemClick = {book, position ->
-            // DO SOMETHING
-        }
+                                bookListAdapter!!.onItemClick = {book, position ->
+                                    // TODO: Edit activity
+                                    val intent = Intent(requireContext(), PostNewActivity::class.java)
+                                    intent.putExtra(Product.MESSAGE1, book)
+                                    startActivityForResult(intent, REQUEST_CODE_PICK_UPDATE_PRODUCT)
+                                }
+                            }
+                        })
+                }
+            })
 
         btnNewBook?.setOnClickListener {
             // DO SOMETHING
-
             val intent = Intent(requireContext(), PostNewActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_PICK_PRODUCT)
 //            (activity as MainActivity).replaceFragment(PostNewActivity())
         }
         var avatar: ImageButton? = null
@@ -193,6 +159,21 @@ class Writing : Fragment() {
 //        return inflater.inflate(R.layout.fragment_writing, container, false)
         return view
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == REQUEST_CODE_PICK_UPDATE_PRODUCT && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
 
+            // TODO: Update book tren BD
+            productViewModel.updateProduct(reply)
+        }
+
+        if (requestCode == REQUEST_CODE_PICK_PRODUCT && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
+
+            // TODO: Post book len DB
+            productViewModel.addProduct(reply)
+        }
+    }
 }

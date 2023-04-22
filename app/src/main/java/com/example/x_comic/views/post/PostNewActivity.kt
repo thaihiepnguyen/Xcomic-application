@@ -1,6 +1,8 @@
 package com.example.x_comic.views.post
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
+import com.example.x_comic.adapters.CategoryChooseAdapter
+import com.example.x_comic.adapters.ChaptersAdapter
 import com.example.x_comic.models.Category
 import com.example.x_comic.models.Chapter
 import com.example.x_comic.models.Product
@@ -27,31 +32,28 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.firebase.storage.FirebaseStorage
 import java.io.IOException
 
 class PostNewActivity : AppCompatActivity() {
-
-    var categoryView : RecyclerView? = null;
     var REQUEST_CODE_PICK_IMAGE = 1111
     var REQUEST_CODE_PICK_CHAPTER = 2222
+    var REQUEST_CODE_UPDATE_CHAPTER = 3333
+
     var fileNameCover : String = ""
     var age : Int = 0
     var _user : User = User()
-    var curBook : Product = Product()
-    lateinit var chapterListAdapter : ChaptersAdapter
+    private var curBook : Product = Product()
     var is_new = true
 
-    var categoryList : ArrayList<Category> = ArrayList()
+    lateinit var chapterListAdapter : ChaptersAdapter
 
-    var chapterList: MutableList<Chapter> = mutableListOf(
-        Chapter("Chapter 1"),
-        Chapter("Chapter 2"),
-        Chapter("Chapter 3"),
-        Chapter("Chapter 4"),
-        Chapter("Chapter 5"),
-        Chapter("Chapter 6"),
-    )
+    var categoryList : ArrayList<Category> = ArrayList()
+    var categoryListChoose : ArrayList<Category> = ArrayList()
+    var chapterList: MutableList<Chapter> = mutableListOf()
+
     var customChapterListView: RecyclerView? = null;
+    var categoryView : RecyclerView? = null;
 
     val ageRanges = listOf(
         "0-2 years" to "Board books and picture books" to 2,
@@ -67,71 +69,55 @@ class PostNewActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var chapterViewModel: ChapterViewModel
 
-
-
-    class ChaptersAdapter (private val chapters: MutableList<Chapter>) : RecyclerView.Adapter<ChaptersAdapter.ViewHolder>() {
-        var onItemClick: ((chapter: Chapter, position: Int) -> Unit)? = null
-        var onButtonClick: ((Chapter) -> Unit)? = null
-        inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-            val name = listItemView.findViewById(R.id.tvChapterName) as TextView
-            val dateUpdate = listItemView.findViewById(R.id.tvDate) as TextView
-
-            init {
-                listItemView.setOnClickListener { onItemClick?.invoke(chapters[adapterPosition], adapterPosition) }
-
-            }
-
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val context = parent.context
-            val inflater = LayoutInflater.from(context)
-            // Inflate the custom layout
-            val chapterView = inflater.inflate(R.layout.chapter_status, parent, false)
-            // Return a new holder instance
-            return ViewHolder(chapterView)
-        }
-
-        override fun getItemCount(): Int {
-            return chapters.size
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // Get the data model based on position
-            val c: Chapter = chapters.get(position)
-            // Set item views based on your views and data model
-
-            holder.name.text = chapters[position].name
-
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         chapterViewModel = ViewModelProvider(this).get(ChapterViewModel::class.java)
-
         setContentView(R.layout.activity_post_new)
 
-        // Category
-        val layoutManager = FlexboxLayoutManager(this);
-        categoryView = findViewById(R.id.category_list);
-        categoryViewModel.getAll()
-            .observe(this, Observer { categories ->
-                run {
-                    val adapter = CategoryAdapter(categories);
-                    categoryView!!.adapter = adapter
+        // Spinner Age
+        spinnerAgeView()
 
-                    layoutManager!!.flexWrap = FlexWrap.WRAP;
-                    layoutManager!!.flexDirection = FlexDirection.ROW;
-                    layoutManager!!.alignItems = AlignItems.FLEX_START;
-                    categoryView!!.layoutManager = layoutManager;
+        var intent = intent
+        val _book = intent.getSerializableExtra(Product.MESSAGE1) as? Product
+        _book?.let {
+            curBook = _book
+            is_new = false
+            findViewById<TextView>(R.id.title).text = "Update Book"
 
-                    categoryList = adapter!!.getAllItem()
+            var cover = findViewById<ImageView>(R.id.ivCover)
+            val storage = FirebaseStorage.getInstance()
+            val imageName = curBook.cover // Replace with your image name
+            val imageRef = storage.reference.child("book_cover/$imageName")
+            imageRef.getBytes(Long.MAX_VALUE)
+                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    // Set the Bitmap to the ImageView
+                    cover.setImageBitmap(bitmap)
+
+                }.addOnFailureListener {
+                    // Handle any errors
                 }
-            })
+            fileNameCover = curBook.cover
+
+            findViewById<EditText>(R.id.etTitle).setText(curBook.title.toString())
+            findViewById<EditText>(R.id.etDescription).setText(curBook.tiny_des.toString())
+            findViewById<Switch>(R.id.sStatus).isChecked = curBook.status
+            findViewById<Switch>(R.id.sIsHide).isChecked =  curBook.hide
+
+            val curIndex = ageRanges.indexOfFirst { it.second == curBook.age }
+            val index = if (curIndex == -1) ageRanges.lastIndex else curIndex
+            findViewById<Spinner>(R.id.ageSpinner).setSelection(index)
+            chapterList = curBook.chapters
+            categoryListChoose = curBook.categories
+        }
+
+        // Category
+        categoryView()
+        // Chapter
+        chapterView()
 
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
@@ -143,7 +129,57 @@ class PostNewActivity : AppCompatActivity() {
                 })
         }
 
-        // Spinner Age
+        val addCoverBtn = findViewById<Button>(R.id.btnNewCover)
+        addCoverBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+        }
+
+        val nextButton = findViewById<Button>(R.id.btnNext)
+        nextButton.setOnClickListener {
+            //TODO: Return book
+            val replyIntent = Intent()
+            replyIntent.putExtra(Product.MESSAGE2, getCurBook())
+            setResult(Activity.RESULT_OK, replyIntent)
+            finish()
+        }
+
+        val backButton = findViewById<ImageButton>(R.id.imgbtnBack)
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        val newChapterButton = findViewById<Button>(R.id.btnNewChapter)
+        newChapterButton.setOnClickListener {
+
+            curBook?.let {
+                val intent = Intent(this, NewChapterActivity::class.java)
+                intent.putExtra(Chapter.MESSAGE1, curBook.id)
+                startActivityForResult(intent, REQUEST_CODE_PICK_CHAPTER)
+            }
+        }
+    }
+
+    private fun categoryView () {
+        val layoutManager = FlexboxLayoutManager(this);
+        categoryView = findViewById(R.id.category_list);
+        categoryViewModel.getAll()
+            .observe(this, Observer { categories ->
+                run {
+                    val adapter = CategoryChooseAdapter(categories, categoryListChoose);
+                    categoryView!!.adapter = adapter
+
+                    layoutManager!!.flexWrap = FlexWrap.WRAP;
+                    layoutManager!!.flexDirection = FlexDirection.ROW;
+                    layoutManager!!.alignItems = AlignItems.FLEX_START;
+                    categoryView!!.layoutManager = layoutManager;
+
+                    categoryList = adapter!!.getAllItem()
+                }
+            })
+    }
+
+    private fun spinnerAgeView () {
         val ageSpinner = findViewById<Spinner>(R.id.ageSpinner)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ageRanges.map { it.first.first })
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -159,71 +195,38 @@ class PostNewActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
-        val addCoverBtn = findViewById<Button>(R.id.btnNewCover)
-        addCoverBtn.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
-        }
-
-        val nextButton = findViewById<Button>(R.id.btnNext)
-        nextButton.setOnClickListener {
-            //TODO: Save book
-//            postBook()
-            finish()
-        }
-
-        val newChapterButton = findViewById<Button>(R.id.btnNewChapter)
-        newChapterButton.setOnClickListener {
-            // Save book
-            if (is_new) {
-                postBook()
-                is_new = false
-            }
-            curBook?.let {
-                val intent = Intent(this, NewChapterActivity::class.java)
-                intent.putExtra(Chapter.MESSAGE1, curBook.id)
-                startActivityForResult(intent, REQUEST_CODE_PICK_CHAPTER)
-            }
-        }
-
-        // Chapter
-        getChapter()
     }
 
-    private fun getChapter() {
-        chapterViewModel.getAllChapterOfBook(curBook.id)
-            .observe(this, Observer { chapters ->
-                run {
-                    customChapterListView = findViewById(R.id.listViewChapter) as RecyclerView;
-                    chapterListAdapter = ChaptersAdapter(chapters);
-                    customChapterListView!!.adapter = chapterListAdapter;
-                    customChapterListView!!.layoutManager = LinearLayoutManager(this);
-                    val itemDecoration: RecyclerView.ItemDecoration =
-                        DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-                    customChapterListView?.addItemDecoration(itemDecoration)
+    private fun chapterView () {
+        customChapterListView = findViewById(R.id.listViewChapter) as RecyclerView;
+        chapterListAdapter = ChaptersAdapter(chapterList);
+        customChapterListView!!.adapter = chapterListAdapter;
+        customChapterListView!!.layoutManager = LinearLayoutManager(this);
+        val itemDecoration: RecyclerView.ItemDecoration =
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        customChapterListView?.addItemDecoration(itemDecoration)
 
-                    chapterListAdapter!!.onItemClick = {chapter, position ->
-                        // DO SOMETHING
-
-                    }
-                }
-            })
+        chapterListAdapter!!.onItemClick = {chapter, position ->
+            val intent = Intent(this, NewChapterActivity::class.java)
+            intent.putExtra(Chapter.MESSAGE1, position)
+            intent.putExtra(Chapter.MESSAGE3, chapter)
+            startActivityForResult(intent, REQUEST_CODE_UPDATE_CHAPTER)
+        }
     }
 
-    private fun postBook () {
-        val book = Product()
-        book.author = _user.penname
-        book.title = findViewById<EditText>(R.id.etTitle).text.toString()
-        book.tiny_des = findViewById<EditText>(R.id.etDescription).text.toString()
-        book.status = findViewById<Switch>(R.id.sStatus).isChecked
-        book.hide = findViewById<Switch>(R.id.sIsHide).isChecked
-        book.age = age
-        book.cover = fileNameCover
-        book.categories = categoryList
+    private fun getCurBook () : Product {
 
-        curBook= book
-        productViewModel.addProduct(book)
+        curBook.author = _user.penname
+        curBook.title = findViewById<EditText>(R.id.etTitle).text.toString()
+        curBook.tiny_des = findViewById<EditText>(R.id.etDescription).text.toString()
+        curBook.status = findViewById<Switch>(R.id.sStatus).isChecked
+        curBook.hide = findViewById<Switch>(R.id.sIsHide).isChecked
+        curBook.age = age
+        curBook.cover = fileNameCover
+        curBook.categories = categoryList
+        curBook.chapters = ArrayList(chapterList)
+
+        return curBook
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -244,11 +247,21 @@ class PostNewActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
-            chapterViewModel.addChapter(reply)
 
-            getChapter()
+            chapterList.add(reply)
             chapterListAdapter?.notifyDataSetChanged()
+        }
 
+        if (requestCode == REQUEST_CODE_UPDATE_CHAPTER && resultCode == RESULT_OK && data != null) {
+            val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
+            val index = data!!.getIntExtra(Chapter.MESSAGE4, -1) as Int
+            if (index == -1) {
+
+            } else {
+                chapterList[index] = reply
+            }
+
+            chapterListAdapter?.notifyDataSetChanged()
         }
     }
 

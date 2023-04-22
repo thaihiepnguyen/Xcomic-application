@@ -6,11 +6,13 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -68,6 +70,36 @@ class ProductViewModel : ViewModel() {
         println("123"+_products)
         return _products
     }
+
+    fun getAuthBook(_user : User):MutableLiveData<ArrayList<Product>>{
+        // TODO: Kiểm tra là chỉ khi _products.value == null. Ý là mình chỉ chạy dòng ở dưới 1 lần thôi
+        // lần đầu tiên khi _products.value còn là null
+        if (_products.value == null) {
+            // tạo thread mới.
+            db.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val products = ArrayList<Product>()
+
+                    for (snapshot in dataSnapshot.children) {
+                        val product = snapshot.getValue(Product::class.java)
+                        if (product != null && _user.penname == product.author) {
+                            products.add(product)
+                        }
+                    }
+                    _products.value = products
+                    _products.postValue(products)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    db.removeEventListener(this)
+                }
+            })
+        }
+
+        return _products
+    }
+
     fun getCompletedBook():MutableLiveData<ArrayList<Product>>{
         if (_productsCompleted.value == null) {
             // tạo thread mới.
@@ -209,6 +241,14 @@ class ProductViewModel : ViewModel() {
         }
 
         newRef.setValue(product)
+    }
+
+    fun updateProduct(product: Product) {
+        val database = Firebase.database
+        database.reference
+            .child("book")
+            .child(product.id)
+            .setValue(product)
     }
 
     fun addFavorite(product: Product) {

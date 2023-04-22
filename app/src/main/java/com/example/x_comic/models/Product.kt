@@ -2,7 +2,7 @@ package com.example.x_comic.models
 
 import android.util.Log
 
-class Product {
+class Product : java.io.Serializable {
     var id: String = ""
     var title: String = ""
     var cover: String = ""
@@ -56,6 +56,8 @@ class Product {
 
 
         companion object {
+            const val MESSAGE1 = "message1"
+            const val MESSAGE2 = "message2"
             fun fromString(string: String): Product {
                 val parts = string.split("<Product/>")
                 val id = parts[0]

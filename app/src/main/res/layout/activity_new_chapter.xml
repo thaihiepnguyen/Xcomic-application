@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/titleChapter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -50,7 +50,8 @@
         android:ems="10"
         android:fontFamily="@font/poppins_bold"
         android:inputType="textPersonName"
-        android:text="Title for chapter"
+        android:hint="Title for chapter"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header" />
@@ -67,7 +68,7 @@
         android:inputType="textMultiLine"
         android:maxLines="100"
         android:scrollbars="vertical"
-        android:text="Start writting"
+        android:hint="Start writting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
