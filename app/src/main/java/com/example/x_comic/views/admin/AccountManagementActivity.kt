@@ -20,17 +20,17 @@ class AccountManagementActivity : AppCompatActivity() {
 
     var accountList: MutableList<User> = mutableListOf(
         User("01", "Adam Jost", 23, "@drawable/avatar_1", "", "01/01/2000",
-            "account@gmail.com", 0, false, "", "", "", 0),
+            "account@gmail.com", 0, false, "", "", "","", 0),
         User("01", "Adam Jost", 23, "@drawable/avatar_2", "", "01/01/2000",
-        "account@gmail.com", 0, false, "", "", "", 0),
+        "account@gmail.com", 0, false, "", "", "", "",0),
         User("01", "Adam Jost", 23, "@drawable/avatar_3", "", "01/01/2000",
-            "account@gmail.com", 0, false, "", "", "", 0),
+            "account@gmail.com", 0, false, "", "", "", "",0),
         User("01", "Adam Jost", 23, "@drawable/avatar_4", "", "01/01/2000",
-            "account@gmail.com", 0, false, "", "", "", 0),
+            "account@gmail.com", 0, false, "", "", "", "",0),
         User("01", "Adam Jost", 23, "@drawable/avatar_5", "", "01/01/2000",
-            "account@gmail.com", 0, false, "", "", "", 0),
+            "account@gmail.com", 0, false, "", "", "", "",0),
         User("01", "Adam Jost", 23, "@drawable/avatar_6", "", "01/01/2000",
-            "account@gmail.com", 0, false, "", "", "", 0),
+            "account@gmail.com", 0, false, "", "", "", "",0),
     )
     var customAccountListView: RecyclerView? = null;
 

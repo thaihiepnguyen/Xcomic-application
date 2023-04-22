@@ -67,6 +67,8 @@ class MainProfileActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
         }
 
+
+
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -76,6 +78,7 @@ class MainProfileActivity : AppCompatActivity() {
                     run {
                         binding.emailTV.text = user.email
                         binding.usernameTV.text = user.full_name
+                        binding.aboutme.text = user.aboutme
 
                         if (user.avatar != "") {
                             Glide.with(binding.avtImg.context)

@@ -14,6 +14,7 @@ class User
     var penname: String = "no data yet"
     var phone: String = "no data yet"
     var gender: String = "male"
+    var aboutme: String = ""
     var role: Long = 1
     constructor(
         id: String = "",
@@ -28,6 +29,7 @@ class User
         penname: String = "no data yet",
         phone: String = "no data yet",
         gender: String = "male",
+        aboutme: String = "",
         role: Long = 1, // Role = 1: là đọc giả; 2: là người đọc giả có thể đăng truyện; 3: là admin
     ) {
         this.id = id
@@ -43,6 +45,7 @@ class User
         this.phone = phone
         this.gender = gender
         this.role = role
+        this.aboutme = aboutme
     }
     constructor() {
 

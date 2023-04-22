@@ -140,6 +140,18 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun changeAboutMe(aboutme: String) {
+        var currentUser = FirebaseAuthManager.getUser()
+        val database = Firebase.database
+        if (currentUser != null) {
+            database.reference
+                .child("users")
+                .child(currentUser.uid)
+                .child("aboutme")
+                .setValue(aboutme)
+        }
+    }
+
     fun changePenname(penname: String) {
         var currentUser = FirebaseAuthManager.getUser()
         val database = Firebase.database

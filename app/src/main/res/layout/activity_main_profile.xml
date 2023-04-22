@@ -180,7 +180,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/aboutme"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:layout_marginTop="10dp"

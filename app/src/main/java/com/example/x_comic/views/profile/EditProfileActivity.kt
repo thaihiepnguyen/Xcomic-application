@@ -67,6 +67,10 @@ class EditProfileActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
         }
 
+        binding.aboutmeLayout.setOnClickListener {
+            nextAboutMeActivity()
+        }
+
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -144,6 +148,10 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun nextChangePennameActivity() {
         val intent = Intent(this, ChangePennameActivity::class.java)
+        startActivity(intent)
+    }
+    private fun nextAboutMeActivity() {
+        val intent = Intent(this, AboutMeActivity::class.java)
         startActivity(intent)
     }
 }
