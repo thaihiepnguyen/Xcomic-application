@@ -37,6 +37,8 @@ import com.example.x_comic.views.profile.ProfileActivity
 import com.google.android.material.tabs.TabLayout
 import kotlin.random.Random
 import com.example.x_comic.models.User
+import com.example.x_comic.views.login.LoginActivity
+import com.example.x_comic.views.main.MainActivity
 
 
 class Home : Fragment() {
@@ -49,13 +51,13 @@ class Home : Fragment() {
 
     var bookDetailList: MutableList<Product> = mutableListOf()
 
-    private  val bookPopularList: MutableList<Product> = mutableListOf();
+    private  val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
 
     private val bookCompletedList: MutableList<Product> = mutableListOf()
 
     var tabsBook = mutableListOf(
-        bookDetailList,bookLatestList,bookCompletedList);
+        bookDetailList,bookLatestList,bookCompletedList)
     var customSlideView: RecyclerView? = null;
     var customAvatarView: RecyclerView? = null;
     var customBookListView: RecyclerView? = null;
@@ -63,19 +65,21 @@ class Home : Fragment() {
     var scrollView: NestedScrollView? = null;
     var avatar: ImageButton? = null
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
 
-
-        var productViewModel: ProductViewModel
+        if (FirebaseAuthManager.auth.currentUser == null) {
+            nextLoginActivity()
+            return null
+        }
         var userViewModel: UserViewModel
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        var productViewModel: ProductViewModel
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         customSlideView = view.findViewById(R.id.listView);
         customAvatarView = view.findViewById(R.id.avatarListView);
@@ -256,6 +260,11 @@ class Home : Fragment() {
     // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
         val intent = Intent(context, MainProfileActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextLoginActivity() {
+        val intent = Intent(context, LoginActivity::class.java)
         startActivity(intent)
     }
 }
