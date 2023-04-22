@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -59,7 +60,7 @@ class Home : Fragment() {
     var customBookListView: RecyclerView? = null;
     var tabLayout: TabLayout? = null;
     var scrollView: NestedScrollView? = null;
-    var avatar: ImageButton? = null
+    var avatar: ImageView? = null
 
 
     override fun onCreateView(
@@ -98,12 +99,12 @@ class Home : Fragment() {
 
                     authorList.addAll(authors)
 
-                    Log.d("AUTHOR", authors[0].full_name)
+                    val avatarAdapter = AvatarListAdapter(requireActivity(), authorList)
 
-                    val avatarAdapter = AvatarListAdapter(authorList);
                     customAvatarView!!.adapter = avatarAdapter
                 }
             })
+
 
         productViewModel.getAllBook()
             .observe(this, Observer { products ->
@@ -240,6 +241,7 @@ class Home : Fragment() {
                 }
             }
         })
+
 
 
 

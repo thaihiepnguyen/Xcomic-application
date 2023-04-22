@@ -1,9 +1,13 @@
 package com.example.x_comic.adapters
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -12,22 +16,25 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.User
+import com.example.x_comic.views.detail.DetailActivity
+import com.example.x_comic.views.profile.AuthorProfileActivity
+import com.beust.klaxon.Klaxon
 
 class AvatarListAdapter (
+    private  var context: Activity,
     private var avatarList: MutableList<User>,
 ) : RecyclerView.Adapter<AvatarListAdapter.ViewHolder>()
 {
     var onItemClick: ((User) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
-        var avatar = listItemView.findViewById(R.id.avatar_picture) as ImageButton;
+        var avatar = listItemView.findViewById(R.id.avatar_picture) as ImageView;
         var username = listItemView.findViewById(R.id.username) as TextView;
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(avatarList[adapterPosition])
             }
         }
-
     }
 
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,6 +58,12 @@ class AvatarListAdapter (
             .apply(RequestOptions().override(250, 250))
             .circleCrop()
             .into(avatar)
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, AuthorProfileActivity::class.java)
+            intent.putExtra("authorKey",Klaxon().toJsonString(author))
+            ActivityCompat.startActivity(context, intent, null)
+        }
     }
 
 }

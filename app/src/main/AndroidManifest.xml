@@ -16,6 +16,9 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
+            android:name=".views.profile.AuthorProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.profile.AboutMeActivity"
             android:exported="false" />
         <activity
