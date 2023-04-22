@@ -1,8 +1,10 @@
 package com.example.x_comic.views.profile
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -13,10 +15,13 @@ import com.example.x_comic.databinding.ActivityEditProfileBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.login.LoginActivity
+import jp.wasabeef.glide.transformations.BlurTransformation
+import java.io.IOException
 
 class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var userViewModel: UserViewModel
+    private var REQUEST_CODE_PICK_IMAGE = 1112
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
@@ -56,6 +61,12 @@ class EditProfileActivity : AppCompatActivity() {
         binding.phoneLayout.setOnClickListener {
             nextChangePhoneNumberActivity()
         }
+
+        binding.avtLayout.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+        }
+
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)
@@ -65,10 +76,41 @@ class EditProfileActivity : AppCompatActivity() {
                         binding.user = user
                         Glide.with(binding.avtImg.context)
                             .load(user.avatar)
-                            .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                            .apply(RequestOptions().override(100, 100))
+                            .circleCrop()
                             .into(binding.avtImg)
                     }
                 })
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            val imageUri = data.data
+            // Lưu ảnh vào profile
+            saveImageToProfile(imageUri)
+        }
+    }
+
+    private fun saveImageToProfile(imageUri: Uri?) {
+        try {
+            val uid = FirebaseAuthManager.auth.uid
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            if (uid != null) {
+                var uploadTask = userViewModel.uploadAvt(uid, bitmap)
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        val downloadUrl = uri.toString()
+                        userViewModel.changeAvt(downloadUrl)
+                    }
+                }.addOnFailureListener { exception ->
+                    // Tải lên ảnh thất bại
+                    exception.printStackTrace()
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 

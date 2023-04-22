@@ -80,7 +80,8 @@ class MainProfileActivity : AppCompatActivity() {
                         if (user.avatar != "") {
                             Glide.with(binding.avtImg.context)
                                 .load(user.avatar)
-                                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                                .apply(RequestOptions().override(100, 100))
+                                .circleCrop()
                                 .into(binding.avtImg)
 
                             Glide.with(binding.background.context)
@@ -88,9 +89,11 @@ class MainProfileActivity : AppCompatActivity() {
                                 .apply(RequestOptions.bitmapTransform(BlurTransformation(30, 3)))
                                 .into(binding.background)
                         } else {
+                            // nếu mà chưa có avt thì mặc định render vầy :v
                             Glide.with(binding.avtImg.context)
                                 .load(R.drawable.avatar)
-                                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                                .apply(RequestOptions().override(100, 100))
+                                .circleCrop()
                                 .into(binding.avtImg)
                         }
                     }
@@ -115,7 +118,19 @@ class MainProfileActivity : AppCompatActivity() {
             val uid = FirebaseAuthManager.auth.uid
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             if (uid != null) {
-                userViewModel.uploadAvt(uid, bitmap, binding.avtImg, binding.background)
+                // upload avt lên storage
+                var uploadTask = userViewModel.uploadAvt(uid, bitmap)
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        val downloadUrl = uri.toString()
+
+                        // change avt ở realtime db
+                        userViewModel.changeAvt(downloadUrl)
+                    }
+                }.addOnFailureListener { exception ->
+                    // Tải lên ảnh thất bại
+                    exception.printStackTrace()
+                }
             }
         } catch (e: IOException) {
             e.printStackTrace()

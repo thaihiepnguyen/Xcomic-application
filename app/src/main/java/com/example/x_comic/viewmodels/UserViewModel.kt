@@ -20,6 +20,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.ByteArrayOutputStream
 import java.net.UnknownServiceException
@@ -58,7 +59,7 @@ class UserViewModel : ViewModel() {
         return _user
     }
 
-    fun uploadAvt(userID: String,bitmap: Bitmap, imgAvt: ImageView, bg: ImageView){
+    fun uploadAvt(userID: String,bitmap: Bitmap) : UploadTask {
         val storage = FirebaseStorage.getInstance()
         val fileName = "${userID}.png"
         val storageRef = storage.reference.child("users/$fileName")
@@ -66,25 +67,8 @@ class UserViewModel : ViewModel() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val data = baos.toByteArray()
         val uploadTask = storageRef.putBytes(data)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                val downloadUrl = uri.toString()
-                Glide.with(imgAvt.context)
-                    .load(downloadUrl)
-                    .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
-                    .into(imgAvt)
 
-                Glide.with(bg.context)
-                    .load(downloadUrl)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                    .into(bg)
-            }
-
-
-        }.addOnFailureListener { exception ->
-            // Tải lên ảnh thất bại
-            exception.printStackTrace()
-        }
+        return uploadTask
     }
 
     fun getAvt(userID: String, imgAvt: ImageView, bg: ImageView) {
@@ -97,7 +81,8 @@ class UserViewModel : ViewModel() {
             changeAvt(downloadUrl)
             Glide.with(imgAvt.context)
                 .load(downloadUrl)
-                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+                .apply(RequestOptions().override(100, 100))
+                .circleCrop()
                 .into(imgAvt)
             Glide.with(bg.context)
                 .load(downloadUrl)
@@ -108,18 +93,6 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun getAvtForImageButton(userID: String, imgAvt: ImageButton) {
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference.child("users/$userID.png")
-
-        storageRef.downloadUrl.addOnSuccessListener { uri ->
-            val downloadUrl = uri.toString()
-            Glide.with(imgAvt.context)
-                .load(downloadUrl)
-                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
-                .into(imgAvt)
-        }
-    }
     // add
     fun addUser(user: User) {
         val database = Firebase.database

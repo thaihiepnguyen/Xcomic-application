@@ -1,7 +1,7 @@
 package com.example.x_comic.views.main.fragments
 
 
-import android.app.ProgressDialog
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,19 +26,15 @@ import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.BookListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.models.Avatar
-import com.example.x_comic.models.Book
-import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
-import com.example.x_comic.views.profile.MainProfileActivity
-import com.example.x_comic.views.profile.ProfileActivity
-import com.google.android.material.tabs.TabLayout
-import kotlin.random.Random
-import com.example.x_comic.models.User
 import com.example.x_comic.views.login.LoginActivity
-import com.example.x_comic.views.main.MainActivity
+import com.example.x_comic.views.profile.MainProfileActivity
+import com.google.android.material.tabs.TabLayout
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 class Home : Fragment() {
@@ -64,6 +60,7 @@ class Home : Fragment() {
     var tabLayout: TabLayout? = null;
     var scrollView: NestedScrollView? = null;
     var avatar: ImageButton? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -237,7 +234,8 @@ class Home : Fragment() {
                 if (user.avatar != "") {
                     Glide.with(this)
                         .load(user.avatar)
-                        .apply(RequestOptions().override(100, 100).transform(CenterCrop()).transform(RoundedCorners(150)))
+                        .apply(RequestOptions().override(100, 100))
+                        .circleCrop()
                         .into(avatar!!)
                 }
             }

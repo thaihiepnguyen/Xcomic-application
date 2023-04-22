@@ -48,7 +48,8 @@ class AvatarListAdapter (
         username.setText(author.full_name);
         Glide.with(avatar.context)
             .load(author.avatar)
-            .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
+            .apply(RequestOptions().override(250, 250))
+            .circleCrop()
             .into(avatar)
     }
 
