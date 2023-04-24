@@ -42,24 +42,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         val uid = FirebaseAuthManager.auth.uid
-        if (uid != null) {
-            userViewModel.callApi(uid)
-                .observe(this, Observer {
-                    // user nó được thay đổi realtime ở đb
-                        user ->
-                    run {
-                        binding.user = user
-                        if (user.role.toInt() == 1) {
-                            binding.roleTV.text = "Member"
-                        }
-                    }
 
-                })
-        }
-
-        if (uid != null) {
-//            userViewModel.getAvt(uid, binding.avtImg)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

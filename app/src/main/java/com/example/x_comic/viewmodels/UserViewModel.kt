@@ -93,7 +93,25 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    // add
+    fun saveCurrentFollow(user: User) {
+        val database = Firebase.database
+        database.reference
+            .child("users")
+            .child(user.id)
+            .child("follow")
+            .setValue(user.follow)
+    }
+
+    fun saveCurrentHaveFollowed(user: User) {
+        val database = Firebase.database
+        database.reference
+            .child("users")
+            .child(user.id)
+            .child("have_followed")
+            .setValue(user.have_followed)
+    }
+
+
     fun addUser(user: User) {
         val database = Firebase.database
         database.reference

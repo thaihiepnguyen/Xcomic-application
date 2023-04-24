@@ -99,6 +99,8 @@ class MainProfileActivity : AppCompatActivity() {
                                 .circleCrop()
                                 .into(binding.avtImg)
                         }
+
+                        binding.followNumber.text = user.have_followed.size.toString()
                     }
                 })
         }
