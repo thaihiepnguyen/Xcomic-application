@@ -16,20 +16,34 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.adapters.ChapterAdapter
+import com.example.x_comic.adapters.FeedbackAdapter
+import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.models.Avatar
+import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.User
+import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
 import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -44,7 +58,7 @@ class DetailActivity : AppCompatActivity() {
 
         val intent = intent
         val stringData = intent.getStringExtra("book_data")
-        val bookData = Product.fromString(stringData!!)
+        val bookData = stringData?.let{ Klaxon().parse<Product>(it)}
 
         var title = findViewById(R.id.book_title) as TextView;
         var author = findViewById(R.id.book_author) as TextView;
@@ -61,12 +75,13 @@ class DetailActivity : AppCompatActivity() {
         var ratingTextView = findViewById(R.id.ratingTV) as TextView;
         var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
 
-        title.text = bookData.title
-        author.text = bookData.author
+        title.text = bookData?.title
+        author.text = bookData?.author
+        favorite.text = bookData?.favorite.toString()
         val backCover = findViewById<ImageView>(R.id.background)
         // Get a reference to the Firebase Storage instance
         val storage = FirebaseStorage.getInstance()
-        val imageName = bookData.cover // Replace with your image name
+        val imageName = bookData?.cover // Replace with your image name
         val imageRef = storage.reference.child("book_cover/$imageName")
         imageRef.getBytes(Long.MAX_VALUE)
             .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
@@ -83,9 +98,9 @@ class DetailActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 // Handle any errors
             }
-        view.text = bookData.view.toString()
-        chapter.text = bookData.chapters.size.toString()
-        if (bookData.status){
+        view.text = bookData?.view.toString()
+        chapter.text = bookData?.chapters?.size.toString()
+        if (bookData!!.status){
             status.text = "Status: Done"
         }else{
             status.text = "Status: Ongoing"
@@ -111,6 +126,16 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
 
+        //read
+        val readBtn = findViewById<Button>(R.id.readBtn)
+        readBtn.setOnClickListener {
+            if (bookData.chapters[0]!=null){
+                val intent = Intent(this, ReadBookActivity::class.java)
+                intent.putExtra("title",bookData.chapters[0].name)
+                intent.putExtra("content",bookData.chapters[0].content)
+                ActivityCompat.startActivityForResult(this, intent, 302, null)
+            }
+        }
 
         //open dialog choose chapter to read
         val chooseBtn = findViewById<Button>(R.id.chooseChapterBtn)
@@ -143,15 +168,125 @@ class DetailActivity : AppCompatActivity() {
             val ratingBar = dl.findViewById<RatingBar>(R.id.ratingBar)
             val ratingTextView = dl.findViewById<TextView>(R.id.ratingTextView)
             val submitBtn = dl.findViewById<Button>(R.id.submitBtn)
+            val comment = dl.findViewById<EditText>(R.id.editText)
 
             ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 ratingTextView.text = String.format("(%s)", fl)
             }
 
             submitBtn.setOnClickListener {
+                if (FirebaseAuthManager.auth.currentUser != null) {
+                    val currentUser = FirebaseAuthManager.getUser()
+                    if (currentUser != null) {
+                        val uid = currentUser.uid
+                        val bid = bookData.id
+
+                        // Check if the user has already left feedback for the book/comic
+                        val feedbackRef = Firebase.database.reference.child("feedback")
+                        val query = feedbackRef.orderByChild("uid").equalTo(uid)
+                        query.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()) {
+                                    // If there is existing feedback, update it with the new rating and feedback
+                                    for (feedbackSnapshot in snapshot.children) {
+                                        val feedback = feedbackSnapshot.getValue(Feedback::class.java)
+                                        if (feedback?.bid == bid) {
+                                            feedback?.let {
+                                                it.rating = ratingBar.rating
+                                                it.feedback = comment.text.toString()
+                                                feedbackSnapshot.ref.setValue(feedback)
+                                            }
+                                        }
+                                        else {
+                                            // If there is no existing feedback, push a new feedback
+                                            val newFeedback = Feedback(
+                                                id = "", // leave the ID empty to generate a unique key in Firebase
+                                                uid = uid,
+                                                bid = bid,
+                                                rating = ratingBar.rating,
+                                                feedback = comment.text.toString() // replace with the user's feedback
+                                            )
+                                            val feedbackKey = feedbackRef.push().key
+                                            feedbackKey?.let { key ->
+                                                newFeedback.id =
+                                                    key // assign the generated key to the Feedback object
+                                                feedbackRef.child(key).setValue(newFeedback)
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    // If there is no existing feedback, push a new feedback
+                                    val newFeedback = Feedback(
+                                        id = "", // leave the ID empty to generate a unique key in Firebase
+                                        uid = uid,
+                                        bid = bid,
+                                        rating = ratingBar.rating,
+                                        feedback = comment.text.toString() // replace with the user's feedback
+                                    )
+                                    val feedbackKey = feedbackRef.push().key
+                                    feedbackKey?.let { key ->
+                                        newFeedback.id =
+                                            key // assign the generated key to the Feedback object
+                                        feedbackRef.child(key).setValue(newFeedback)
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                // Handle any errors here
+                            }
+                        })
+                    }
+                }
                 dl.dismiss()
             }
-
         }
+
+        val feedbackList = mutableListOf<Feedback>()
+
+        val listFeedback = findViewById<RecyclerView>(R.id.listFeedback)
+        val fbAdapter = FeedbackAdapter(this, feedbackList)
+        listFeedback.adapter = fbAdapter
+        listFeedback.layoutManager =
+            LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+
+        val feedbackRef = FirebaseDatabase.getInstance().getReference("feedback")
+        val query = feedbackRef.orderByChild("bid").equalTo(bookData.id)
+
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                feedbackList.clear()
+                for (data in snapshot.children) {
+                    val feedback = data.getValue(Feedback::class.java)
+                    if (feedback != null) {
+                        feedbackList.add(feedback)
+                        Log.i("AA????", feedback.feedback)
+                    }
+                }
+                fbAdapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+        var productViewModel: ProductViewModel
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        val bookList: MutableList<Product> = mutableListOf()
+        var customSlideView: RecyclerView? = null;
+        customSlideView = findViewById(R.id.listView);
+        productViewModel.getAllBook()
+            .observe(this, Observer { products ->
+                run {
+                    bookList.clear()
+                    println(products)
+                    bookList.addAll(products)
+                    val adapter = ListAdapterSlideshow(this, bookList);
+                    customSlideView!!.adapter = adapter;
+                    customSlideView!!.layoutManager =
+                        LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+                }
+            })
     }
 }

@@ -393,9 +393,9 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/ratingbutton"
+                        android:background="@drawable/readbutton"
                         android:padding="10dp"
-                        android:textColor="@color/golden"
+                        android:textColor="@color/azure"
                         android:textSize="15dp"
                         android:textStyle="italic"
 
@@ -405,6 +405,32 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp">
+
+                    <TextView
+                        android:id="@+id/feedback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Others Feedback"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="500dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/feedback">
+
+                </androidx.recyclerview.widget.RecyclerView>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -436,7 +462,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listView"
                     android:layout_width="match_parent"
-                    android:layout_height="259dp"
+                    android:layout_height="300dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     app:layout_constraintTop_toBottomOf="@+id/for_you">

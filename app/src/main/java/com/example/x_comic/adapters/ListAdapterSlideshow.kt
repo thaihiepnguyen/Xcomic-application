@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
@@ -82,9 +83,8 @@ class ListAdapterSlideshow (
             }
         }
         holder.itemView.setOnClickListener {
-            Log.i("String",book.toString())
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("book_data", book.toString())
+            intent.putExtra("book_data", Klaxon().toJsonString(book))
             ActivityCompat.startActivityForResult(context, intent, 302, null)
         }
     }

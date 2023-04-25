@@ -3,4 +3,9 @@
         <item name="android:background">@drawable/common_google_signin_btn_text_light_normal</item>
         <item name="android:textColor">@color/common_google_signin_btn_text_light</item>
     </style>
+    <style name="SmallRatingBar" parent="@android:style/Widget.Material.Light.RatingBar">
+        <item name="android:scaleX">0.5</item>
+        <item name="android:scaleY">0.5</item>
+    </style>
+
 </resources>

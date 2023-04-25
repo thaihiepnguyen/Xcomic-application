@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
@@ -168,9 +169,8 @@ class BookListAdapter (
             }
         }
         holder.itemView.setOnClickListener {
-            Log.i("String",book.toString())
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("book_data", book.toString())
+            intent.putExtra("book_data", Klaxon().toJsonString(book))
             ActivityCompat.startActivityForResult(context, intent, 302, null)
         }
 

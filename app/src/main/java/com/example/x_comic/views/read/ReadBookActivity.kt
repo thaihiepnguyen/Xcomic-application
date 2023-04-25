@@ -52,11 +52,11 @@ class ReadBookActivity : AppCompatActivity() {
         textViewContentBook = findViewById(R.id.tvContentChapterBook)
         btnNext = findViewById(R.id.btnNextChapter)
         btnBack = findViewById(R.id.btnBackChapter)
-
         val intent = intent
         val titleStr = intent.getStringExtra("title")
         var titleTv = findViewById<TextView>(R.id.tvTitleChapter)
         titleTv.text = titleStr
+
 
         textViewContentBook?.text = "Once upon a time, in a far-off land, there was a secret garden. It was hidden away from the rest of the world, and only a select few knew of its existence. The garden was said to be magical, and those who entered it would be blessed with good luck and happiness.\n" +
                 "\n" +
