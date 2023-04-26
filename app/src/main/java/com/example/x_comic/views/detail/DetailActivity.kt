@@ -144,9 +144,29 @@ class DetailActivity : AppCompatActivity() {
             dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dl.setContentView(R.layout.list_chapter_dialog)
             dl.show()
+            var bgcover = dl.findViewById<ImageView>(R.id.background)
+            var minicover = dl.findViewById<ImageView>(R.id.book)
+            var minititle = dl.findViewById<TextView>(R.id.book_title)
+            minititle.text = bookData.title
+            imageRef.getBytes(Long.MAX_VALUE)
+                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
+                    // Set the Bitmap to the ImageView
+                    minicover.setImageBitmap(bitmap)
+
+
+                    Glide.with(this)
+                        .load(bitmap)
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                        .into(bgcover)
+                }.addOnFailureListener {
+                    // Handle any errors
+                }
+
+
 
             var chapterListView = dl.findViewById<ListView>(R.id.chapterListView)
-
             val adapter = ChapterAdapter(this, bookData.chapters)
             chapterListView.adapter = adapter
             chapterListView.setOnItemClickListener { adapterView, view, i, l ->
@@ -186,6 +206,7 @@ class DetailActivity : AppCompatActivity() {
                         val query = feedbackRef.orderByChild("uid").equalTo(uid)
                         query.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
+                                var flag = 0
                                 if (snapshot.exists()) {
                                     // If there is existing feedback, update it with the new rating and feedback
                                     for (feedbackSnapshot in snapshot.children) {
@@ -195,27 +216,12 @@ class DetailActivity : AppCompatActivity() {
                                                 it.rating = ratingBar.rating
                                                 it.feedback = comment.text.toString()
                                                 feedbackSnapshot.ref.setValue(feedback)
-                                            }
-                                        }
-                                        else {
-                                            // If there is no existing feedback, push a new feedback
-                                            val newFeedback = Feedback(
-                                                id = "", // leave the ID empty to generate a unique key in Firebase
-                                                uid = uid,
-                                                bid = bid,
-                                                rating = ratingBar.rating,
-                                                feedback = comment.text.toString() // replace with the user's feedback
-                                            )
-                                            val feedbackKey = feedbackRef.push().key
-                                            feedbackKey?.let { key ->
-                                                newFeedback.id =
-                                                    key // assign the generated key to the Feedback object
-                                                feedbackRef.child(key).setValue(newFeedback)
+                                                flag = 1
                                             }
                                         }
                                     }
                                 }
-                                else {
+                                if (flag == 0){
                                     // If there is no existing feedback, push a new feedback
                                     val newFeedback = Feedback(
                                         id = "", // leave the ID empty to generate a unique key in Firebase
