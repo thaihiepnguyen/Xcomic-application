@@ -122,14 +122,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/avatar_picture"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/oval"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/avatar"
+                        app:layout_constraintEnd_toStartOf="@+id/book_author"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/book_title" />
+
                     <TextView
                         android:id="@+id/book_author"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
                         android:text="alsophanie"
                         android:textAlignment="center"
                         android:textSize="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.501"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/book_title" />
 
@@ -230,18 +245,19 @@
                         android:id="@+id/editTextTextPersonName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
                         android:editable="false"
                         android:ems="10"
+                        android:inputType="none"
                         android:text=""
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/readBtn" />
+
                     <LinearLayout
                         android:id="@+id/statusTextView"
-                        android:layout_margin="5dp"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName">
@@ -249,74 +265,83 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Status: "/>
+                            android:text="Status: " />
+
                         <TextView
                             android:id="@+id/statusTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Done"/>
+                            android:text="Done" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ageTextView"
-                        android:layout_margin="5dp"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/statusTextView">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Age: "/>
+                            android:text="Age: " />
+
                         <TextView
                             android:id="@+id/ageTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="16+" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ratingTextView"
-                        android:layout_margin="5dp"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ageTextView">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rating: "/>
+                            android:text="Rating: " />
+
                         <TextView
                             android:id="@+id/ratingTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="4.3" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" ☆"
-                            android:textSize="17dp"/>
+                            android:textSize="17dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_margin="5dp"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ratingTextView">
 
                         <TextView
-                            android:layout_marginEnd="10dp"
                             android:id="@+id/cateTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
                             android:text="Categories"
                             app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/category_list"
                             android:layout_width="match_parent"
@@ -341,16 +366,15 @@
                     </LinearLayout>
 
 
-
                     <TextView
-                        android:layout_margin="5dp"
                         android:id="@+id/descTextView"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:singleLine="false"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in consequat magna, in tincidunt risus. Vestibulum sodales posuere bibendum. Proin eu iaculis risus. Suspendisse ultricies vulputate velit a fermentum. Etiam luctus sagittis mauris, nec consequat mauris pellentesque a. Nulla consequat egestas diam, id venenatis lorem ultrices vel. Donec vestibulum at justo at elementum. Morbi a congue dui. Nunc rutrum metus non tellus commodo mattis. Donec pharetra maximus leo vel facilisis. Morbi id rutrum lacus. Quisque bibendum dolor at odio hendrerit, a ullamcorper nisl vehicula. Donec et tincidunt diam.
 
 Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt diam vel elit blandit dapibus. Phasellus convallis molestie sem, nec pulvinar justo lacinia viverra. Proin euismod at sapien a hendrerit. Aliquam vitae ante in nisi pretium laoreet. Curabitur eu mattis arcu, eget viverra urna. Aliquam facilisis odio non erat sodales eleifend. Etiam eget orci id justo convallis condimentum. Duis orci ante, sodales at efficitur sit amet, vulputate vitae augue."
-                        android:singleLine="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

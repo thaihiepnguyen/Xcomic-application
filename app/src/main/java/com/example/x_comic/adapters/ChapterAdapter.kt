@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import com.example.x_comic.R
@@ -23,6 +24,11 @@ class ChapterAdapter(
         chapterTV.text = chapters[position].name
         val dateTV = rowView.findViewById(R.id.tvDate) as TextView
         dateTV.text = chapters[position].date_update
+        val lock_icon = rowView.findViewById(R.id.lock_icon) as ImageView
+        if (!chapters[position]._lock){
+            lock_icon.setVisibility(View.GONE);
+        }
+
         return rowView
     }
 }

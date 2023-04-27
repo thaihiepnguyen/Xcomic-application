@@ -34,6 +34,7 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
+import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -74,11 +75,11 @@ class DetailActivity : AppCompatActivity() {
         var descTextView = findViewById(R.id.descTextView) as TextView
         var ratingTextView = findViewById(R.id.ratingTV) as TextView;
         var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
-
+        val backCover = findViewById<ImageView>(R.id.background)
         title.text = bookData?.title
         author.text = bookData?.author
         favorite.text = bookData?.favorite.toString()
-        val backCover = findViewById<ImageView>(R.id.background)
+
         // Get a reference to the Firebase Storage instance
         val storage = FirebaseStorage.getInstance()
         val imageName = bookData?.cover // Replace with your image name
@@ -171,10 +172,18 @@ class DetailActivity : AppCompatActivity() {
             chapterListView.adapter = adapter
             chapterListView.setOnItemClickListener { adapterView, view, i, l ->
                 //TODO: Code doc sach khi click vo chapter o day ne
-                val intent = Intent(this, ReadBookActivity::class.java)
-                intent.putExtra("title",bookData.chapters[i].name)
-                intent.putExtra("content",bookData.chapters[i].content)
-                ActivityCompat.startActivityForResult(this, intent, 302, null)
+                if(!bookData.chapters[i]._lock){
+                    val intent = Intent(this, ReadBookActivity::class.java)
+                    intent.putExtra("title",bookData.chapters[i].name)
+                    intent.putExtra("content",bookData.chapters[i].content)
+                    ActivityCompat.startActivityForResult(this, intent, 302, null)
+                }else{
+                    val intent = Intent(this, PurchaseActivity::class.java)
+                    intent.putExtra("bookdata", Klaxon().toJsonString(bookData))
+                    intent.putExtra("chapter", Klaxon().toJsonString(bookData.chapters[i]))
+                    ActivityCompat.startActivityForResult(this, intent, 700, null)
+                }
+
             }
         }
         //open dialog feedback and rating
@@ -263,13 +272,18 @@ class DetailActivity : AppCompatActivity() {
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 feedbackList.clear()
+                var totalRating = 0.0F
                 for (data in snapshot.children) {
                     val feedback = data.getValue(Feedback::class.java)
                     if (feedback != null) {
                         feedbackList.add(feedback)
-                        Log.i("AA????", feedback.feedback)
+                        totalRating += feedback.rating
                     }
                 }
+                totalRating /= feedbackList.size
+                ratingTextView.text = totalRating.toString()
+                val bookRef = FirebaseDatabase.getInstance().getReference("book").child(bookData.id)
+                bookRef.child("rating").setValue(totalRating)
                 fbAdapter.notifyDataSetChanged()
             }
 
