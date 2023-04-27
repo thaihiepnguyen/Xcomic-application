@@ -129,12 +129,16 @@ class Home : Fragment() {
                         bookPopularList.add(product)
                     }
                 }
-                // khởi tạo list lúc đầu
-                // Tại vì mặc định ở List hiển thị Popular.
-                // addAll là tạo vùng nhớ mới.
-                // nên sẽ không bị bug mất dữ liệu
-                bookPointer.clear()
-                bookPointer.addAll(bookPopularList)
+                // TODO: Trông kì, nhưng không tốn chi phí lắm.
+                // tại lưu object ~ lưu địa chỉ
+                tabsBook = mutableListOf(
+                    bookPopularList, bookLatestList, bookCompletedList
+                )
+                
+                if (tabLayout!!.selectedTabPosition == 0) {
+                    bookPointer.clear()
+                    bookPointer.addAll(bookPopularList)
+                }
                 bookListAdapter.notifyDataSetChanged()
             }
         }
@@ -147,6 +151,13 @@ class Home : Fragment() {
                     if (product != null) {
                         bookCompletedList.add(product)
                     }
+                }
+                tabsBook = mutableListOf(
+                    bookPopularList, bookLatestList, bookCompletedList
+                )
+                if (tabLayout!!.selectedTabPosition == 2) {
+                    bookPointer.clear()
+                    bookPointer.addAll(bookCompletedList)
                 }
                 bookListAdapter.notifyDataSetChanged()
             }
@@ -161,6 +172,13 @@ class Home : Fragment() {
                         bookLatestList.add(product)
                     }
                 }
+                tabsBook = mutableListOf(
+                    bookPopularList, bookLatestList, bookCompletedList
+                )
+                if (tabLayout!!.selectedTabPosition == 1) {
+                    bookPointer.clear()
+                    bookPointer.addAll(bookLatestList)
+                }
                 bookListAdapter.notifyDataSetChanged()
             }
         }
@@ -168,15 +186,15 @@ class Home : Fragment() {
             LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
         //    initMediator();
-        if (bookPopularList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
-        ) {
-            // All LiveData have emitted a value, assign to tabsBook
-            tabsBook = mutableListOf(
-                bookPopularList, bookLatestList, bookCompletedList
-            );
-            println("abc"+tabsBook);
-
-        }
+//        if (bookPopularList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
+//        ) {
+//            // All LiveData have emitted a value, assign to tabsBook
+//            tabsBook = mutableListOf(
+//                bookPopularList, bookLatestList, bookCompletedList
+//            );
+//            println("abc"+tabsBook);
+//
+//        }
         tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
         {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -203,8 +221,6 @@ class Home : Fragment() {
             }
         })
 
-
-        // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
         avatar!!.setOnClickListener {
             nextProfileActivity()
         }
