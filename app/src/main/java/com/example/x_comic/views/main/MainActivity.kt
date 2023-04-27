@@ -36,25 +36,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-        // TODO: Đăng ký với Observer
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-
-
-        val uid = FirebaseAuthManager.auth.uid
-
-        if (uid != null) {
-            userViewModel.callApi(uid).observe(this, Observer {
-                    user ->
-//                TODO: Binding biến user ở đây vào UI
-            })
-        }
-
-        productViewModel.productsLiveData.observe(this, Observer {
-            products -> Log.d("PRODUCT 1", products[0].title)
-//                TODO: Binding biến products ở đây vào UI
-        })
     }
 
     fun replaceFragment(fragment: Fragment){

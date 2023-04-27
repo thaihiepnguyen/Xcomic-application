@@ -3,6 +3,8 @@ package com.example.x_comic.models
 import java.util.*
 
 class Chapter : java.io.Serializable {
+    // văn xóa id ở đây bị bug á. phải đồng bộ tên với trên fbase
+    var id: String = ""
     var id_book: String = ""
     var id_chapter: String? = ""
     var name: String = ""

@@ -4,11 +4,9 @@ package com.example.x_comic.views.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -19,8 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadhamwi.tabsync.TabbedListMediator
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
@@ -35,26 +31,19 @@ import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.profile.MainProfileActivity
 import com.google.android.material.tabs.TabLayout
-import de.hdodenhof.circleimageview.CircleImageView
 
 
 class Home : Fragment() {
-
-
-    val bookList: MutableList<Product> = mutableListOf()
-
+    val bookListSlideShow: MutableList<Product> = mutableListOf()
     val avatarList: MutableList<Avatar> = mutableListOf()
     val authorList: MutableList<User> = mutableListOf()
-
-    var bookDetailList: MutableList<Product> = mutableListOf()
-
-    private  val bookPopularList: MutableList<Product> = mutableListOf()
+    var bookPointer: MutableList<Product> = mutableListOf()
+    private val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
-
     private val bookCompletedList: MutableList<Product> = mutableListOf()
 
     var tabsBook = mutableListOf(
-        bookDetailList,bookLatestList,bookCompletedList)
+        bookPopularList,bookLatestList,bookCompletedList)
     var customSlideView: RecyclerView? = null;
     var customAvatarView: RecyclerView? = null;
     var customBookListView: RecyclerView? = null;
@@ -68,17 +57,19 @@ class Home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
         if (FirebaseAuthManager.auth.currentUser == null) {
             nextLoginActivity()
             return null
         }
+
         var userViewModel: UserViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         var productViewModel: ProductViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+
         customSlideView = view.findViewById(R.id.listView);
         customAvatarView = view.findViewById(R.id.avatarListView);
         customBookListView = view.findViewById(R.id.popularListBook);
@@ -96,139 +87,127 @@ class Home : Fragment() {
             .observe(this, Observer { authors ->
                 run {
                     authorList.clear()
-
                     authorList.addAll(authors)
-
                     val avatarAdapter = AvatarListAdapter(requireActivity(), authorList)
-
                     customAvatarView!!.adapter = avatarAdapter
                 }
             })
 
-
-        productViewModel.getAllBook()
-            .observe(this, Observer { products ->
-                run {
-                    bookList.clear()
-
-                    println(products)
-                    bookList.addAll(products)
-                    val adapter = ListAdapterSlideshow(requireActivity(), bookList);
-                    customSlideView!!.adapter = adapter;
-                    customSlideView!!.layoutManager =
-                        LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
-                    if (bookList.isNotEmpty()){
-                        val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
-                        avatarList.addAll(authorList)
+        // TODO : khai báo adapter
+        val adapterSlideShow = ListAdapterSlideshow(requireActivity(), bookListSlideShow);
+        customSlideView!!.adapter = adapterSlideShow;
+        customSlideView!!.layoutManager =
+            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+        val bookListAdapter = BookListAdapter(requireActivity(), bookPointer)
+        customBookListView!!.adapter = bookListAdapter
+        customBookListView!!.layoutManager = LinearLayoutManager(this.context);
+        val itemDecoration: RecyclerView.ItemDecoration =
+            DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
+        customBookListView?.addItemDecoration(itemDecoration)
+//        if (bookList.isNotEmpty()){
+//            val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
+//            avatarList.addAll(authorList)
+//        }
+        productViewModel.getAllBook { books ->
+            run {
+                bookListSlideShow.clear()
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookListSlideShow.add(product)
                     }
                 }
-            })
-
-        var bookListAdapter: BookListAdapter? = null;
-
-            productViewModel.getPopularBook().observe(this, Observer { popularProducts ->
-                run {
-                    bookDetailList.clear()
-                    bookDetailList.addAll(popularProducts);
-                    bookPopularList.clear();
-                    bookPopularList.addAll(popularProducts);
-                    bookListAdapter = BookListAdapter(requireActivity(), bookDetailList);
-                    customBookListView!!.adapter = bookListAdapter;
-                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
-                    ) {
-
-                        // All LiveData have emitted a value, assign to tabsBook
-                        tabsBook = mutableListOf(
-                            bookPopularList, bookLatestList, bookCompletedList
-                        );
-                        println("abc"+tabsBook);
-
-                    }
-                }
-            })
-
-
-
-            productViewModel.getCompletedBook().observe(this, Observer { completedProducts ->
-                run {
-                    bookCompletedList.clear()
-                    bookCompletedList.addAll(completedProducts)
-                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
-                    ) {
-
-                        // All LiveData have emitted a value, assign to tabsBook
-                        tabsBook = mutableListOf(
-                            bookPopularList, bookLatestList, bookCompletedList
-                        );
-                        println("abc"+tabsBook);
-                    }
-                }
-            })
-
-            productViewModel.getLatestBook().observe(this, Observer { latestProducts ->
-                run {
-                    bookLatestList.clear()
-                    bookLatestList.addAll(latestProducts)
-                    if (bookDetailList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
-                    ) {
-
-                        // All LiveData have emitted a value, assign to tabsBook
-                        tabsBook = mutableListOf(
-                            bookPopularList, bookLatestList, bookCompletedList
-                        );
-
-                        println("abc"+tabsBook);
-                    }
-                }
-            })
-            println(bookDetailList.iterator());
-            println(bookLatestList.iterator());
-            println(bookCompletedList.iterator());
-            println(tabsBook[1].iterator());
-
-            customAvatarView!!.layoutManager =
-                LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
-
-            customBookListView!!.layoutManager = LinearLayoutManager(this.context);
-            val itemDecoration: RecyclerView.ItemDecoration =
-                DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
-            customBookListView?.addItemDecoration(itemDecoration)
-
-            //    initMediator();
-
-            tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
-            {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    scrollView!!.smoothScrollTo(0,tabLayout!!.top);
-                    when (tab?.position) {
-                        //NEED SOLUTION HERE
-                        tab?.position ->  {
-                            bookDetailList.clear();
-                            bookListAdapter!!.notifyDataSetChanged();
-                            // println(1);
-                            bookDetailList.addAll(tabsBook[tab!!.position]);
-                            println(bookDetailList);
-                            bookListAdapter!!.notifyItemRangeChanged(0,bookDetailList.size);
-                        }
-
-                    }
-
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                }
-            })
-
-
-            // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
-            avatar!!.setOnClickListener {
-                nextProfileActivity()
+                adapterSlideShow.notifyDataSetChanged()
             }
+        }
+        productViewModel.getPopularBook { books ->
+            run {
+                bookPopularList.clear()
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookPopularList.add(product)
+                    }
+                }
+                // khởi tạo list lúc đầu
+                // Tại vì mặc định ở List hiển thị Popular.
+                // addAll là tạo vùng nhớ mới.
+                // nên sẽ không bị bug mất dữ liệu
+                bookPointer.clear()
+                bookPointer.addAll(bookPopularList)
+                bookListAdapter.notifyDataSetChanged()
+            }
+        }
+
+        productViewModel.getCompletedBook { books ->
+            run {
+                bookCompletedList.clear()
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookCompletedList.add(product)
+                    }
+                }
+                bookListAdapter.notifyDataSetChanged()
+            }
+        }
+
+        productViewModel.getLatestBook { books ->
+            run {
+                bookLatestList.clear()
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookLatestList.add(product)
+                    }
+                }
+                bookListAdapter.notifyDataSetChanged()
+            }
+        }
+        customAvatarView!!.layoutManager =
+            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
+
+        //    initMediator();
+        if (bookPopularList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
+        ) {
+            // All LiveData have emitted a value, assign to tabsBook
+            tabsBook = mutableListOf(
+                bookPopularList, bookLatestList, bookCompletedList
+            );
+            println("abc"+tabsBook);
+
+        }
+        tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
+        {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                scrollView!!.smoothScrollTo(0,tabLayout!!.top);
+                when (tab?.position) {
+                    //NEED SOLUTION HERE
+                    tab?.position ->  {
+                        // đổi dữ liệu của bookPointer là xong
+                        bookPointer.clear()
+                        bookPointer.addAll(tabsBook[tab!!.position])
+                        bookListAdapter!!.notifyDataSetChanged();
+                        bookListAdapter!!.notifyItemRangeChanged(0,bookPointer.size);
+                    }
+                }
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+
+
+        // TODO: thêm lắng nghe sự kiện click vào avatar nhé!
+        avatar!!.setOnClickListener {
+            nextProfileActivity()
+        }
         var currentUser = FirebaseAuthManager.getUser()
         userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
             run {

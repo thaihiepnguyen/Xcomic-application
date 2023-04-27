@@ -1,6 +1,5 @@
 package com.example.x_comic.views.detail
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -9,11 +8,8 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,13 +22,10 @@ import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.adapters.ChapterAdapter
 import com.example.x_comic.adapters.FeedbackAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
-import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.Product
-import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
-import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
@@ -291,22 +284,33 @@ class DetailActivity : AppCompatActivity() {
 
             }
         })
+
         var productViewModel: ProductViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         val bookList: MutableList<Product> = mutableListOf()
         var customSlideView: RecyclerView? = null;
         customSlideView = findViewById(R.id.listView);
-        productViewModel.getAllBook()
-            .observe(this, Observer { products ->
-                run {
-                    bookList.clear()
-                    println(products)
-                    bookList.addAll(products)
-                    val adapter = ListAdapterSlideshow(this, bookList);
-                    customSlideView!!.adapter = adapter;
-                    customSlideView!!.layoutManager =
-                        LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        val adapterSlide = ListAdapterSlideshow(this, bookList);
+        customSlideView!!.adapter = adapter;
+        customSlideView!!.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        productViewModel.getAllBook { books ->
+            run {
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookList.add(product)
+                    }
                 }
-            })
+                adapterSlide.notifyDataSetChanged()
+            }
+        }
+//            .observe(this, Observer { products ->
+//                run {
+//                    bookList.clear()
+//                    println(products)
+//                    bookList.addAll(products)
+
+//                }
+//            })
     }
 }
