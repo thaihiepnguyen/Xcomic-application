@@ -200,6 +200,53 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
+                android:id="@+id/follow_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@drawable/border_top"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userInfo">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Followers"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/followProfileTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="0 Profiles"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:srcCompat="@drawable/baseline_navigate_next_24" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profileListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+            <LinearLayout
                 android:id="@+id/stories_layout"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -220,7 +267,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Stories by thaihiep"
+                        android:text="Stories"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -228,7 +275,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="6 Publiched Stories"/>
+                        android:text="0 Stories"/>
                 </LinearLayout>
 
                 <ImageView

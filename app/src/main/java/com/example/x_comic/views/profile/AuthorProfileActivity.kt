@@ -11,6 +11,7 @@ import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
+import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityAuthorProfileBinding
 import com.example.x_comic.models.Product
@@ -29,7 +30,7 @@ class AuthorProfileActivity : AppCompatActivity() {
     private var _currentAuthor: User? = null
     private var _isFollowing: Boolean? = null
     val bookList: MutableList<Product> = mutableListOf()
-
+    val followList: MutableList<User> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthorProfileBinding.inflate(layoutInflater)
@@ -37,6 +38,16 @@ class AuthorProfileActivity : AppCompatActivity() {
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+
+        binding.listView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        binding.profileListView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+
+        val favoriteAdapter = ListAdapterSlideshow(this, bookList)
+        val avatarAdapter = AvatarListAdapter(this, followList)
+        binding.listView.adapter = favoriteAdapter
+        binding.profileListView.adapter = avatarAdapter
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -48,7 +59,27 @@ class AuthorProfileActivity : AppCompatActivity() {
 
         _currentAuthor = author
 
+        userViewModel.getAllUserFollow(_currentAuthor!!.id) {
+                usersID -> run {
+            followList.clear()
+            var cnt: Int = 0
+            for (userid in usersID.children) {
+                userViewModel.getUserById(userid.value as String) {
+                        user -> run {
+                    if (user.isFollowing(_currentAuthor!!.id)) {
+                        cnt++
+                        followList.add(user)
+                    }
+                }
+                    avatarAdapter.notifyDataSetChanged()
+                    binding.followProfileTV.text = "${cnt} Profiles"
+                }
+                avatarAdapter.notifyDataSetChanged()
+            }
+        }
+        }
 
+        // uid ở đây là người click vào xem profile của author
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
             userViewModel.callApi(uid)

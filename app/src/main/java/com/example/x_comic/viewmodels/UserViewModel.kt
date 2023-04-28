@@ -129,6 +129,16 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    inline fun getAllUserFollow(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        db.child(uid).child("have_followed").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                callback(task.result)
+            } else {
+
+            }
+        }
+    }
+
     inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {
         val ref = db.child(uid)
         ref.addValueEventListener(object : ValueEventListener {

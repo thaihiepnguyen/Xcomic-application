@@ -115,6 +115,11 @@ class User
         return this.have_followed.contains(id)
     }
 
+    fun isFollowing(id: String) : Boolean {
+        return this.follow.contains(id)
+    }
+
+
 
     constructor() {
 
