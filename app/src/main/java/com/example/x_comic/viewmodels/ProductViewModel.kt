@@ -128,7 +128,6 @@ class ProductViewModel : ViewModel() {
         // tạo thread mới.
         db.orderByChild("favorite").limitToFirst(5).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                print("TEST")
                 callback(dataSnapshot)
             }
 

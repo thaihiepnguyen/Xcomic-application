@@ -43,7 +43,6 @@ class UserViewModel : ViewModel() {
             val ref = db.child(uid)
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-
                     var user: User = dataSnapshot.getValue(User::class.java)!!
                     _user.value = user
                     _user.postValue(user)
@@ -118,6 +117,34 @@ class UserViewModel : ViewModel() {
             .child("users")
             .child(user.id)
             .setValue(user)
+    }
+
+    inline fun getAllUserIsFollowed(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        db.child(uid).child("follow").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // TODO: Xử lý lỗi, bỏ thread đi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
+    inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {
+        val ref = db.child(uid)
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var user: User = dataSnapshot.getValue(User::class.java)!!
+                callback(user)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // TODO: Xử lý lỗi, bỏ thread đi
+                db.removeEventListener(this)
+            }
+        })
     }
 
     fun getAllAuthor() : MutableLiveData<ArrayList<User>> {

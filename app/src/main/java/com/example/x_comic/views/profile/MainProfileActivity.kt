@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +15,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
+import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityMainProfileBinding
 import com.example.x_comic.databinding.ActivityProfileBinding
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
@@ -29,6 +32,7 @@ class MainProfileActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
     val bookList: MutableList<Product> = mutableListOf()
+    val followList: MutableList<User> = mutableListOf()
     private var REQUEST_CODE_PICK_IMAGE = 1111
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,28 +53,59 @@ class MainProfileActivity : AppCompatActivity() {
         }
 
 
-        binding.listView.layoutManager =
+        binding.FavoriteListView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        productViewModel.getLatestBook().observe(this, Observer {
-            products -> run {
-            bookList.clear()
-            bookList.addAll(products)
-            val adapter = ListAdapterSlideshow(this, bookList);
+        val favoriteAdapter = ListAdapterSlideshow(this, bookList)
+        val avatarAdapter = AvatarListAdapter(this, followList)
+        binding.FavoriteListView.adapter = favoriteAdapter
+        binding.profileListView.adapter = avatarAdapter
 
-            binding.listView.adapter = adapter
+//        userViewModel.getAllAuthor()
+//            .observe(this, Observer { authors ->
+//                run {
+//
+//                }
+//            })
+
+        productViewModel.getLatestBook {
+            products -> run {
+                bookList.clear()
+                for (book in products.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null) {
+                        bookList.add(product)
+                    }
+                }
+                favoriteAdapter.notifyDataSetChanged()
             }
-        })
+        }
 
         binding.avtImg.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
         }
 
-
-
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
+            userViewModel.getAllUserIsFollowed(uid) {
+                usersID -> run {
+                    followList.clear()
+                    for (userid in usersID.children) {
+                        userViewModel.getUserById(userid.value as String) {
+                            user -> run {
+                                followList.add(user)
+                                Log.d("TESTING 1", user.full_name)
+                                avatarAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+                }
+            }
+
+
             userViewModel.callApi(uid)
                 .observe(this, Observer {
                     // user nó được thay đổi realtime ở đb

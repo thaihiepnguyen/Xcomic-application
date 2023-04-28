@@ -126,13 +126,14 @@
                         android:id="@+id/readListTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="55dp"
                         android:layout_marginBottom="20dp"
                         android:text="READING LISTS"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintEnd_toEndOf="@+id/readListNumber"
+                        app:layout_constraintStart_toStartOf="@+id/readListNumber"
+                        app:layout_constraintTop_toBottomOf="@+id/readListNumber" />
 
                     <TextView
                         android:id="@+id/followNumber"
@@ -151,13 +152,14 @@
                         android:id="@+id/followTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="75dp"
                         android:layout_marginBottom="20dp"
                         android:text="FOLLOWERS"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="@+id/followNumber"
+                        app:layout_constraintStart_toStartOf="@+id/followNumber"
+                        app:layout_constraintTop_toBottomOf="@+id/followNumber" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

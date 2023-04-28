@@ -83,16 +83,6 @@ class Home : Fragment() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Latest"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Completed"))
 
-        userViewModel.getAllAuthor()
-            .observe(this, Observer { authors ->
-                run {
-                    authorList.clear()
-                    authorList.addAll(authors)
-                    val avatarAdapter = AvatarListAdapter(requireActivity(), authorList)
-                    customAvatarView!!.adapter = avatarAdapter
-                }
-            })
-
         // TODO : khai báo adapter
         val adapterSlideShow = ListAdapterSlideshow(requireActivity(), bookListSlideShow);
         customSlideView!!.adapter = adapterSlideShow;
@@ -104,10 +94,25 @@ class Home : Fragment() {
         val itemDecoration: RecyclerView.ItemDecoration =
             DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
         customBookListView?.addItemDecoration(itemDecoration)
+        customAvatarView!!.layoutManager =
+            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
+
+        val avatarAdapter = AvatarListAdapter(requireActivity(), authorList)
+        customAvatarView!!.adapter = avatarAdapter
 //        if (bookList.isNotEmpty()){
 //            val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
 //            avatarList.addAll(authorList)
 //        }
+
+        userViewModel.getAllAuthor()
+            .observe(this, Observer { authors ->
+                run {
+                    authorList.clear()
+                    authorList.addAll(authors)
+                    avatarAdapter.notifyDataSetChanged()
+                }
+            })
+
         productViewModel.getAllBook { books ->
             run {
                 bookListSlideShow.clear()
@@ -120,24 +125,38 @@ class Home : Fragment() {
                 adapterSlideShow.notifyDataSetChanged()
             }
         }
+
+        // TODO: code được comment ở đây tương đương với dòng 144
+        // tùy TH mình sài nhe
+//        productViewModel.getPopularBook().observe(this, Observer {
+//            products -> run {
+//                bookPopularList.clear()
+//                bookPopularList.addAll(products)
+//                if (tabLayout!!.selectedTabPosition == 0) {
+//                    bookPointer.clear()
+//                    bookPointer.addAll(bookPopularList)
+//                    tabsBook[tabLayout!!.selectedTabPosition].clear()
+//                    tabsBook[tabLayout!!.selectedTabPosition].addAll(bookPopularList)
+//                }
+//                bookListAdapter.notifyDataSetChanged()
+//            }
+//        })
         productViewModel.getPopularBook { books ->
             run {
                 bookPopularList.clear()
+
                 for (book in books.children) {
                     val product = book.getValue(Product::class.java)
                     if (product != null) {
                         bookPopularList.add(product)
                     }
                 }
-                // TODO: Trông kì, nhưng không tốn chi phí lắm.
-                // tại lưu object ~ lưu địa chỉ
-                tabsBook = mutableListOf(
-                    bookPopularList, bookLatestList, bookCompletedList
-                )
                 
                 if (tabLayout!!.selectedTabPosition == 0) {
                     bookPointer.clear()
                     bookPointer.addAll(bookPopularList)
+                    tabsBook[tabLayout!!.selectedTabPosition].clear()
+                    tabsBook[tabLayout!!.selectedTabPosition].addAll(bookPopularList)
                 }
                 bookListAdapter.notifyDataSetChanged()
             }
@@ -152,12 +171,12 @@ class Home : Fragment() {
                         bookCompletedList.add(product)
                     }
                 }
-                tabsBook = mutableListOf(
-                    bookPopularList, bookLatestList, bookCompletedList
-                )
+
                 if (tabLayout!!.selectedTabPosition == 2) {
                     bookPointer.clear()
                     bookPointer.addAll(bookCompletedList)
+                    tabsBook[tabLayout!!.selectedTabPosition].clear()
+                    tabsBook[tabLayout!!.selectedTabPosition].addAll(bookCompletedList)
                 }
                 bookListAdapter.notifyDataSetChanged()
             }
@@ -172,18 +191,16 @@ class Home : Fragment() {
                         bookLatestList.add(product)
                     }
                 }
-                tabsBook = mutableListOf(
-                    bookPopularList, bookLatestList, bookCompletedList
-                )
+
                 if (tabLayout!!.selectedTabPosition == 1) {
                     bookPointer.clear()
                     bookPointer.addAll(bookLatestList)
+                    tabsBook[tabLayout!!.selectedTabPosition].clear()
+                    tabsBook[tabLayout!!.selectedTabPosition].addAll(bookLatestList)
                 }
                 bookListAdapter.notifyDataSetChanged()
             }
         }
-        customAvatarView!!.layoutManager =
-            LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
         //    initMediator();
 //        if (bookPopularList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
@@ -200,7 +217,6 @@ class Home : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 scrollView!!.smoothScrollTo(0,tabLayout!!.top);
                 when (tab?.position) {
-                    //NEED SOLUTION HERE
                     tab?.position ->  {
                         // đổi dữ liệu của bookPointer là xong
                         bookPointer.clear()
@@ -236,9 +252,6 @@ class Home : Fragment() {
                 }
             }
         })
-
-
-
 
         return view
     }
