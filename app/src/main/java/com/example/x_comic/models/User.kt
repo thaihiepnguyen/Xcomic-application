@@ -16,6 +16,7 @@ class User
     var aboutme: String = ""
     var follow: ArrayList<String> = ArrayList()
     var have_followed: ArrayList<String> = ArrayList()
+    var heart_list: ArrayList<String> = ArrayList()
     var role: Long = 1
     constructor(
         id: String = "",
@@ -32,6 +33,7 @@ class User
         aboutme: String = "",
         follow: ArrayList<String> = ArrayList(),
         have_followed: ArrayList<String> = ArrayList(),
+        heart_list: ArrayList<String> = ArrayList(),
         role: Long = 1, // Role = 1: là đọc giả; 2: là người đọc giả có thể đăng truyện; 3: là admin
     ) {
         this.id = id
@@ -49,7 +51,25 @@ class User
         this.follow = follow
         // is_followed nó bug :)))
         this.have_followed = have_followed
+        this.heart_list = heart_list
         this.aboutme = aboutme
+    }
+
+    fun love(book: Product) {
+        this.heart_list.add(book.id)
+    }
+
+    fun unLove(book: Product) {
+        var index: Int? = null
+
+        for (i in 0 until this.heart_list.size) {
+            if (this.heart_list[i] == book.id) {
+                index = i
+            }
+        }
+
+        if (index != null)
+            this.heart_list.removeAt(index)
     }
 
     fun follow(other: User) {
@@ -89,6 +109,10 @@ class User
 
     fun following(other: User): Boolean {
         return this.follow.contains(other.id)
+    }
+
+    fun isfollowed(id: String) : Boolean {
+        return this.have_followed.contains(id)
     }
 
 

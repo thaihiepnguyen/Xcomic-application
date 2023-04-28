@@ -93,19 +93,23 @@ class MainProfileActivity : AppCompatActivity() {
             userViewModel.getAllUserIsFollowed(uid) {
                 usersID -> run {
                     followList.clear()
+                    var cnt: Int = 0
                     for (userid in usersID.children) {
                         userViewModel.getUserById(userid.value as String) {
                             user -> run {
-                                followList.add(user)
-                                Log.d("TESTING 1", user.full_name)
-                                avatarAdapter.notifyDataSetChanged()
+                                if (user.isfollowed(uid)) {
+                                    cnt++
+                                    followList.add(user)
+                                }
                             }
+                            avatarAdapter.notifyDataSetChanged()
+                            binding.followProfileTV.text = "${cnt} profiles"
                         }
+                        avatarAdapter.notifyDataSetChanged()
                     }
                 }
+
             }
-
-
             userViewModel.callApi(uid)
                 .observe(this, Observer {
                     // user nó được thay đổi realtime ở đb

@@ -120,16 +120,13 @@ class UserViewModel : ViewModel() {
     }
 
     inline fun getAllUserIsFollowed(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        db.child(uid).child("follow").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                callback(dataSnapshot)
-            }
+        db.child(uid).child("follow").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                callback(task.result)
+            } else {
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // TODO: Xử lý lỗi, bỏ thread đi
-                db.removeEventListener(this)
             }
-        })
+        }
     }
 
     inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {
@@ -271,5 +268,10 @@ class UserViewModel : ViewModel() {
                 // Handle errors here
             }
         })
+    }
+
+    fun saveHeartList(user: User) {
+        db.child(user.id).child("heart_list")
+            .setValue(user.heart_list)
     }
 }

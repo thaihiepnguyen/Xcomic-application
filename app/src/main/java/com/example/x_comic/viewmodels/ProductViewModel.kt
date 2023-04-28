@@ -278,5 +278,10 @@ class ProductViewModel : ViewModel() {
         values["favorite"] = Random.nextLong(100,1000000);
         db.child(product.id).updateChildren(values)
     }
+    fun saveCurrentIsLove(book: Product) {
+        db.child(book.id)
+            .child("have_loved")
+            .setValue(book.have_loved)
+    }
 }
 

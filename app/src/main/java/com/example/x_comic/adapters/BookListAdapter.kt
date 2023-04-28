@@ -22,9 +22,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
+import com.example.x_comic.models.User
+import com.example.x_comic.viewmodels.ProductViewModel
 
 class BookListAdapter (
     private  var context: Activity,
@@ -76,14 +80,14 @@ class BookListAdapter (
         val favorite = holder.favorite;
         val chapter = holder.chapter;
 
+        var _currentUser: User? = null
 
 
         var category_holder = arrayListOf(holder.category1,holder.category2,holder.category3)
 
         var love = holder.love;
         var rest = holder.rest;
-
-        var favourite = false;
+        var favourite = false
         title.setText(book.title);
         author.setText(book.author);
         val storage = FirebaseStorage.getInstance()
@@ -159,14 +163,33 @@ class BookListAdapter (
             }
 
         rest.setText(if ((book.categories.size -3)>0) "+ ${book.categories.size -3} more" else "");
-
+        var userViewModel : UserViewModel = UserViewModel()
+        var bookViewModel : ProductViewModel = ProductViewModel()
+        FirebaseAuthManager.auth.uid?.let { userViewModel.getUserById(it) { user ->
+            run {
+                _currentUser = user
+                favourite = _currentUser?.let { book.islove(it) } == true
+                if (favourite) {
+                    love.setImageResource(R.drawable.love_clickable)
+                } else {
+                    love.setImageResource(R.drawable.love)
+                }
+            }
+        }
+        }
         love.setOnClickListener{
             favourite = !favourite;
             if (favourite) {
+                _currentUser!!.love(book)
+                book.love(_currentUser!!)
                 love.setImageResource(R.drawable.love_clickable)
             }else {
+                _currentUser!!.unLove(book)
+                book.notlove(_currentUser!!)
                 love.setImageResource(R.drawable.love)
             }
+            bookViewModel.saveCurrentIsLove(book)
+            userViewModel.saveHeartList(_currentUser!!)
         }
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)

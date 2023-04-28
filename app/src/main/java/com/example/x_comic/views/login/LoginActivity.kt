@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
     private lateinit var categoryViewModel: CategoryViewModel
-    private var RC_SIGN_IN = 12321
+    private var RC_SIGN_IN = 123321
     private lateinit var mClient: GoogleSignInClient
 
     override fun onStart() {

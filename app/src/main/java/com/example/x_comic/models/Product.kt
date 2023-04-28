@@ -16,6 +16,7 @@ class Product : java.io.Serializable {
     var hide: Boolean = false
     var categories = ArrayList<Category>()
     var chapters = ArrayList<Chapter>()
+    var have_loved: ArrayList<String> = ArrayList()
     constructor(
         id: String = "",
         title: String = "",
@@ -29,7 +30,8 @@ class Product : java.io.Serializable {
         rating: Double = 0.0,
         hide: Boolean = false,
         categories: ArrayList<Category>,
-        chapters: ArrayList<Chapter>
+        chapters: ArrayList<Chapter>,
+        have_loved: ArrayList<String> = ArrayList(),
     ) {
         this.id = id
         this.title = title
@@ -44,6 +46,28 @@ class Product : java.io.Serializable {
         this.rating = rating
         this.categories = categories
         this.chapters = chapters
+        this.have_loved = have_loved
+    }
+
+    fun love(user: User) {
+        this.have_loved.add(user.id)
+    }
+
+    fun notlove(user: User) {
+        var index: Int? = null
+
+        for (i in 0 until this.have_loved.size) {
+            if (this.have_loved[i] == user.id) {
+                index = i
+            }
+        }
+
+        if (index != null)
+            this.have_loved.removeAt(index)
+    }
+
+    fun islove(user: User): Boolean {
+        return this.have_loved.contains(user.id)
     }
     constructor() {}
         companion object {

@@ -4,6 +4,7 @@ package com.example.x_comic.views.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,10 +59,6 @@ class Home : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        if (FirebaseAuthManager.auth.currentUser == null) {
-            nextLoginActivity()
-            return null
-        }
 
         var userViewModel: UserViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
@@ -268,11 +265,6 @@ class Home : Fragment() {
     // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
         val intent = Intent(context, MainProfileActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun nextLoginActivity() {
-        val intent = Intent(context, LoginActivity::class.java)
         startActivity(intent)
     }
 }

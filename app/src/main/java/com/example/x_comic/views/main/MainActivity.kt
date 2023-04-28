@@ -1,5 +1,6 @@
 package com.example.x_comic.views.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.example.x_comic.databinding.ActivityMainBinding
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.main.fragments.*
 
 
@@ -18,6 +20,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
+
+    override fun onStart() {
+        super.onStart()
+        if (FirebaseAuthManager.auth.currentUser == null) {
+            nextLoginActivity()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,5 +52,9 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout,fragment)
         fragmentTransaction.commit()
+    }
+    private fun nextLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 }
