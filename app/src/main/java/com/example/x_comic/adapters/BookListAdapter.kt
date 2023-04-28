@@ -168,7 +168,7 @@ class BookListAdapter (
         FirebaseAuthManager.auth.uid?.let { userViewModel.getUserById(it) { user ->
             run {
                 _currentUser = user
-                favourite = _currentUser?.let { book.islove(it) } == true
+                favourite = _currentUser?.let { book.islove(it.id) } == true
                 if (favourite) {
                     love.setImageResource(R.drawable.love_clickable)
                 } else {

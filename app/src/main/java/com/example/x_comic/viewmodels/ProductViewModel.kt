@@ -283,5 +283,30 @@ class ProductViewModel : ViewModel() {
             .child("have_loved")
             .setValue(book.have_loved)
     }
+
+    inline fun getAllBookIsLoved(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        Firebase.database.getReference("users").child(uid).child("heart_list").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                callback(task.result)
+            } else {
+
+            }
+        }
+    }
+
+    inline fun getBookById(bookid: String, crossinline callback: (Product)->Unit) {
+        val ref = db.child(bookid)
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var book: Product = dataSnapshot.getValue(Product::class.java)!!
+                callback(book)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // TODO: Xử lý lỗi, bỏ thread đi
+                db.removeEventListener(this)
+            }
+        })
+    }
 }
 

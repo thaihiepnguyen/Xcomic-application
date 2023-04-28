@@ -66,8 +66,8 @@ class Product : java.io.Serializable {
             this.have_loved.removeAt(index)
     }
 
-    fun islove(user: User): Boolean {
-        return this.have_loved.contains(user.id)
+    fun islove(userid: String): Boolean {
+        return this.have_loved.contains(userid)
     }
     constructor() {}
         companion object {

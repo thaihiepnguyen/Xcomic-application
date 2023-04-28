@@ -229,7 +229,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1 profile"/>
+                        android:text="0 Profiles"/>
                 </LinearLayout>
 
                 <ImageView
@@ -265,18 +265,20 @@
                     android:orientation="vertical"
                     >
                     <TextView
+                        android:id="@+id/favoriteTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Favorites list by thaihiep"
+                        android:text="Favorites list"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
                     <TextView
+                        android:id="@+id/loveTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="6 Publiched Stories"/>
+                        android:text="0 Stories"/>
                 </LinearLayout>
 
                 <ImageView

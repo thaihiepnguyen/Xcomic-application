@@ -63,26 +63,6 @@ class MainProfileActivity : AppCompatActivity() {
         binding.FavoriteListView.adapter = favoriteAdapter
         binding.profileListView.adapter = avatarAdapter
 
-//        userViewModel.getAllAuthor()
-//            .observe(this, Observer { authors ->
-//                run {
-//
-//                }
-//            })
-
-        productViewModel.getLatestBook {
-            products -> run {
-                bookList.clear()
-                for (book in products.children) {
-                    val product = book.getValue(Product::class.java)
-                    if (product != null) {
-                        bookList.add(product)
-                    }
-                }
-                favoriteAdapter.notifyDataSetChanged()
-            }
-        }
-
         binding.avtImg.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
@@ -103,18 +83,41 @@ class MainProfileActivity : AppCompatActivity() {
                                 }
                             }
                             avatarAdapter.notifyDataSetChanged()
-                            binding.followProfileTV.text = "${cnt} profiles"
+                            binding.followProfileTV.text = "${cnt} Profiles"
                         }
                         avatarAdapter.notifyDataSetChanged()
                     }
                 }
-
             }
+
+            productViewModel.getAllBookIsLoved(uid) {
+                booksID -> run {
+                    bookList.clear()
+                    var cnt: Int = 0
+                    for (bookid in booksID.children) {
+                        productViewModel.getBookById(bookid.value as String) {
+                            book -> run {
+                                Log.d("BOOKKKKK", book.title)
+                                if (book.islove(uid)) {
+                                    cnt++
+                                    bookList.add(book)
+                                }
+                            }
+                            favoriteAdapter.notifyDataSetChanged()
+                            binding.loveTV.text = "${cnt} Stories"
+//                            binding.followProfileTV.text = "${cnt} book"
+                        }
+                        favoriteAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
             userViewModel.callApi(uid)
                 .observe(this, Observer {
                     // user nó được thay đổi realtime ở đb
                         user ->
                     run {
+                        binding.favoriteTextView.text = "Favorites of ${user.full_name}"
                         binding.emailTV.text = user.email
                         binding.usernameTV.text = user.full_name
                         binding.aboutme.text = user.aboutme
