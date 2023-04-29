@@ -1,5 +1,6 @@
 package com.example.x_comic.views.profile
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -31,8 +32,10 @@ class AuthorProfileActivity : AppCompatActivity() {
     private var _isFollowing: Boolean? = null
     val bookList: MutableList<Product> = mutableListOf()
     val followList: MutableList<User> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityAuthorProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

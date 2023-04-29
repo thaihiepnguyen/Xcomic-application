@@ -21,14 +21,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
 
-    override fun onStart() {
-        super.onStart()
-        if (FirebaseAuthManager.auth.currentUser == null) {
-            nextLoginActivity()
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (FirebaseAuthManager.auth.currentUser == null) {
+            nextLoginActivity()
+            return
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(Home())

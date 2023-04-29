@@ -2,6 +2,7 @@ package com.example.x_comic.views.main.fragments
 
 
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,7 @@ import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.profile.MainProfileActivity
 import com.google.android.material.tabs.TabLayout
+import kotlin.math.log
 
 
 class Home : Fragment() {
@@ -39,6 +41,7 @@ class Home : Fragment() {
     val avatarList: MutableList<Avatar> = mutableListOf()
     val authorList: MutableList<User> = mutableListOf()
     var bookPointer: MutableList<Product> = mutableListOf()
+    var bookBackup: MutableList<Product> = mutableListOf()
     private val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
     private val bookCompletedList: MutableList<Product> = mutableListOf()
@@ -64,7 +67,6 @@ class Home : Fragment() {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         var productViewModel: ProductViewModel
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-
 
 
         customSlideView = view.findViewById(R.id.listView);
@@ -146,12 +148,15 @@ class Home : Fragment() {
                     val product = book.getValue(Product::class.java)
                     if (product != null) {
                         bookPopularList.add(product)
+
                     }
                 }
                 
                 if (tabLayout!!.selectedTabPosition == 0) {
                     bookPointer.clear()
                     bookPointer.addAll(bookPopularList)
+                    bookBackup.clear()
+                    bookBackup.addAll(bookPopularList)
                     tabsBook[tabLayout!!.selectedTabPosition].clear()
                     tabsBook[tabLayout!!.selectedTabPosition].addAll(bookPopularList)
                 }
@@ -198,26 +203,26 @@ class Home : Fragment() {
                 bookListAdapter.notifyDataSetChanged()
             }
         }
-
-        //    initMediator();
+//
+//        //    initMediator();
 //        if (bookPopularList.isNotEmpty() && bookLatestList.isNotEmpty() && bookCompletedList.isNotEmpty()
 //        ) {
-//            // All LiveData have emitted a value, assign to tabsBook
-//            tabsBook = mutableListOf(
-//                bookPopularList, bookLatestList, bookCompletedList
-//            );
-//            println("abc"+tabsBook);
 //
 //        }
+
         tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
         {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 scrollView!!.smoothScrollTo(0,tabLayout!!.top);
                 when (tab?.position) {
                     tab?.position ->  {
-                        // đổi dữ liệu của bookPointer là xong
                         bookPointer.clear()
                         bookPointer.addAll(tabsBook[tab!!.position])
+
+                        // Tạm bợ ^^
+                        if (tabsBook[0].isEmpty()) {
+                            tabsBook[0].addAll(bookBackup)
+                        }
                         bookListAdapter!!.notifyDataSetChanged();
                         bookListAdapter!!.notifyItemRangeChanged(0,bookPointer.size);
                     }
