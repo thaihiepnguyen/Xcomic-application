@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
+import com.example.x_comic.adapters.BookListAdapter
 import com.example.x_comic.adapters.IAvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityMainProfileBinding
@@ -63,7 +64,7 @@ class MainProfileActivity : AppCompatActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         val favoriteAdapter = ListAdapterSlideshow(this, bookList)
-        val readingAdapter = ListAdapterSlideshow(this, readingList)
+        val readingAdapter = BookListAdapter(this, readingList)
         val avatarAdapter = AvatarListAdapter(followList, object: IAvatarListAdapter {
             override fun onClickItemAuthor(author: User) {
                 nextAuthorProfileActivity(author)

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
+import com.example.x_comic.adapters.BookListAdapter
 import com.example.x_comic.adapters.IAvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityAuthorProfileBinding
@@ -49,13 +50,13 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val favoriteAdapter = ListAdapterSlideshow(this, bookList)
+        val readingAdapter = BookListAdapter(this, bookList)
         val avatarAdapter = AvatarListAdapter(followList, object : IAvatarListAdapter {
             override fun onClickItemAuthor(author: User) {
                 nextAuthorProfileActivity(author)
             }
         })
-        binding.listView.adapter = favoriteAdapter
+        binding.listView.adapter = readingAdapter
         binding.profileListView.adapter = avatarAdapter
 
         binding.backBtn.setOnClickListener {
@@ -66,7 +67,6 @@ class AuthorProfileActivity : AppCompatActivity() {
 //        }
 
         var bundle = Bundle()
-
         bundle = intent.extras!!
 
         var author: User = bundle.get("authorKey") as User;
@@ -163,15 +163,23 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.listView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        productViewModel.getLatestBook().observe(this, Observer {
-                products -> run {
-            bookList.clear()
-            bookList.addAll(products)
-            val adapter = ListAdapterSlideshow(this, bookList);
-
-            binding.listView.adapter = adapter
+        productViewModel.getAllReadingBook(author.id) {
+                booksID -> run {
+                bookList.clear()
+                var cnt: Int = 0
+                for (bookid in booksID.children) {
+                    productViewModel.getBookById(bookid.value as String) {
+                            book -> run {
+                        cnt++
+                        bookList.add(book)
+                    }
+                        readingAdapter.notifyDataSetChanged()
+                        binding.readingTV.text = "${cnt} Stories"
+                    }
+                    readingAdapter.notifyDataSetChanged()
+                }
+            }
         }
-        })
     }
 
     fun setFollowingUI(follow: Button) {
