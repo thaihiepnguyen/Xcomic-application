@@ -2,6 +2,7 @@ package com.example.x_comic.adapters
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +22,8 @@ import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.beust.klaxon.Klaxon
 
 class AvatarListAdapter (
-    private  var context: Activity,
     private var avatarList: MutableList<User>,
+    private var iAvatarListAdapter: IAvatarListAdapter
 ) : RecyclerView.Adapter<AvatarListAdapter.ViewHolder>()
 {
     var onItemClick: ((User) -> Unit)? = null
@@ -60,9 +61,7 @@ class AvatarListAdapter (
             .into(avatar)
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, AuthorProfileActivity::class.java)
-            intent.putExtra("authorKey",Klaxon().toJsonString(author))
-            ActivityCompat.startActivity(context, intent, null)
+            iAvatarListAdapter.onClickItemAuthor(author)
         }
     }
 

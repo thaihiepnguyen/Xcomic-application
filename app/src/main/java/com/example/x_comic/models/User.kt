@@ -1,6 +1,6 @@
 package com.example.x_comic.models
 
-class User
+class User : java.io.Serializable
 {
     var id: String = ""
     var full_name: String = "no data yet"
@@ -17,6 +17,7 @@ class User
     var follow: ArrayList<String> = ArrayList()
     var have_followed: ArrayList<String> = ArrayList()
     var heart_list: ArrayList<String> = ArrayList()
+    var collection: ArrayList<String> = ArrayList()
     var role: Long = 1
     constructor(
         id: String = "",
@@ -34,6 +35,7 @@ class User
         follow: ArrayList<String> = ArrayList(),
         have_followed: ArrayList<String> = ArrayList(),
         heart_list: ArrayList<String> = ArrayList(),
+        collection: ArrayList<String> = ArrayList(),
         role: Long = 1, // Role = 1: là đọc giả; 2: là người đọc giả có thể đăng truyện; 3: là admin
     ) {
         this.id = id
@@ -53,6 +55,28 @@ class User
         this.have_followed = have_followed
         this.heart_list = heart_list
         this.aboutme = aboutme
+        this.collection = collection
+    }
+
+    fun addToReadingList(book: Product) {
+        this.collection.add(book.id)
+    }
+
+    fun removeFromReadingList(book: Product) {
+        var index: Int? = null
+
+        for (i in 0 until this.collection.size) {
+            if (this.collection[i] == book.id) {
+                index = i
+            }
+        }
+
+        if (index != null)
+            this.collection.removeAt(index)
+    }
+
+    fun isExits(id: String): Boolean {
+        return this.collection.contains(id)
     }
 
     fun love(book: Product) {

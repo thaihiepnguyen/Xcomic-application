@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
+import com.example.x_comic.adapters.IAvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityMainProfileBinding
 import com.example.x_comic.databinding.ActivityProfileBinding
@@ -32,6 +33,7 @@ class MainProfileActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
     val bookList: MutableList<Product> = mutableListOf()
+    val readingList: MutableList<Product> = mutableListOf()
     val followList: MutableList<User> = mutableListOf()
     private var REQUEST_CODE_PICK_IMAGE = 1111
 
@@ -57,11 +59,19 @@ class MainProfileActivity : AppCompatActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        binding.readingListView.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         val favoriteAdapter = ListAdapterSlideshow(this, bookList)
-        val avatarAdapter = AvatarListAdapter(this, followList)
+        val readingAdapter = ListAdapterSlideshow(this, readingList)
+        val avatarAdapter = AvatarListAdapter(followList, object: IAvatarListAdapter {
+            override fun onClickItemAuthor(author: User) {
+                nextAuthorProfileActivity(author)
+            }
+        })
         binding.FavoriteListView.adapter = favoriteAdapter
         binding.profileListView.adapter = avatarAdapter
+        binding.readingListView.adapter = readingAdapter
 
         binding.avtImg.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -112,6 +122,24 @@ class MainProfileActivity : AppCompatActivity() {
                 }
             }
 
+            productViewModel.getAllReadingBook(uid) {
+                    booksID -> run {
+                    readingList.clear()
+                    var cnt: Int = 0
+                    for (bookid in booksID.children) {
+                        productViewModel.getBookById(bookid.value as String) {
+                            book -> run {
+                                cnt++
+                                readingList.add(book)
+                                }
+                            readingAdapter.notifyDataSetChanged()
+                            binding.readingTV.text = "${cnt} Stories"
+                        }
+                        readingAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
             userViewModel.callApi(uid)
                 .observe(this, Observer {
                     // user nó được thay đổi realtime ở đb
@@ -143,6 +171,7 @@ class MainProfileActivity : AppCompatActivity() {
                         }
 
                         binding.followNumber.text = user.have_followed.size.toString()
+                        binding.readListNumber.text = user.collection.size.toString()
                     }
                 })
         }
@@ -186,6 +215,13 @@ class MainProfileActivity : AppCompatActivity() {
 
     private fun nextSettingActivity() {
         val intent = Intent(this, EditProfileActivity::class.java)
+        startActivity(intent)
+    }
+    fun nextAuthorProfileActivity(author: User) {
+        val intent = Intent(this, AuthorProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
         startActivity(intent)
     }
 }

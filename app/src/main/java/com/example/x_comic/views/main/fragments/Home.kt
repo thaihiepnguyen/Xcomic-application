@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
 import com.example.x_comic.adapters.BookListAdapter
+import com.example.x_comic.adapters.IAvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Product
@@ -31,6 +33,7 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.login.LoginActivity
+import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.profile.MainProfileActivity
 import com.google.android.material.tabs.TabLayout
 import kotlin.math.log
@@ -96,7 +99,11 @@ class Home : Fragment() {
         customAvatarView!!.layoutManager =
             LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
-        val avatarAdapter = AvatarListAdapter(requireActivity(), authorList)
+        val avatarAdapter = AvatarListAdapter(authorList, object : IAvatarListAdapter {
+            override fun onClickItemAuthor(author: User) {
+                nextAuthorProfileActivity(author)
+            }
+        })
         customAvatarView!!.adapter = avatarAdapter
 //        if (bookList.isNotEmpty()){
 //            val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
@@ -270,6 +277,15 @@ class Home : Fragment() {
     // TODO: sẽ truyền với hiệu ứng từ trái sang phải
     private fun nextProfileActivity() {
         val intent = Intent(context, MainProfileActivity::class.java)
+        startActivity(intent)
+    }
+
+
+    fun nextAuthorProfileActivity(author: User) {
+        val intent = Intent(context, AuthorProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
         startActivity(intent)
     }
 }

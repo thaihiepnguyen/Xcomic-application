@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,8 +25,10 @@ import com.example.x_comic.adapters.FeedbackAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
@@ -45,10 +48,15 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 
 
 class DetailActivity : AppCompatActivity() {
-
+    private var _currentUser: User? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        var productViewModel: ProductViewModel
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        var userViewModel: UserViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         val intent = intent
         val stringData = intent.getStringExtra("book_data")
@@ -73,6 +81,10 @@ class DetailActivity : AppCompatActivity() {
         author.text = bookData?.author
         favorite.text = bookData?.favorite.toString()
 
+        val uid = FirebaseAuthManager.auth.uid
+        userViewModel.callApi(uid!!).observe(this, Observer {
+            user -> _currentUser = user
+        })
         // Get a reference to the Firebase Storage instance
         val storage = FirebaseStorage.getInstance()
         val imageName = bookData?.cover // Replace with your image name
@@ -117,7 +129,27 @@ class DetailActivity : AppCompatActivity() {
         //button back to previous activity
         val backBtn = findViewById<Button>(R.id.backBtn)
         backBtn.setOnClickListener {
-            finish()
+            if (!_currentUser?.isExits(bookData.id)!!) {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Message")
+                builder.setMessage("Do you want to save it to your reading list?")
+
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    _currentUser?.addToReadingList(bookData)
+                    userViewModel.saveReadingList(_currentUser!!)
+                    finish()
+                }
+
+                builder.setNegativeButton("No") { dialog, which ->
+                    finish()
+                }
+
+                val dialog = builder.create()
+                dialog.show()
+            }
+            else {
+                finish()
+            }
         }
 
         //read
@@ -284,9 +316,6 @@ class DetailActivity : AppCompatActivity() {
 
             }
         })
-
-        var productViewModel: ProductViewModel
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         val bookList: MutableList<Product> = mutableListOf()
         var customSlideView: RecyclerView? = null;
         customSlideView = findViewById(R.id.listView);

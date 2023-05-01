@@ -1,6 +1,7 @@
 package com.example.x_comic.views.profile
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.AvatarListAdapter
+import com.example.x_comic.adapters.IAvatarListAdapter
 import com.example.x_comic.adapters.ListAdapterSlideshow
 import com.example.x_comic.databinding.ActivityAuthorProfileBinding
 import com.example.x_comic.models.Product
@@ -48,17 +50,26 @@ class AuthorProfileActivity : AppCompatActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         val favoriteAdapter = ListAdapterSlideshow(this, bookList)
-        val avatarAdapter = AvatarListAdapter(this, followList)
+        val avatarAdapter = AvatarListAdapter(followList, object : IAvatarListAdapter {
+            override fun onClickItemAuthor(author: User) {
+                nextAuthorProfileActivity(author)
+            }
+        })
         binding.listView.adapter = favoriteAdapter
         binding.profileListView.adapter = avatarAdapter
 
         binding.backBtn.setOnClickListener {
             finish()
         }
-        var author = intent.getStringExtra("authorKey")?.let {
-            Klaxon().parse<User>(it)
-        }
+//        var author = intent.getStringExtra("authorKey")?.let {
+//            Klaxon().parse<User>(it)
+//        }
 
+        var bundle = Bundle()
+
+        bundle = intent.extras!!
+
+        var author: User = bundle.get("authorKey") as User;
 
         _currentAuthor = author
 
@@ -173,5 +184,12 @@ class AuthorProfileActivity : AppCompatActivity() {
         follow.setText("Follow")
         val drawable = resources.getDrawable(R.drawable.baseline_person_add_alt_1_24)
         follow.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+    }
+    fun nextAuthorProfileActivity(author: User) {
+        val intent = Intent(this, AuthorProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }

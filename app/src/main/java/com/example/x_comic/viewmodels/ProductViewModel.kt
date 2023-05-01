@@ -294,6 +294,16 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    inline fun getAllReadingBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        Firebase.database.getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                callback(task.result)
+            } else {
+
+            }
+        }
+    }
+
     inline fun getBookById(bookid: String, crossinline callback: (Product)->Unit) {
         val ref = db.child(bookid)
         ref.addValueEventListener(object : ValueEventListener {
