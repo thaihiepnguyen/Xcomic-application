@@ -107,9 +107,9 @@ class DetailActivity : AppCompatActivity() {
         view.text = bookData?.view.toString()
         chapter.text = bookData?.chapters?.size.toString()
         if (bookData!!.status){
-            status.text = "Status: Done"
+            status.text = "Completed"
         }else{
-            status.text = "Status: Ongoing"
+            status.text = "Ongoing"
         }
         age.text = bookData.age.toString() + "+"
         descTextView.text = bookData.tiny_des
@@ -320,7 +320,7 @@ class DetailActivity : AppCompatActivity() {
         var customSlideView: RecyclerView? = null;
         customSlideView = findViewById(R.id.listView);
         val adapterSlide = ListAdapterSlideshow(this, bookList);
-        customSlideView!!.adapter = adapter;
+        customSlideView!!.adapter = adapterSlide;
         customSlideView!!.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         productViewModel.getAllBook { books ->
             run {

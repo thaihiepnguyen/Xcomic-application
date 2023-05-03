@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.models.Category
@@ -39,6 +40,8 @@ class Explore : Fragment() {
     var layoutExpand: ExpandableRelativeLayout? = null;
 
     var categoryView : RecyclerView? = null;
+
+    var myFilter = com.example.x_comic.models.Filter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,12 +63,15 @@ class Explore : Fragment() {
             .observe(this, Observer { categories ->
                 run {
                     adapter = CategoryAdapter(categories);
+
                     categoryView!!.adapter = adapter;
 
                     layoutManager!!.flexWrap = FlexWrap.WRAP;
                     layoutManager!!.flexDirection = FlexDirection.ROW;
                     layoutManager!!.alignItems = AlignItems.FLEX_START;
                     categoryView!!.layoutManager = layoutManager;
+
+                    myFilter.listCate = adapter.getAllItem()
                 }
             })
 
@@ -109,6 +115,15 @@ class Explore : Fragment() {
             //val oldFragment = view.findViewById<FrameLayout>(R.id.exploreLayout);
             //oldFragment.removeAllViews();
 
+            var searchEditText = view.findViewById<EditText>(R.id.searchEditText)
+            var keyword = searchEditText.text.toString()
+
+            val bundle = Bundle()
+            bundle.putString("keyword", keyword)
+            bundle.putString("filter", Klaxon().toJsonString(myFilter))
+
+            // Pass the bundle to the fragment
+            fragment.arguments = bundle
 
             val fragmentManager = requireActivity().supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
@@ -138,24 +153,40 @@ class Explore : Fragment() {
         checkBox1.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 checkBox5.isChecked = false;
+                checkBox2.isChecked = false;
+                checkBox3.isChecked = false;
+                checkBox4.isChecked = false;
+                myFilter.chapterRange = "1-10"
             }
         }
 
         checkBox2.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                checkBox1.isChecked = false;
+                checkBox3.isChecked = false;
+                checkBox4.isChecked = false;
                 checkBox5.isChecked = false;
+                myFilter.chapterRange = "10-20"
             }
         }
 
         checkBox3.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                checkBox1.isChecked = false;
+                checkBox2.isChecked = false;
+                checkBox4.isChecked = false;
                 checkBox5.isChecked = false;
+                myFilter.chapterRange = "20-50"
             }
         }
 
         checkBox4.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
+                checkBox1.isChecked = false;
+                checkBox2.isChecked = false;
+                checkBox3.isChecked = false;
                 checkBox5.isChecked = false;
+                myFilter.chapterRange = "50+"
             }
         }
 
@@ -165,6 +196,7 @@ class Explore : Fragment() {
                 checkBox2.isChecked = false;
                 checkBox3.isChecked = false;
                 checkBox4.isChecked = false;
+                myFilter.chapterRange = "all"
             }
         }
 
@@ -172,24 +204,28 @@ class Explore : Fragment() {
         checkBox6.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 checkBox10.isChecked = false;
+                myFilter.bookStatus = "Completed"
             }
         }
 
         checkBox7.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 checkBox10.isChecked = false;
+                myFilter.bookStatus = "Ongoing"
             }
         }
 
         checkBox8.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 checkBox10.isChecked = false;
+                myFilter.bookStatus = "Ongoing"
             }
         }
 
         checkBox9.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 checkBox10.isChecked = false;
+                myFilter.bookStatus = "Ongoing"
             }
         }
 
@@ -199,6 +235,7 @@ class Explore : Fragment() {
                 checkBox7.isChecked = false;
                 checkBox8.isChecked = false;
                 checkBox9.isChecked = false;
+                myFilter.bookStatus = "All"
             }
         }
 
@@ -216,8 +253,12 @@ class Explore : Fragment() {
 
                 //val oldFragment = view.findViewById<FrameLayout>(R.id.exploreLayout);
                 //oldFragment.removeAllViews();
-
-
+                var searchEditText = view.findViewById<EditText>(R.id.searchEditText)
+                var keyword = searchEditText.text.toString()
+                val bundle = Bundle()
+                bundle.putString("keyword", keyword)
+                bundle.putString("filter", Klaxon().toJsonString(myFilter))
+                fragment.arguments = bundle
                 val fragmentManager = requireActivity().supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
                 //transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
