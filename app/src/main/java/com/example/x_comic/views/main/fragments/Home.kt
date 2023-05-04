@@ -19,19 +19,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadhamwi.tabsync.TabbedListMediator
+import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.AvatarListAdapter
-import com.example.x_comic.adapters.BookListAdapter
-import com.example.x_comic.adapters.IAvatarListAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.adapters.*
 import com.example.x_comic.models.Avatar
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.profile.MainProfileActivity
@@ -90,7 +89,10 @@ class Home : Fragment() {
         customSlideView!!.adapter = adapterSlideShow;
         customSlideView!!.layoutManager =
             LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-        val bookListAdapter = BookListAdapter(requireActivity(), bookPointer)
+        val bookListAdapter = BookListAdapter(bookPointer)
+        bookListAdapter.onItemClick = {
+            book -> nextBookDetailActivity(book)
+        }
         customBookListView!!.adapter = bookListAdapter
         customBookListView!!.layoutManager = LinearLayoutManager(this.context);
         val itemDecoration: RecyclerView.ItemDecoration =
@@ -99,11 +101,14 @@ class Home : Fragment() {
         customAvatarView!!.layoutManager =
             LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false);
 
-        val avatarAdapter = AvatarListAdapter(authorList, object : IAvatarListAdapter {
-            override fun onClickItemAuthor(author: User) {
-                nextAuthorProfileActivity(author)
-            }
-        })
+        val avatarAdapter = AvatarListAdapter(authorList)
+
+        avatarAdapter.onItemClick = {
+            author -> nextAuthorProfileActivity(author)
+        }
+
+
+
         customAvatarView!!.adapter = avatarAdapter
 //        if (bookList.isNotEmpty()){
 //            val authorList = bookList.map { Avatar(it.author, R.drawable.avatar_1) };
@@ -286,6 +291,14 @@ class Home : Fragment() {
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)
         intent.putExtras(bundle)
+        startActivity(intent)
+    }
+    fun nextBookDetailActivity(book: Product) {
+        val intent = Intent(context, DetailActivity::class.java)
+//        val bundle = Bundle()
+//        bundle.putSerializable("productKey", book)
+        intent.putExtra("productKey", Klaxon().toJsonString(book))
+
         startActivity(intent)
     }
 }

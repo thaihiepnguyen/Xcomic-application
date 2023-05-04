@@ -2,7 +2,8 @@ package com.example.x_comic.models
 
 import android.util.Log
 
-class Product : java.io.Serializable {
+class Product : java.io.Serializable
+{
     var id: String = ""
     var title: String = ""
     var cover: String = ""
@@ -75,6 +76,6 @@ class Product : java.io.Serializable {
             const val MESSAGE2 = "message2"
 
         }
-    }
+}
 
 

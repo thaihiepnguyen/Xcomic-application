@@ -22,8 +22,7 @@ import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.beust.klaxon.Klaxon
 
 class AvatarListAdapter (
-    private var avatarList: MutableList<User>,
-    private var iAvatarListAdapter: IAvatarListAdapter
+    private var avatarList: MutableList<User>
 ) : RecyclerView.Adapter<AvatarListAdapter.ViewHolder>()
 {
     var onItemClick: ((User) -> Unit)? = null
@@ -59,10 +58,6 @@ class AvatarListAdapter (
             .apply(RequestOptions().override(250, 250))
             .circleCrop()
             .into(avatar)
-
-        holder.itemView.setOnClickListener {
-            iAvatarListAdapter.onClickItemAuthor(author)
-        }
     }
 
 }

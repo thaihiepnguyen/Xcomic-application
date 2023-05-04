@@ -31,11 +31,11 @@ import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.ProductViewModel
 
 class BookListAdapter (
-    private  var context: Activity,
-    private var bookList: MutableList<Product>,
+    private var bookList: MutableList<Product>
 ) : RecyclerView.Adapter<BookListAdapter.ViewHolder>()
 {
     var onItemClick: ((Product) -> Unit)? = null
+    private lateinit var _currentContext : Context
     //var context: Context? = null;
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var title = listItemView.findViewById(R.id.book_list_title) as TextView;
@@ -58,7 +58,8 @@ class BookListAdapter (
     }
 
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
-        //context = parent.context;
+        val context = parent.context;
+        _currentContext = context
         val inflater = LayoutInflater.from(context)
         var columnView =  inflater.inflate(R.layout.book_list, parent, false)
         return ViewHolder(columnView)
@@ -106,54 +107,53 @@ class BookListAdapter (
         view.setText(book.view.toString());
         favorite.setText(book.favorite.toString());
         chapter.setText(book.chapters.size.toString());
-
         val category = book.categories.take(3);
             for (i in category) {
             when (i.name){
                 "Romance" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                         R.color.love
                     ));
                 }
                 "Fiction" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                        R.color.yellow_green
                    ));
                 }
                 "Short Story" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                   category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                        R.color.light_blue
                    ));
                 }
                 "Mystery" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList =
-                        ColorStateList.valueOf(ContextCompat.getColor(context!!, R.color.violet));
+                        ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!, R.color.violet));
                 }
                 "Thriller" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                  category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                  category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                       R.color.golden
                   ));
                 }
                 "Horror" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                         R.color.purple_500
                     ));
                 }
                 "Humor" -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                         R.color.pink
                     ));
                 }
                 else -> {
                     category_holder[category.indexOf(i)].setText(i.name)
-                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
+                    category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(_currentContext!!,
                         R.color.lightgrey
                     ));
                 }
@@ -191,12 +191,12 @@ class BookListAdapter (
             bookViewModel.saveCurrentIsLove(book)
             userViewModel.saveHeartList(_currentUser!!)
         }
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("book_data", Klaxon().toJsonString(book))
-            ActivityCompat.startActivityForResult(context, intent, 302, null)
-        }
-
+        // TODO: chuyển ra ngoài adapter
+//        holder.itemView.setOnClickListener {
+//            val intent = Intent(context, DetailActivity::class.java)
+//            intent.putExtra("book_data", Klaxon().toJsonString(book))
+//            ActivityCompat.startActivityForResult(context, intent, 302, null)
+//        }
     }
 
 }

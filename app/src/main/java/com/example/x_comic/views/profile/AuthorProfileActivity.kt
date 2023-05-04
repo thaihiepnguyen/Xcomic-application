@@ -13,16 +13,14 @@ import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.AvatarListAdapter
-import com.example.x_comic.adapters.BookListAdapter
-import com.example.x_comic.adapters.IAvatarListAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityAuthorProfileBinding
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.detail.DetailActivity
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 
@@ -50,12 +48,15 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val readingAdapter = BookListAdapter(this, bookList)
-        val avatarAdapter = AvatarListAdapter(followList, object : IAvatarListAdapter {
-            override fun onClickItemAuthor(author: User) {
-                nextAuthorProfileActivity(author)
-            }
-        })
+        val readingAdapter = BookListAdapter(bookList)
+        val avatarAdapter = AvatarListAdapter(followList)
+
+        readingAdapter.onItemClick = {
+            book -> nextBookDetailActivity(book)
+        }
+        avatarAdapter.onItemClick = {
+            author -> nextAuthorProfileActivity(author)
+        }
         binding.listView.adapter = readingAdapter
         binding.profileListView.adapter = avatarAdapter
 
@@ -198,6 +199,15 @@ class AuthorProfileActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)
         intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    fun nextBookDetailActivity(book: Product) {
+        val intent = Intent(this, DetailActivity::class.java)
+//        val bundle = Bundle()
+//        bundle.putSerializable("productKey", book)
+        intent.putExtra("productKey", Klaxon().toJsonString(book))
+
         startActivity(intent)
     }
 }

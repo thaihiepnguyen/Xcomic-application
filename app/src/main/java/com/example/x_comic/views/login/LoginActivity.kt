@@ -41,8 +41,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var bindingDialog: LayoutDialogSendpassBinding
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
-    private lateinit var productViewModel: ProductViewModel
-    private lateinit var categoryViewModel: CategoryViewModel
     private var RC_SIGN_IN = 123321
     private lateinit var mClient: GoogleSignInClient
 

@@ -1,8 +1,8 @@
 package com.example.x_comic.views.main.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.adapters.BookListAdapter
-import com.example.x_comic.models.Book
-import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
+import com.example.x_comic.views.detail.DetailActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -60,7 +59,11 @@ class Search : Fragment() {
 
         customBookListView = view.findViewById(R.id.searchBookList);
 
-        val bookListAdapter = BookListAdapter(requireActivity(),bookDetailList);
+        val bookListAdapter = BookListAdapter(bookDetailList)
+
+        bookListAdapter.onItemClick = {
+            book -> nextBookDetailActivity(book)
+        }
         customBookListView!!.adapter = bookListAdapter;
 
         customBookListView!!.layoutManager = LinearLayoutManager(this.context);
@@ -170,5 +173,13 @@ class Search : Fragment() {
         val inputMethodManager: InputMethodManager? =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun nextBookDetailActivity(book: Product) {
+        val intent = Intent(context, DetailActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("bookKey", book)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }
