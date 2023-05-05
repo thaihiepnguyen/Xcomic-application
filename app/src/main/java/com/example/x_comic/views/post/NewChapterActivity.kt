@@ -30,9 +30,10 @@ class NewChapterActivity : AppCompatActivity() {
         chapter.id_chapter =  Firebase.database.getReference().push().key
 
         var intent = intent
+        val _IdBook = intent.getStringExtra(Chapter.MESSAGE5) as String
         val position = intent.getIntExtra(Chapter.MESSAGE1, -1) as Int
         val _chapter = intent.getSerializableExtra(Chapter.MESSAGE3) as? Chapter
-
+        chapter.id_book =  _IdBook
         _chapter?.let {
             findViewById<TextView>(R.id.titleChapter).setText("Edit Chapter")
             findViewById<EditText>(R.id.etTitleChapter).setText(_chapter.name)

@@ -32,6 +32,8 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import java.io.IOException
 
@@ -79,6 +81,11 @@ class PostNewActivity : AppCompatActivity() {
 
         // Spinner Age
         spinnerAgeView()
+
+        var id = Firebase.database.getReference().push().key
+        if (id != null) {
+            curBook.id = id
+        }
 
         var intent = intent
         val _book = intent.getSerializableExtra(Product.MESSAGE1) as? Product
@@ -154,7 +161,7 @@ class PostNewActivity : AppCompatActivity() {
 
             curBook?.let {
                 val intent = Intent(this, NewChapterActivity::class.java)
-                intent.putExtra(Chapter.MESSAGE1, curBook.id)
+                intent.putExtra(Chapter.MESSAGE5, curBook.id)
                 startActivityForResult(intent, REQUEST_CODE_PICK_CHAPTER)
             }
         }
@@ -210,6 +217,7 @@ class PostNewActivity : AppCompatActivity() {
             val intent = Intent(this, NewChapterActivity::class.java)
             intent.putExtra(Chapter.MESSAGE1, position)
             intent.putExtra(Chapter.MESSAGE3, chapter)
+            intent.putExtra(Chapter.MESSAGE5, curBook.id)
             startActivityForResult(intent, REQUEST_CODE_UPDATE_CHAPTER)
         }
     }
@@ -234,15 +242,9 @@ class PostNewActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             val imageUri = data.data
             // Lay ten file cua anh
-            val filename: String = imageUri?.let { uri ->
-                val cursor = contentResolver.query(uri, null, null, null, null)
-                val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                cursor?.moveToFirst()
-                nameIndex?.let { cursor?.getString(it) }
-            } ?: "unknown_filename"
-            fileNameCover = filename
+            fileNameCover = curBook.id +".png"
             // Lưu ảnh vào profile
-            saveImageToProfile(imageUri, filename)
+            saveImageToProfile(imageUri, fileNameCover)
         }
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {

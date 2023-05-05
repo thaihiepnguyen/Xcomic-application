@@ -173,7 +173,7 @@ class Writing : Fragment() {
             val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
 
             // TODO: Post book len DB
-            productViewModel.addProduct(reply)
+            productViewModel.updateProduct(reply)
         }
     }
 }
