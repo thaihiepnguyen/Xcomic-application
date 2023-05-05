@@ -1,6 +1,7 @@
 package com.example.x_comic.views.post
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -93,6 +94,7 @@ class PostNewActivity : AppCompatActivity() {
             curBook = _book
             is_new = false
             findViewById<TextView>(R.id.title).text = "Update Book"
+            findViewById<Button>(R.id.btnNext).text = "SAVE"
 
             var cover = findViewById<ImageView>(R.id.ivCover)
             val storage = FirebaseStorage.getInstance()
@@ -113,6 +115,7 @@ class PostNewActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.etDescription).setText(curBook.tiny_des.toString())
             findViewById<Switch>(R.id.sStatus).isChecked = curBook.status
             findViewById<Switch>(R.id.sIsHide).isChecked =  curBook.hide
+            findViewById<Button>(R.id.btnDeleteBook).visibility = View.VISIBLE
 
             val curIndex = ageRanges.indexOfFirst { it.second == curBook.age }
             val index = if (curIndex == -1) ageRanges.lastIndex else curIndex
@@ -136,7 +139,7 @@ class PostNewActivity : AppCompatActivity() {
                 })
         }
 
-        val addCoverBtn = findViewById<Button>(R.id.btnNewCover)
+        val addCoverBtn = findViewById<ImageButton>(R.id.btnNewCover)
         addCoverBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
@@ -164,6 +167,25 @@ class PostNewActivity : AppCompatActivity() {
                 intent.putExtra(Chapter.MESSAGE5, curBook.id)
                 startActivityForResult(intent, REQUEST_CODE_PICK_CHAPTER)
             }
+        }
+
+        val deleteButton = findViewById<Button>(R.id.btnDeleteBook)
+        deleteButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Are you sure you want to delete?")
+            builder.setPositiveButton("Yes") { dialog, which ->
+                // Handle user's positive response
+                val replyIntent = Intent()
+                replyIntent.putExtra(Product.MESSAGE2, getCurBook())
+                replyIntent.putExtra("DELETE", true)
+                setResult(Activity.RESULT_OK, replyIntent)
+                finish()
+            }
+            builder.setNegativeButton("No") { dialog, which ->
+                // Handle user's negative response
+            }
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 
@@ -258,7 +280,9 @@ class PostNewActivity : AppCompatActivity() {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
             val index = data!!.getIntExtra(Chapter.MESSAGE4, -1) as Int
             if (index == -1) {
-
+                for (i in chapterList)
+                    if (i.id_chapter.equals(reply.id_chapter))
+                        chapterList.remove(i);
             } else {
                 chapterList[index] = reply
             }

@@ -164,9 +164,13 @@ class Writing : Fragment() {
 
         if (requestCode == REQUEST_CODE_PICK_UPDATE_PRODUCT && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
-
-            // TODO: Update book tren BD
-            productViewModel.updateProduct(reply)
+            val isDelete = data!!.getBooleanExtra("DELETE", false)
+            if (isDelete) {
+                productViewModel.deleteProduct(reply)
+            } else {
+                // TODO: Update book tren BD
+                productViewModel.updateProduct(reply)
+            }
         }
 
         if (requestCode == REQUEST_CODE_PICK_PRODUCT && resultCode == AppCompatActivity.RESULT_OK && data != null) {

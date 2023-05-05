@@ -265,6 +265,14 @@ class ProductViewModel : ViewModel() {
         newRef.setValue(product)
     }
 
+    fun deleteProduct(product: Product) {
+        val database = Firebase.database
+        database.reference
+            .child("book")
+            .child(product.id)
+            .removeValue()
+    }
+
     fun updateProduct(product: Product) {
         val database = Firebase.database
         database.reference

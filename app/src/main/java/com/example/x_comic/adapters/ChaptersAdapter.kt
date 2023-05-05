@@ -3,6 +3,7 @@ package com.example.x_comic.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
@@ -14,6 +15,7 @@ class ChaptersAdapter (private val chapters: MutableList<Chapter>) : RecyclerVie
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val name = listItemView.findViewById(R.id.tvChapterName) as TextView
         val dateUpdate = listItemView.findViewById(R.id.tvDate) as TextView
+        val ivStatusChapter = listItemView.findViewById(R.id.ivStatusChapter) as ImageView
 
         init {
             listItemView.setOnClickListener { onItemClick?.invoke(chapters[adapterPosition], adapterPosition) }
@@ -41,6 +43,11 @@ class ChaptersAdapter (private val chapters: MutableList<Chapter>) : RecyclerVie
         // Set item views based on your views and data model
 
         holder.name.text = chapters[position].name
-
+        holder.dateUpdate.text = "updated " + chapters[position].date_update
+        if (chapters[position]._lock) {
+            holder.ivStatusChapter.setImageResource(R.drawable.baseline_lock_24)
+        } else {
+            holder.ivStatusChapter.setImageResource(R.drawable.ic_unlock)
+        }
     }
 }

@@ -236,8 +236,8 @@ class DetailActivity : AppCompatActivity() {
                 //TODO: Code doc sach khi click vo chapter o day ne
                 if(!bookData.chapters[i]._lock){
                     val intent = Intent(this, ReadBookActivity::class.java)
-                    intent.putExtra("title",bookData.chapters[i].name)
-                    intent.putExtra("content",bookData.chapters[i].content)
+                    intent.putExtra("book",bookData)
+                    intent.putExtra("id_chapter",bookData.chapters[i].id_chapter)
                     ActivityCompat.startActivityForResult(this, intent, 302, null)
                 }else{
                     val intent = Intent(this, PurchaseActivity::class.java)

@@ -1,22 +1,22 @@
 package com.example.x_comic.views.post
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.x_comic.R
 import com.example.x_comic.models.Chapter
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
+
 
 class NewChapterActivity : AppCompatActivity() {
     var etContent : EditText? = null
@@ -39,6 +39,9 @@ class NewChapterActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.etTitleChapter).setText(_chapter.name)
             findViewById<EditText>(R.id.etContent).setText(_chapter.content)
             findViewById<Switch>(R.id.sLockChapter).isChecked = _chapter._lock
+            tvCountWords?.text = etContent.toString().split("\\s+".toRegex()).size.toString() + " words"
+            findViewById<ImageButton>(R.id.btn_menu).visibility = View.VISIBLE
+
             chapter = _chapter
         }
 
@@ -79,6 +82,45 @@ class NewChapterActivity : AppCompatActivity() {
             replyIntent.putExtra(Chapter.MESSAGE4, position)
             setResult(Activity.RESULT_OK, replyIntent)
             finish()
+        }
+
+        val backButton = findViewById<ImageButton>(R.id.imgbtnBack)
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        val btnMenu = findViewById<ImageButton>(R.id.btn_menu)
+        val popupMenu = PopupMenu(this, btnMenu)
+        popupMenu.menuInflater.inflate(R.menu.chapter_menu, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.btnDeleteChapter -> {
+                    // Perform action for Item 1
+                    val builder = AlertDialog.Builder(this)
+                    builder.setMessage("Are you sure you want to delete?")
+                    builder.setPositiveButton("Yes") { dialog, which ->
+                        // Handle user's positive response
+                        // Tra Chapter moi ve
+                        val replyIntent = Intent()
+                        replyIntent.putExtra(Chapter.MESSAGE2, chapter)
+                        replyIntent.putExtra(Chapter.MESSAGE4, -1)
+                        setResult(Activity.RESULT_OK, replyIntent)
+                        finish()
+                    }
+                    builder.setNegativeButton("No") { dialog, which ->
+                        // Handle user's negative response
+                    }
+                    val dialog = builder.create()
+                    dialog.show()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        btnMenu.setOnClickListener {
+            popupMenu.show()
         }
     }
 }

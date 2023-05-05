@@ -7,60 +7,136 @@
     tools:context=".views.read.ReadBookActivity"
     android:background="@drawable/pattern">
 
-    <TextView
-        android:id="@+id/tvTitleChapter"
+    <LinearLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
+        android:orientation="vertical">
 
-        android:text="Chapter 1"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </TextView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleChapter">
-
-        <ProgressBar
-            android:id="@+id/progressBarReadBook"
-            style="?android:attr/progressBarStyleHorizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ECECEC"
-            android:padding="20dp"
-            android:progressTint="@color/azure" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTitleChapter">
 
-        <ScrollView
-            android:id="@+id/sv_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progressBarReadBook"
-            android:layout_centerInParent="true">
-
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/progressBarReadBook"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="#ECECEC"
+                android:padding="20dp"
+                android:progressTint="@color/azure" />
 
-                <TextView
-                    android:id="@+id/tvContentChapterBook"
+            <ScrollView
+                android:id="@+id/sv_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progressBarReadBook"
+                android:layout_centerInParent="true">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    android:padding="20dp"
-                    android:textAlignment="viewStart"
-                    android:textSize="40sp">
-                </TextView>
+                    <ImageView
+                        android:id="@+id/ivCoverChapter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/book_cover_2" />
 
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/linearLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/book_author"
+                        tools:layout_editor_absoluteX="30dp">
+
+                        <ImageView
+                            android:id="@+id/viewIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:srcCompat="@drawable/ic_view"
+                            android:layout_marginLeft="20dp"
+                            tools:layout_editor_absoluteY="49dp" />
+
+                        <TextView
+                            android:id="@+id/viewTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="200K view"
+                            android:layout_marginRight="20dp"
+                            android:textAlignment="center" />
+
+                        <ImageView
+                            android:id="@+id/favoriteIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="match_parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:srcCompat="@drawable/favorite_icon"
+                            tools:layout_editor_absoluteY="49dp" />
+
+                        <TextView
+                            android:id="@+id/favoriteTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="167K favor"
+                            android:layout_marginRight="20dp"
+                            android:textAlignment="center" />
+
+                        <ImageView
+                            android:id="@+id/chapterIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:srcCompat="@drawable/ic_list_chapter"
+                            tools:layout_editor_absoluteY="49dp" />
+
+                        <TextView
+                            android:id="@+id/numOfChapterTextView"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="4 Chapters"
+                            android:layout_marginRight="20dp"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvTitleChapter"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@color/fui_transparent"
+
+                        android:text="Chapter 1"
+                        android:textAlignment="center"
+                        android:textSize="30sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/tvContentChapterBook"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/poppins_light"
+                        android:padding="20dp"
+                        android:textAlignment="viewStart"
+                        android:textSize="20sp">
+                    </TextView>
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/btnNextChapter"
@@ -71,7 +147,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitleChapter"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/next" />
 
     <ImageButton
@@ -83,7 +159,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitleChapter"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
 
 
