@@ -43,9 +43,11 @@ class UserViewModel : ViewModel() {
             val ref = db.child(uid)
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    var user: User = dataSnapshot.getValue(User::class.java)!!
-                    _user.value = user
-                    _user.postValue(user)
+                    if (dataSnapshot.exists()) {
+                        var user: User = dataSnapshot.getValue(User::class.java)!!
+                        _user.value = user
+                        _user.postValue(user)
+                    }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -141,7 +143,7 @@ class UserViewModel : ViewModel() {
 
     inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {
         val ref = db.child(uid)
-        ref.addValueEventListener(object : ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var user: User = dataSnapshot.getValue(User::class.java)!!
                 callback(user)

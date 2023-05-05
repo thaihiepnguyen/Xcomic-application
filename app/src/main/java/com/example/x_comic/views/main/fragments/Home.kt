@@ -43,7 +43,9 @@ class Home : Fragment() {
     val avatarList: MutableList<Avatar> = mutableListOf()
     val authorList: MutableList<User> = mutableListOf()
     var bookPointer: MutableList<Product> = mutableListOf()
-    var bookBackup: MutableList<Product> = mutableListOf()
+    var bookPopularBackup: MutableList<Product> = mutableListOf()
+    var bookLastestBackup: MutableList<Product> = mutableListOf()
+    var bookCompletedBackup: MutableList<Product> = mutableListOf()
     private val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
     private val bookCompletedList: MutableList<Product> = mutableListOf()
@@ -91,7 +93,7 @@ class Home : Fragment() {
             LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
         val bookListAdapter = BookListAdapter(bookPointer)
         bookListAdapter.onItemClick = {
-            book -> nextBookDetailActivity(book)
+                book -> nextBookDetailActivity(book)
         }
         customBookListView!!.adapter = bookListAdapter
         customBookListView!!.layoutManager = LinearLayoutManager(this.context);
@@ -104,7 +106,7 @@ class Home : Fragment() {
         val avatarAdapter = AvatarListAdapter(authorList)
 
         avatarAdapter.onItemClick = {
-            author -> nextAuthorProfileActivity(author)
+                author -> nextAuthorProfileActivity(author)
         }
 
 
@@ -137,7 +139,7 @@ class Home : Fragment() {
             }
         }
 
-        // TODO: code được comment ở đây tương đương với dòng 144
+        // TODO: code được comment ở đây tương đương với dòng 155
         // tùy TH mình sài nhe
 //        productViewModel.getPopularBook().observe(this, Observer {
 //            products -> run {
@@ -163,12 +165,12 @@ class Home : Fragment() {
 
                     }
                 }
-                
+
                 if (tabLayout!!.selectedTabPosition == 0) {
                     bookPointer.clear()
                     bookPointer.addAll(bookPopularList)
-                    bookBackup.clear()
-                    bookBackup.addAll(bookPopularList)
+                    bookPopularBackup.clear()
+                    bookPopularBackup.addAll(bookPopularList)
                     tabsBook[tabLayout!!.selectedTabPosition].clear()
                     tabsBook[tabLayout!!.selectedTabPosition].addAll(bookPopularList)
                 }
@@ -189,6 +191,8 @@ class Home : Fragment() {
                 if (tabLayout!!.selectedTabPosition == 2) {
                     bookPointer.clear()
                     bookPointer.addAll(bookCompletedList)
+                    bookCompletedBackup.clear()
+                    bookCompletedBackup.addAll(bookCompletedList)
                     tabsBook[tabLayout!!.selectedTabPosition].clear()
                     tabsBook[tabLayout!!.selectedTabPosition].addAll(bookCompletedList)
                 }
@@ -209,6 +213,8 @@ class Home : Fragment() {
                 if (tabLayout!!.selectedTabPosition == 1) {
                     bookPointer.clear()
                     bookPointer.addAll(bookLatestList)
+                    bookLastestBackup.clear()
+                    bookLastestBackup.addAll(bookLatestList)
                     tabsBook[tabLayout!!.selectedTabPosition].clear()
                     tabsBook[tabLayout!!.selectedTabPosition].addAll(bookLatestList)
                 }
@@ -229,12 +235,17 @@ class Home : Fragment() {
                 when (tab?.position) {
                     tab?.position ->  {
                         bookPointer.clear()
-                        bookPointer.addAll(tabsBook[tab!!.position])
-
                         // Tạm bợ ^^
                         if (tabsBook[0].isEmpty()) {
-                            tabsBook[0].addAll(bookBackup)
+                            tabsBook[0].addAll(bookPopularBackup)
                         }
+                        if (tabsBook[1].isEmpty()) {
+                            tabsBook[1].addAll(bookLastestBackup)
+                        }
+                        if (tabsBook[2].isEmpty()) {
+                            tabsBook[2].addAll(bookCompletedBackup)
+                        }
+                        bookPointer.addAll(tabsBook[tab!!.position])
                         bookListAdapter!!.notifyDataSetChanged();
                         bookListAdapter!!.notifyItemRangeChanged(0,bookPointer.size);
                     }
@@ -255,17 +266,18 @@ class Home : Fragment() {
             nextProfileActivity()
         }
         var currentUser = FirebaseAuthManager.getUser()
-        userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
-            run {
-                if (user.avatar != "") {
-                    Glide.with(this)
-                        .load(user.avatar)
-                        .apply(RequestOptions().override(100, 100))
-                        .circleCrop()
-                        .into(avatar!!)
+        if (currentUser != null)
+            userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
+                run {
+                    if (user.avatar != "") {
+                        Glide.with(this)
+                            .load(user.avatar)
+                            .apply(RequestOptions().override(100, 100))
+                            .circleCrop()
+                            .into(avatar!!)
+                    }
                 }
-            }
-        })
+            })
 
         return view
     }

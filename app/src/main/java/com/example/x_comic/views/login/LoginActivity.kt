@@ -51,10 +51,6 @@ class LoginActivity : AppCompatActivity() {
         // TODO: Lúc này người dùng đã đăng nhập rồi.
         if (FirebaseAuthManager.auth.currentUser != null) {
             nextMainActivity()
-            var currentUser = FirebaseAuthManager.getUser()
-            if (currentUser != null) {
-                userViewModel.callApi(currentUser.uid)
-            }
         }
     }
 
@@ -172,6 +168,7 @@ class LoginActivity : AppCompatActivity() {
                                 userViewModel.addUser(user)
                             }
                         }
+
                         nextMainActivity()
                     }
                     progressDialog.cancel()
