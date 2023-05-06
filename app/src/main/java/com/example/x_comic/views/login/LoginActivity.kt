@@ -49,9 +49,9 @@ class LoginActivity : AppCompatActivity() {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         // TODO: Lúc này người dùng đã đăng nhập rồi.
-//        if (FirebaseAuthManager.auth.currentUser != null) {
-//            nextMainActivity()
-//        }
+        if (FirebaseAuthManager.auth.currentUser != null) {
+            nextMainActivity()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
