@@ -18,6 +18,7 @@ class User : java.io.Serializable
     var have_followed: ArrayList<String> = ArrayList()
     var heart_list: ArrayList<String> = ArrayList()
     var collection: ArrayList<String> = ArrayList()
+    var reading: ArrayList<Reading> = ArrayList()
     var role: Long = 1
     constructor(
         id: String = "",
@@ -36,6 +37,7 @@ class User : java.io.Serializable
         have_followed: ArrayList<String> = ArrayList(),
         heart_list: ArrayList<String> = ArrayList(),
         collection: ArrayList<String> = ArrayList(),
+        reading: ArrayList<Reading> = ArrayList(),
         role: Long = 1, // Role = 1: là đọc giả; 2: là người đọc giả có thể đăng truyện; 3: là admin
     ) {
         this.id = id
@@ -56,6 +58,7 @@ class User : java.io.Serializable
         this.heart_list = heart_list
         this.aboutme = aboutme
         this.collection = collection
+        this.reading = reading
     }
 
     fun addToReadingList(book: Product) {

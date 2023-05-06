@@ -6,15 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.example.x_comic.models.Category
 import com.example.x_comic.models.Product
 import com.google.android.gms.tasks.Tasks
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class CategoryViewModel : ViewModel() {
-    private val database = Firebase.database
+    private val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app")
     val db = database.getReference("categories")
     private val _categories = MutableLiveData<ArrayList<Category>>()
 

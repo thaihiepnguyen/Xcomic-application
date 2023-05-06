@@ -21,7 +21,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
 class ProductViewModel : ViewModel() {
-    val database = Firebase.database
+    private val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app")
     val db = database.getReference("book")
     private val _products = MutableLiveData<ArrayList<Product>>()
     private val _productsCompleted = MutableLiveData<ArrayList<Product>>()
@@ -205,10 +205,8 @@ class ProductViewModel : ViewModel() {
     }
 
     fun changeCov(cover: String, bookID: String) {
-        val database = Firebase.database
         if (bookID != null) {
-            database.reference
-                .child("book")
+            db
                 .child(bookID)
                 .child("cover")
                 .setValue(cover)
@@ -265,10 +263,14 @@ class ProductViewModel : ViewModel() {
         newRef.setValue(product)
     }
 
+    fun deleteProduct(product: Product) {
+        db
+            .child(product.id)
+            .removeValue()
+    }
+
     fun updateProduct(product: Product) {
-        val database = Firebase.database
-        database.reference
-            .child("book")
+        db
             .child(product.id)
             .setValue(product)
     }
@@ -285,7 +287,7 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllBookIsLoved(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        Firebase.database.getReference("users").child(uid).child("heart_list").get().addOnCompleteListener { task ->
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("heart_list").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {
@@ -295,7 +297,7 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllReadingBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        Firebase.database.getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {

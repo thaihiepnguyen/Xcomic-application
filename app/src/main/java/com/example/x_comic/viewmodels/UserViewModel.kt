@@ -11,11 +11,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -26,7 +24,7 @@ import java.io.ByteArrayOutputStream
 import java.net.UnknownServiceException
 
 class UserViewModel : ViewModel() {
-    private val database = Firebase.database
+    private val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app")
     val db = database.getReference("users")
 
     private val _user = MutableLiveData<User>()
@@ -43,9 +41,11 @@ class UserViewModel : ViewModel() {
             val ref = db.child(uid)
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    var user: User = dataSnapshot.getValue(User::class.java)!!
-                    _user.value = user
-                    _user.postValue(user)
+                    if (dataSnapshot.exists()) {
+                        var user: User = dataSnapshot.getValue(User::class.java)!!
+                        _user.value = user
+                        _user.postValue(user)
+                    }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -93,18 +93,14 @@ class UserViewModel : ViewModel() {
     }
 
     fun saveCurrentFollow(user: User) {
-        val database = Firebase.database
-        database.reference
-            .child("users")
+        db
             .child(user.id)
             .child("follow")
             .setValue(user.follow)
     }
 
     fun saveCurrentHaveFollowed(user: User) {
-        val database = Firebase.database
-        database.reference
-            .child("users")
+        db
             .child(user.id)
             .child("have_followed")
             .setValue(user.have_followed)
@@ -112,9 +108,7 @@ class UserViewModel : ViewModel() {
 
 
     fun addUser(user: User) {
-        val database = Firebase.database
-        database.reference
-            .child("users")
+        db
             .child(user.id)
             .setValue(user)
     }
@@ -141,7 +135,7 @@ class UserViewModel : ViewModel() {
 
     inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {
         val ref = db.child(uid)
-        ref.addValueEventListener(object : ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var user: User = dataSnapshot.getValue(User::class.java)!!
                 callback(user)
@@ -182,10 +176,8 @@ class UserViewModel : ViewModel() {
 
     fun changeUsername(username: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("full_name")
                 .setValue(username)
@@ -194,10 +186,8 @@ class UserViewModel : ViewModel() {
 
     fun changeAboutMe(aboutme: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("aboutme")
                 .setValue(aboutme)
@@ -206,10 +196,8 @@ class UserViewModel : ViewModel() {
 
     fun changePenname(penname: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("penname")
                 .setValue(penname)
@@ -218,10 +206,8 @@ class UserViewModel : ViewModel() {
 
     fun changePhone(phone: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("phone")
                 .setValue(phone)
@@ -230,10 +216,8 @@ class UserViewModel : ViewModel() {
 
     fun changeAge(age: Long) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("age")
                 .setValue(age)
@@ -242,10 +226,8 @@ class UserViewModel : ViewModel() {
 
     fun changeGender(gender: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("gender")
                 .setValue(gender)
@@ -254,10 +236,8 @@ class UserViewModel : ViewModel() {
 
     fun changeAvt(avatar: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("avatar")
                 .setValue(avatar)
@@ -266,8 +246,7 @@ class UserViewModel : ViewModel() {
 
     // ton
     fun isExist(uid: String, callback: (Boolean) -> Unit) {
-        val database = Firebase.database
-        val ref = database.reference.child("users").child(uid)
+        val ref = db.child(uid)
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -288,5 +267,15 @@ class UserViewModel : ViewModel() {
     fun saveReadingList(user: User) {
         db.child(user.id).child("collection")
             .setValue(user.collection)
+    }
+
+    fun updateReadingUserList(readingList : ArrayList<Reading>) {
+        var currentUser = FirebaseAuthManager.getUser()
+        if (currentUser != null) {
+            db
+                .child(currentUser.uid)
+                .child("reading")
+                .setValue(readingList)
+        }
     }
 }

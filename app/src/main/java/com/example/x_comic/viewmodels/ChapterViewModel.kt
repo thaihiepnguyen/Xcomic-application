@@ -18,7 +18,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
 class ChapterViewModel : ViewModel() {
-    val database = Firebase.database
+    private val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app")
     val db = database.getReference("chapter")
     private val _chapters = MutableLiveData<ArrayList<Chapter>>()
 

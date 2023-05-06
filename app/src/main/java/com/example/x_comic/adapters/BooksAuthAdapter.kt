@@ -75,7 +75,7 @@ class BooksAuthAdapter (private val books: MutableList<Product>) : RecyclerView.
     private fun countChapterIsPosted (p : Product) : Int {
         var count : Int = 0
         for (i in p.chapters)
-            if (i._lock)
+            if (!i._lock)
                 count++
         return count
     }

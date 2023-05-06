@@ -10,15 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.AvatarListAdapter
-import com.example.x_comic.adapters.BookListAdapter
-import com.example.x_comic.adapters.IAvatarListAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityMainProfileBinding
 import com.example.x_comic.databinding.ActivityProfileBinding
 import com.example.x_comic.models.Product
@@ -26,6 +24,7 @@ import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.detail.DetailActivity
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.IOException
 
@@ -64,12 +63,17 @@ class MainProfileActivity : AppCompatActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         val favoriteAdapter = ListAdapterSlideshow(this, bookList)
-        val readingAdapter = BookListAdapter(this, readingList)
-        val avatarAdapter = AvatarListAdapter(followList, object: IAvatarListAdapter {
-            override fun onClickItemAuthor(author: User) {
-                nextAuthorProfileActivity(author)
-            }
-        })
+        val readingAdapter = BookListAdapter(readingList)
+        val avatarAdapter = AvatarListAdapter(followList)
+
+        readingAdapter.onItemClick = {
+            book -> nextBookDetailActivity(book)
+        }
+
+        avatarAdapter.onItemClick = {
+            author -> nextAuthorProfileActivity(author)
+        }
+
         binding.FavoriteListView.adapter = favoriteAdapter
         binding.profileListView.adapter = avatarAdapter
         binding.readingListView.adapter = readingAdapter
@@ -223,6 +227,15 @@ class MainProfileActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)
         intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    fun nextBookDetailActivity(book: Product) {
+        val intent = Intent(this, DetailActivity::class.java)
+//        val bundle = Bundle()
+//        bundle.putSerializable("productKey", book)
+        intent.putExtra("productKey", Klaxon().toJsonString(book))
+
         startActivity(intent)
     }
 }

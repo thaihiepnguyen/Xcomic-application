@@ -30,6 +30,7 @@ class Chapter : java.io.Serializable {
         const val MESSAGE2 = "message2"
         const val MESSAGE3 = "message3"
         const val MESSAGE4 = "message4"
+        const val MESSAGE5 = "message5"
         fun fromString(string: String): Chapter {
             val parts = string.split("<Chap/>")
             val chapter = Chapter(parts[2])

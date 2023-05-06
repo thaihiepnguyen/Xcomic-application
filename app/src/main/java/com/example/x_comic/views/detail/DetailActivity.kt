@@ -32,6 +32,7 @@ import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
+import com.facebook.appevents.AppEventsLogger
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -49,6 +50,9 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 
 class DetailActivity : AppCompatActivity() {
     private var _currentUser: User? = null
+    // TODO: biến đồng bộ với firebase
+    private var _currentBook: Product? = null
+    var favourite = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -58,7 +62,12 @@ class DetailActivity : AppCompatActivity() {
         var userViewModel: UserViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        val intent = intent
+
+        // TODO: nhanh hơn
+//        var bundle = Bundle()
+//        bundle = intent.extras!!
+//
+//        var bookData: Product = bundle.get("productKey") as Product;
         val stringData = intent.getStringExtra("book_data")
         val bookData = stringData?.let{ Klaxon().parse<Product>(it)}
 
@@ -76,6 +85,8 @@ class DetailActivity : AppCompatActivity() {
         var descTextView = findViewById(R.id.descTextView) as TextView
         var ratingTextView = findViewById(R.id.ratingTV) as TextView;
         var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
+        var favorBtn = findViewById(R.id.favorBtn) as ImageButton
+
         val backCover = findViewById<ImageView>(R.id.background)
         title.text = bookData?.title
         author.text = bookData?.author
@@ -85,6 +96,18 @@ class DetailActivity : AppCompatActivity() {
         userViewModel.callApi(uid!!).observe(this, Observer {
             user -> _currentUser = user
         })
+
+        productViewModel.getBookById(bookData!!.id) { product ->
+            // TODO: realtime
+            _currentBook = product
+            favourite = _currentUser?.let { _currentBook!!.islove(it.id) } == true
+            if (favourite) {
+                favorBtn.setImageResource(R.drawable.ic_heart_fill)
+
+            } else {
+                favorBtn.setImageResource(R.drawable.ic_heart)
+            }
+        }
         // Get a reference to the Firebase Storage instance
         val storage = FirebaseStorage.getInstance()
         val imageName = bookData?.cover // Replace with your image name
@@ -152,15 +175,24 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
+        favorBtn.setOnClickListener{
+            favourite = !favourite;
+            if (favourite) {
+                _currentUser!!.love(_currentBook!!)
+                _currentBook!!.love(_currentUser!!)
+                favorBtn.setImageResource(R.drawable.ic_heart_fill)
+            }else {
+                _currentUser!!.unLove(_currentBook!!)
+                _currentBook!!.notlove(_currentUser!!)
+                favorBtn.setImageResource(R.drawable.ic_heart)
+            }
+            productViewModel.saveCurrentIsLove(_currentBook!!)
+            userViewModel.saveHeartList(_currentUser!!)
+        }
         //read
         val readBtn = findViewById<Button>(R.id.readBtn)
         readBtn.setOnClickListener {
-            if (bookData.chapters[0]!=null){
-                val intent = Intent(this, ReadBookActivity::class.java)
-                intent.putExtra("title",bookData.chapters[0].name)
-                intent.putExtra("content",bookData.chapters[0].content)
-                ActivityCompat.startActivityForResult(this, intent, 302, null)
-            }
+            readingCurrentBook(bookData)
         }
 
         //open dialog choose chapter to read
@@ -199,8 +231,8 @@ class DetailActivity : AppCompatActivity() {
                 //TODO: Code doc sach khi click vo chapter o day ne
                 if(!bookData.chapters[i]._lock){
                     val intent = Intent(this, ReadBookActivity::class.java)
-                    intent.putExtra("title",bookData.chapters[i].name)
-                    intent.putExtra("content",bookData.chapters[i].content)
+                    intent.putExtra("book",bookData)
+                    intent.putExtra("id_chapter",bookData.chapters[i].id_chapter)
                     ActivityCompat.startActivityForResult(this, intent, 302, null)
                 }else{
                     val intent = Intent(this, PurchaseActivity::class.java)
@@ -341,5 +373,22 @@ class DetailActivity : AppCompatActivity() {
 
 //                }
 //            })
+    }
+
+    private fun readingCurrentBook(bookData: Product) {
+        var reading = _currentUser!!.reading
+        var id_chap = bookData.chapters[0].id_chapter
+        for (i in reading)
+            if (i.id_book.equals(_currentBook!!.id)) {
+                for (j in _currentBook!!.chapters)
+                    if (i.id_chapter.equals(j.id_chapter)) {
+                        id_chap = j!!.id_chapter
+                    }
+            }
+
+        val intent = Intent(this, ReadBookActivity::class.java)
+        intent.putExtra("book",bookData)
+        intent.putExtra("id_chapter", id_chap)
+        ActivityCompat.startActivityForResult(this, intent, 302, null)
     }
 }

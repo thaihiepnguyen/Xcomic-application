@@ -17,7 +17,7 @@ class FirebaseAuthManager {
             // get current user after logging successes
             return auth.currentUser
         }
-
+        var currentRole = 1;
         var msg = ""
     }
 

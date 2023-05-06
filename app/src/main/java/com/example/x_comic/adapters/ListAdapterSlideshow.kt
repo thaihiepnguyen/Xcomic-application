@@ -19,6 +19,7 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 
 class ListAdapterSlideshow (
@@ -67,7 +68,7 @@ class ListAdapterSlideshow (
         author.setText(book.author);
         val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
-        val imageRef = storage.reference.child("book_cover/$imageName")
+        val imageRef = storage.reference.child("book/$imageName")
         imageRef.getBytes(Long.MAX_VALUE)
             .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
