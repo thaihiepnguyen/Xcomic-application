@@ -93,7 +93,7 @@ class BookListAdapter (
         author.setText(book.author);
         val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
-        val imageRef = storage.reference.child("book_cover/$imageName")
+        val imageRef = storage.reference.child("book/$imageName")
         imageRef.getBytes(Long.MAX_VALUE)
             .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

@@ -176,10 +176,8 @@ class UserViewModel : ViewModel() {
 
     fun changeUsername(username: String) {
         var currentUser = FirebaseAuthManager.getUser()
-        val database = Firebase.database
         if (currentUser != null) {
-            database.reference
-                .child("users")
+            db
                 .child(currentUser.uid)
                 .child("full_name")
                 .setValue(username)

@@ -287,7 +287,7 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllBookIsLoved(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        Firebase.database.getReference("users").child(uid).child("heart_list").get().addOnCompleteListener { task ->
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("heart_list").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {
@@ -297,7 +297,7 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllReadingBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        Firebase.database.getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {
