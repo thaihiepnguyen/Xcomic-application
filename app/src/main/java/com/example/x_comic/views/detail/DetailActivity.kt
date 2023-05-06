@@ -45,7 +45,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
-
+import java.lang.Math.round
+import kotlin.math.roundToInt
 
 
 class DetailActivity : AppCompatActivity() {
@@ -85,7 +86,7 @@ class DetailActivity : AppCompatActivity() {
         var descTextView = findViewById(R.id.descTextView) as TextView
         var ratingTextView = findViewById(R.id.ratingTV) as TextView;
         var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
-        var favorBtn = findViewById(R.id.favorBtn) as ImageButton
+        var favorBtn = findViewById(R.id.favorBtn) as Button
 
         val backCover = findViewById<ImageView>(R.id.background)
         title.text = bookData?.title
@@ -102,16 +103,16 @@ class DetailActivity : AppCompatActivity() {
             _currentBook = product
             favourite = _currentUser?.let { _currentBook!!.islove(it.id) } == true
             if (favourite) {
-                favorBtn.setImageResource(R.drawable.ic_heart_fill)
+                favorBtn.text = "\uD83D\uDC95"
 
             } else {
-                favorBtn.setImageResource(R.drawable.ic_heart)
+                favorBtn.text = "ღ"
             }
         }
         // Get a reference to the Firebase Storage instance
         val storage = FirebaseStorage.getInstance()
         val imageName = bookData?.cover // Replace with your image name
-        val imageRef = storage.reference.child("book_cover/$imageName")
+        val imageRef = storage.reference.child("book/$imageName")
         imageRef.getBytes(Long.MAX_VALUE)
             .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -180,11 +181,11 @@ class DetailActivity : AppCompatActivity() {
             if (favourite) {
                 _currentUser!!.love(_currentBook!!)
                 _currentBook!!.love(_currentUser!!)
-                favorBtn.setImageResource(R.drawable.ic_heart_fill)
+                favorBtn.text = "\uD83D\uDC95"
             }else {
                 _currentUser!!.unLove(_currentBook!!)
                 _currentBook!!.notlove(_currentUser!!)
-                favorBtn.setImageResource(R.drawable.ic_heart)
+                favorBtn.text = "ღ"
             }
             productViewModel.saveCurrentIsLove(_currentBook!!)
             userViewModel.saveHeartList(_currentUser!!)
@@ -268,7 +269,7 @@ class DetailActivity : AppCompatActivity() {
                         val bid = bookData.id
 
                         // Check if the user has already left feedback for the book/comic
-                        val feedbackRef = Firebase.database.reference.child("feedback")
+                        val feedbackRef = Firebase.database("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").reference.child("feedback")
                         val query = feedbackRef.orderByChild("uid").equalTo(uid)
                         query.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
@@ -279,7 +280,7 @@ class DetailActivity : AppCompatActivity() {
                                         val feedback = feedbackSnapshot.getValue(Feedback::class.java)
                                         if (feedback?.bid == bid) {
                                             feedback?.let {
-                                                it.rating = ratingBar.rating
+                                                it.rating = ratingBar.rating.toDouble()
                                                 it.feedback = comment.text.toString()
                                                 feedbackSnapshot.ref.setValue(feedback)
                                                 flag = 1
@@ -293,7 +294,7 @@ class DetailActivity : AppCompatActivity() {
                                         id = "", // leave the ID empty to generate a unique key in Firebase
                                         uid = uid,
                                         bid = bid,
-                                        rating = ratingBar.rating,
+                                        rating = ratingBar.rating.toDouble(),
                                         feedback = comment.text.toString() // replace with the user's feedback
                                     )
                                     val feedbackKey = feedbackRef.push().key
@@ -323,13 +324,13 @@ class DetailActivity : AppCompatActivity() {
         listFeedback.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false);
 
-        val feedbackRef = FirebaseDatabase.getInstance().getReference("feedback")
+        val feedbackRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("feedback")
         val query = feedbackRef.orderByChild("bid").equalTo(bookData.id)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 feedbackList.clear()
-                var totalRating = 0.0F
+                var totalRating = 0.0
                 for (data in snapshot.children) {
                     val feedback = data.getValue(Feedback::class.java)
                     if (feedback != null) {
@@ -338,8 +339,10 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
                 totalRating /= feedbackList.size
+                totalRating = ((totalRating * 100.0).roundToInt() / 100.0)
+
                 ratingTextView.text = totalRating.toString()
-                val bookRef = FirebaseDatabase.getInstance().getReference("book").child(bookData.id)
+                val bookRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("book").child(bookData.id)
                 bookRef.child("rating").setValue(totalRating)
                 fbAdapter.notifyDataSetChanged()
             }

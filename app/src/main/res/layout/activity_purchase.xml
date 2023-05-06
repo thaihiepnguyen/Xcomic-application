@@ -274,19 +274,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/chapter_purchase" />
 
-                    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
-                        android:id="@+id/payment_button_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:paypal_button_color="silver"
-                        app:paypal_button_label="pay"
-                        app:paypal_button_shape="rectangle"
-                        app:paypal_button_size="large"
-                        app:paypal_button_enabled="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

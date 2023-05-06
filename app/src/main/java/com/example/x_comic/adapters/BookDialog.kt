@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 class BookDialog(private val title: String) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { // Use the Builder class for convenient dialog construction
-        val builder = AlertDialog.Builder(it)
+        var builder = AlertDialog.Builder(it)
             builder.setTitle(title)
             builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library","Remove from Offline"),
                 DialogInterface.OnClickListener { dialog, which ->

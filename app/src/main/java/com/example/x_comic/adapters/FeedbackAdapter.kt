@@ -52,9 +52,9 @@ class FeedbackAdapter (
         val ratingBar = holder.ratingBar;
         val avatarImageView = holder.avatarImageView;
         fbTextView.text = feedback.feedback;
-        ratingBar.rating = feedback.rating
+        ratingBar.rating = feedback.rating.toFloat()
 
-        val databaseRef = FirebaseDatabase.getInstance().reference
+        val databaseRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").reference
         val userRef = databaseRef.child("users").child(feedback.uid)
 
         val userListener: ValueEventListener = object : ValueEventListener {
@@ -65,25 +65,8 @@ class FeedbackAdapter (
                     if (user.avatar != ""){
                         val avatarUrl: String = user!!.avatar
                         // Load the avatar into your ImageView using your preferred image loading library
-                        // TODO: Code ở dưới có bug
-                        //    java.lang.IllegalArgumentException: You cannot start a load for a destroyed activity
-                        //        at com.bumptech.glide.manager.RequestManagerRetriever.assertNotDestroyed(RequestManagerRetriever.java:348)
-                        //        at com.bumptech.glide.manager.RequestManagerRetriever.get(RequestManagerRetriever.java:148)
-                        //        at com.bumptech.glide.manager.RequestManagerRetriever.get(RequestManagerRetriever.java:181)
-                        //        at com.bumptech.glide.Glide.with(Glide.java:813)
-                        //        at com.example.x_comic.adapters.FeedbackAdapter$onBindViewHolder$userListener$1.onDataChange(FeedbackAdapter.kt:68)
-                        //        at com.google.firebase.database.core.ValueEventRegistration.fireEvent(ValueEventRegistration.java:75)
-                        //        at com.google.firebase.database.core.view.DataEvent.fire(DataEvent.java:63)
-                        //        at com.google.firebase.database.core.view.EventRaiser$1.run(EventRaiser.java:55)
-                        //        at android.os.Handler.handleCallback(Handler.java:751)
-                        //        at android.os.Handler.dispatchMessage(Handler.java:95)
-                        //        at android.os.Looper.loop(Looper.java:154)
-                        //        at android.app.ActivityThread.main(ActivityThread.java:6119)
-                        //        at java.lang.reflect.Method.invoke(Native Method)
-                        //        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)
-                        //        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)
                         Glide.with(context).load(avatarUrl).into(avatarImageView)
-                        feedback_author.text = user.full_name
+                        if(user.full_name!="no data yet") feedback_author.text = user.full_name
                     }
                 }
 
