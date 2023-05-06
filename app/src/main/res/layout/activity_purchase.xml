@@ -274,19 +274,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/chapter_purchase" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/purchaseBtn"
-                        android:layout_margin="20dp"
+                    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+                        android:id="@+id/payment_button_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@color/light_blue"
-                        android:padding="10dp"
-                        android:text="Pay with Paypal"
-                        android:textColor="@color/white"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        app:circularflow_radiusInDP=""
+                        app:paypal_button_color="silver"
+                        app:paypal_button_label="pay"
+                        app:paypal_button_shape="rectangle"
+                        app:paypal_button_size="large"
+                        app:paypal_button_enabled="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

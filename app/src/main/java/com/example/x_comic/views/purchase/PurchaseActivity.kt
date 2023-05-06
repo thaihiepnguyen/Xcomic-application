@@ -1,41 +1,61 @@
 package com.example.x_comic.views.purchase
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.x_comic.BuildConfig
 import com.example.x_comic.R
 import com.example.x_comic.models.Chapter
 import com.example.x_comic.models.Product
 import com.google.firebase.storage.FirebaseStorage
-import com.paypal.android.sdk.payments.PayPalConfiguration
-import com.paypal.android.sdk.payments.PayPalPayment
-import com.paypal.android.sdk.payments.PayPalService
-import com.paypal.android.sdk.payments.PaymentActivity
-import com.paypal.android.sdk.payments.PaymentConfirmation
+import com.paypal.checkout.PayPalCheckout
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
+import com.paypal.checkout.config.CheckoutConfig
+import com.paypal.checkout.config.Environment
+import com.paypal.checkout.config.SettingsConfig
+import com.paypal.checkout.createorder.CreateOrder
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.OrderIntent
+import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.error.OnError
+import com.paypal.checkout.order.Amount
+import com.paypal.checkout.order.AppContext
+import com.paypal.checkout.order.PurchaseUnit
+import com.paypal.checkout.paymentbutton.PaymentButtonContainer
 import jp.wasabeef.glide.transformations.BlurTransformation
-import org.json.JSONException
-import org.json.JSONObject
-import java.math.BigDecimal
+
 
 class PurchaseActivity : AppCompatActivity() {
-    val clientId = "AetqiuaX2ZoHcRciOFWmqHOGSUcasvGCdv0wqrqFsLYxezwE_f2mvjaWrR0nwmep-nSPp_b_CITJitd7"
+    // QuickStartConstants.kt
+     val PAYPAL_CLIENT_ID = "AetqiuaX2ZoHcRciOFWmqHOGSUcasvGCdv0wqrqFsLYxezwE_f2mvjaWrR0nwmep-nSPp_b_CITJitd7"
+     val PAYPAL_SECRET = "ONLY-FOR-QUICKSTART-DO-NOT-INCLUDE-SECRET-IN-CLIENT-SIDE-APPLICATIONS"
+
     val PAYPAL_REQUEST_CODE = 123
-    companion object {
-        var configuration: PayPalConfiguration? = null
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val config = CheckoutConfig(
+            application = this.application,
+            clientId = "AetqiuaX2ZoHcRciOFWmqHOGSUcasvGCdv0wqrqFsLYxezwE_f2mvjaWrR0nwmep-nSPp_b_CITJitd7",
+            environment = Environment.SANDBOX,
+            returnUrl = "${BuildConfig.APPLICATION_ID}://paypalpay",
+            currencyCode = CurrencyCode.USD,
+            userAction = UserAction.PAY_NOW,
+            settingsConfig = SettingsConfig(
+                loggingEnabled = true
+            )
+        )
+        PayPalCheckout.setConfig(config)
+
         setContentView(R.layout.activity_purchase)
 
         val intent = intent
@@ -79,37 +99,35 @@ class PurchaseActivity : AppCompatActivity() {
         val chapter_purchase = findViewById<EditText>(R.id.chapter_purchase)
         chapter_purchase.setText(chapterPurchase!!.name)
 
-        configuration = PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientId)
-        val amount = 10
-        val purchaseBtn = findViewById<Button>(R.id.purchaseBtn)
-        purchaseBtn.setOnClickListener {
-            getPayment(chapterPurchase)
-        }
-    }
-    fun getPayment(chapterPurchase:Chapter){
-        var payment = PayPalPayment(BigDecimal(10),"USD",chapterPurchase.name,PayPalPayment.PAYMENT_INTENT_SALE)
-        val intent = Intent(this, PaymentActivity::class.java)
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, configuration)
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT,payment)
-        startActivityForResult(intent, PAYPAL_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PAYPAL_REQUEST_CODE){
-            var paymentConfirmation: PaymentConfirmation? = data?.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
-            if (paymentConfirmation != null){
-                var paymentDetails = paymentConfirmation.toJSONObject().toString()
-                try {
-                    val obj = JSONObject(paymentDetails)
-                } catch (e: JSONException) {
-                    Toast.makeText(this,e.localizedMessage,Toast.LENGTH_SHORT).show()
+        val paymentButtonContainer = findViewById<PaymentButtonContainer>(R.id.payment_button_container)
+        paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    Order(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD, value = "10.00")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                approval.orderActions.capture { captureOrderResult ->
+                    Log.i("CaptureOrder", "CaptureOrderResult: $captureOrderResult")
                 }
-            }else if (requestCode == Activity.RESULT_CANCELED){
-                Toast.makeText(this,"ERROR",Toast.LENGTH_SHORT).show()
+            },
+            onCancel = OnCancel {
+                Log.d("OnCancel", "Buyer canceled the PayPal experience.")
+            },
+            onError = OnError { errorInfo ->
+                Log.d("OnError", "Error: $errorInfo")
             }
-        }else if(requestCode == PaymentActivity.RESULT_EXTRAS_INVALID){
-            Toast.makeText(this,"INVALID PAYMENT",Toast.LENGTH_SHORT).show()
-        }
-    }
-}
+        )
+    }}
