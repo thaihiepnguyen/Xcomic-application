@@ -20,6 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
         btnBooksManager?.setOnClickListener {
             // TODO: Màn hình quản lý sách
+            val intent = Intent(this, BookManagementActivity::class.java)
+            startActivity(intent)
         }
 
         btnAccountsManager?.setOnClickListener {

@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/bookcover"
+            app:srcCompat="@drawable/empty_image"
             >
         </ImageView>
 

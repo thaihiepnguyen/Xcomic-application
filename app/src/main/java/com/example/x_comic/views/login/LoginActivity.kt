@@ -62,20 +62,20 @@ class LoginActivity : AppCompatActivity() {
         }
         }
         // TODO: Lúc này người dùng đã đăng nhập rồi.
-        if (FirebaseAuthManager.auth.currentUser != null) {
-            var currentUser = FirebaseAuthManager.auth.currentUser
-
-            for (user in _users) {
-                if (user.id == currentUser!!.uid) {
-                    if (user.role.compareTo(3) == 0) {
-                        nextHomeActivity()
-                        break
-                    } else {
-                        nextMainActivity()
-                    }
-                }
-            }
-        }
+//        if (FirebaseAuthManager.auth.currentUser != null) {
+//            var currentUser = FirebaseAuthManager.auth.currentUser
+//
+//            for (user in _users) {
+//                if (user.id == currentUser!!.uid) {
+//                    if (user.role.compareTo(3) == 0) {
+//                        nextHomeActivity()
+//                        break
+//                    } else {
+//                        nextMainActivity()
+//                    }
+//                }
+//            }
+//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
