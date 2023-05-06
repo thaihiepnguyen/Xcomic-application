@@ -58,6 +58,21 @@ class UserViewModel : ViewModel() {
         return _user
     }
 
+
+    inline fun getAllUser(crossinline callback: (DataSnapshot)->Unit){
+        // tạo thread mới.
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
     fun uploadAvt(userID: String,bitmap: Bitmap) : UploadTask {
         val storage = FirebaseStorage.getInstance()
         val fileName = "${userID}.png"

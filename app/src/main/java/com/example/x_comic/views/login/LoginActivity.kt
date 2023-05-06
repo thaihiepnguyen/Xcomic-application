@@ -21,8 +21,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.x_comic.R
 import com.example.x_comic.databinding.ActivityLoginBinding
 import com.example.x_comic.databinding.LayoutDialogSendpassBinding
+import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.*
+import com.example.x_comic.views.admin.HomeActivity
 import com.example.x_comic.views.main.MainActivity
 import com.example.x_comic.views.signup.SignupActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -43,14 +45,36 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private var RC_SIGN_IN = 123321
     private lateinit var mClient: GoogleSignInClient
+    private val _users: MutableList<User> = mutableListOf()
 
     override fun onStart() {
         super.onStart()
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+        userViewModel.getAllUser {users-> kotlin.run {
+            _users.clear()
+            for (item in users.children) {
+                val user = item.getValue(User::class.java)
+                if (user != null) {
+                    _users.add(user)
+                }
+            }
+        }
+        }
         // TODO: Lúc này người dùng đã đăng nhập rồi.
         if (FirebaseAuthManager.auth.currentUser != null) {
-            nextMainActivity()
+            var currentUser = FirebaseAuthManager.auth.currentUser
+
+            for (user in _users) {
+                if (user.id == currentUser!!.uid) {
+                    if (user.role.compareTo(3) == 0) {
+                        nextHomeActivity()
+                        break
+                    } else {
+                        nextMainActivity()
+                    }
+                }
+            }
         }
     }
 
@@ -84,7 +108,16 @@ class LoginActivity : AppCompatActivity() {
                         val userAuth = FirebaseAuthManager.getUser()
 
                         if (userAuth != null) {
-                            nextMainActivity()
+                            for (user in _users) {
+                                if (user.id == userAuth.uid) {
+                                    if (user.role.compareTo(3) == 0) {
+                                        nextHomeActivity()
+                                        break
+                                    } else {
+                                        nextMainActivity()
+                                    }
+                                }
+                            }
                         }
                         progressDialog.cancel()
                     } else {
@@ -258,6 +291,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun nextMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextHomeActivity() {
+        val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
 

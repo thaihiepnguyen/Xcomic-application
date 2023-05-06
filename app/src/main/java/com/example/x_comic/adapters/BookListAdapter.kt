@@ -191,12 +191,6 @@ class BookListAdapter (
             bookViewModel.saveCurrentIsLove(book)
             userViewModel.saveHeartList(_currentUser!!)
         }
-        // TODO: chuyển ra ngoài adapter
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, DetailActivity::class.java)
-//            intent.putExtra("book_data", Klaxon().toJsonString(book))
-//            ActivityCompat.startActivityForResult(context, intent, 302, null)
-//        }
     }
 
 }
