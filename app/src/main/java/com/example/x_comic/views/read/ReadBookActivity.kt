@@ -17,6 +17,8 @@ import android.view.animation.AlphaAnimation
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -24,6 +26,10 @@ import com.example.x_comic.R
 import com.example.x_comic.adapters.ChapterAdapter
 import com.example.x_comic.models.Chapter
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.Reading
+import com.example.x_comic.models.User
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -81,33 +87,8 @@ class ReadBookActivity : AppCompatActivity() {
     var book : Product? = null
     var curChapter = Chapter()
 
-    private fun fadeInImageButton(imageButton: ImageButton?) {
-        imageButton?.alpha = 0f
-        imageButton?.visibility = View.VISIBLE
-
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                imageButton!!.alpha += 0.1f
-                if (imageButton!!.alpha < 1f) {
-                    handler.postDelayed(this, 300)
-                }
-            }
-        }, 300)
-    }
-
-    private fun fadeOutImageButton(imageButton: ImageButton?) {
-        val animation = AlphaAnimation(1f, 0f)
-        animation.duration = 1000
-        imageButton?.startAnimation(animation)
-
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                imageButton?.visibility = View.INVISIBLE
-            }
-        }, 1000)
-    }
+    private var _currentUser: User = User()
+    private lateinit var userViewModel: UserViewModel
 
     private fun getPreviousChapter () : Int {
         var index = book!!.chapters.indexOf(curChapter);
@@ -132,6 +113,14 @@ class ReadBookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_book)
+
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        val uid = FirebaseAuthManager.auth.uid
+        userViewModel.callApi(uid!!).observe(this, Observer {
+                user ->
+                _currentUser = user
+        })
 
         sv_wrapper = findViewById(R.id.sv_wrapper)
         progressBarReadBook = findViewById(R.id.progressBarReadBook)
@@ -168,6 +157,13 @@ class ReadBookActivity : AppCompatActivity() {
                     // Handle any errors
                 }
         }
+
+        userViewModel.callApi(uid!!).observe(this, Observer { user ->
+            _currentUser = user
+            var reading = Reading("", _currentUser.id, book!!.id,
+                id_chapter, book!!.chapters.indexOf(curChapter) + 1, book!!.chapters.size)
+            updateReadingUser(reading, _currentUser.reading);
+        })
 
 
         findViewById<TextView>(R.id.numOfChapterTextView).setOnClickListener {
@@ -252,25 +248,25 @@ class ReadBookActivity : AppCompatActivity() {
             }
 
         }
+    }
 
-        textViewContentBook?.setOnClickListener {
-            fadeInImageButton(btnNext)
-            fadeInImageButton(btnBack)
+    private fun updateReadingUser(reading: Reading?, list : ArrayList<Reading>) {
+        reading?.let {
+            var list_reading = list
+            var isNew = true
+            for (i in list_reading) {
+                if (i.id_user.equals(reading.id_user) && i.id_book.equals(reading.id_book)) {
+                    list_reading[list_reading.indexOf(i)].id_chapter = reading.id_chapter
+                    list_reading[list_reading.indexOf(i)].posChap = reading.posChap
+                    list_reading[list_reading.indexOf(i)].numChap = reading.numChap
+                    isNew = false
+                }
+            }
 
-            Handler().postDelayed({
-                fadeOutImageButton(btnNext)
-                fadeOutImageButton(btnBack)
-            }, 4000)
-        }
-
-        btnNext?.setOnClickListener {
-            // TODO: Chương tiếp theo
-            recreate()
-        }
-
-        btnBack?.setOnClickListener {
-            // TODO: Chương trước đó
-            recreate()
+            if (isNew) {
+                list_reading.add(reading)
+            }
+            userViewModel.updateReadingUserList(list_reading);
         }
     }
 }

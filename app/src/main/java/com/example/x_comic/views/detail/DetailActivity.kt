@@ -192,12 +192,7 @@ class DetailActivity : AppCompatActivity() {
         //read
         val readBtn = findViewById<Button>(R.id.readBtn)
         readBtn.setOnClickListener {
-            if (bookData.chapters[0]!=null){
-                val intent = Intent(this, ReadBookActivity::class.java)
-                intent.putExtra("title",bookData.chapters[0].name)
-                intent.putExtra("content",bookData.chapters[0].content)
-                ActivityCompat.startActivityForResult(this, intent, 302, null)
-            }
+            readingCurrentBook(bookData)
         }
 
         //open dialog choose chapter to read
@@ -328,7 +323,7 @@ class DetailActivity : AppCompatActivity() {
         listFeedback.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false);
 
-        val feedbackRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("feedback")
+        val feedbackRef = FirebaseDatabase.getInstance().getReference("feedback")
         val query = feedbackRef.orderByChild("bid").equalTo(bookData.id)
 
         query.addValueEventListener(object : ValueEventListener {
@@ -378,5 +373,22 @@ class DetailActivity : AppCompatActivity() {
 
 //                }
 //            })
+    }
+
+    private fun readingCurrentBook(bookData: Product) {
+        var reading = _currentUser!!.reading
+        var id_chap = bookData.chapters[0].id_chapter
+        for (i in reading)
+            if (i.id_book.equals(_currentBook!!.id)) {
+                for (j in _currentBook!!.chapters)
+                    if (i.id_chapter.equals(j.id_chapter)) {
+                        id_chap = j!!.id_chapter
+                    }
+            }
+
+        val intent = Intent(this, ReadBookActivity::class.java)
+        intent.putExtra("book",bookData)
+        intent.putExtra("id_chapter", id_chap)
+        ActivityCompat.startActivityForResult(this, intent, 302, null)
     }
 }

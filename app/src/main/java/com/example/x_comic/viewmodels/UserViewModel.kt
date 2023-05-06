@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -268,5 +269,15 @@ class UserViewModel : ViewModel() {
     fun saveReadingList(user: User) {
         db.child(user.id).child("collection")
             .setValue(user.collection)
+    }
+
+    fun updateReadingUserList(readingList : ArrayList<Reading>) {
+        var currentUser = FirebaseAuthManager.getUser()
+        if (currentUser != null) {
+            db
+                .child(currentUser.uid)
+                .child("reading")
+                .setValue(readingList)
+        }
     }
 }

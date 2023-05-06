@@ -280,9 +280,14 @@ class PostNewActivity : AppCompatActivity() {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
             val index = data!!.getIntExtra(Chapter.MESSAGE4, -1) as Int
             if (index == -1) {
+                var temp : Chapter? = null;
                 for (i in chapterList)
-                    if (i.id_chapter.equals(reply.id_chapter))
-                        chapterList.remove(i);
+                    if (i.id_chapter.equals(reply.id_chapter)) {
+                        temp = i
+                    }
+                temp?.let {
+                    chapterList.remove(temp);
+                }
             } else {
                 chapterList[index] = reply
             }

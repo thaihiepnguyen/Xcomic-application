@@ -205,10 +205,8 @@ class ProductViewModel : ViewModel() {
     }
 
     fun changeCov(cover: String, bookID: String) {
-        val database = Firebase.database
         if (bookID != null) {
-            database.reference
-                .child("book")
+            db
                 .child(bookID)
                 .child("cover")
                 .setValue(cover)
@@ -266,17 +264,13 @@ class ProductViewModel : ViewModel() {
     }
 
     fun deleteProduct(product: Product) {
-        val database = Firebase.database
-        database.reference
-            .child("book")
+        db
             .child(product.id)
             .removeValue()
     }
 
     fun updateProduct(product: Product) {
-        val database = Firebase.database
-        database.reference
-            .child("book")
+        db
             .child(product.id)
             .setValue(product)
     }
