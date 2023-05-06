@@ -328,7 +328,7 @@ class DetailActivity : AppCompatActivity() {
         listFeedback.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false);
 
-        val feedbackRef = FirebaseDatabase.getInstance().getReference("feedback")
+        val feedbackRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("feedback")
         val query = feedbackRef.orderByChild("bid").equalTo(bookData.id)
 
         query.addValueEventListener(object : ValueEventListener {
