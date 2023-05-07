@@ -34,6 +34,8 @@ import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.profile.MainProfileActivity
+import com.example.x_comic.views.read.OnSwipeTouchListener
+import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.material.tabs.TabLayout
 import kotlin.math.log
 
@@ -296,6 +298,8 @@ class Home : Fragment() {
         val intent = Intent(context, MainProfileActivity::class.java)
         startActivity(intent)
     }
+
+
 
 
     fun nextAuthorProfileActivity(author: User) {
