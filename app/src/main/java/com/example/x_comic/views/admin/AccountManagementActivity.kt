@@ -1,20 +1,30 @@
 package com.example.x_comic.views.admin
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
+import com.example.x_comic.adapters.AccountsAdapter
 import com.example.x_comic.models.Chapter
+import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.post.PostNewActivity
+import com.google.firebase.storage.FirebaseStorage
 
 class AccountManagementActivity : AppCompatActivity() {
 
@@ -33,54 +43,15 @@ class AccountManagementActivity : AppCompatActivity() {
 //            "account@gmail.com", 0, false, "", "", "", "",0),
     )
     var customAccountListView: RecyclerView? = null;
-
-    class AccountsAdapter (private val accounts: MutableList<User>) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
-        var onItemClick: ((account: User, position: Int) -> Unit)? = null
-        var onButtonClick: ((User) -> Unit)? = null
-        inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-            val avatar = listItemView.findViewById(R.id.ivAvatarAccount) as ImageView
-            val name = listItemView.findViewById(R.id.tvNameAccount) as TextView
-            val dob = listItemView.findViewById(R.id.tvDOBAccount) as TextView
-            val email = listItemView.findViewById(R.id.tvEmailAccount) as TextView
-
-            init {
-                listItemView.setOnClickListener { onItemClick?.invoke(accounts[adapterPosition], adapterPosition) }
-
-            }
-
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val context = parent.context
-            val inflater = LayoutInflater.from(context)
-            // Inflate the custom layout
-            val accountView = inflater.inflate(R.layout.account_list, parent, false)
-            // Return a new holder instance
-            return ViewHolder(accountView)
-        }
-
-        override fun getItemCount(): Int {
-            return accounts.size
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            // Get the data model based on position
-            val a: User = accounts.get(position)
-            // Set item views based on your views and data model
-//            holder.avatar.setImageResource(accounts[position].avatar.toInt())
-            holder.avatar.setImageResource(R.drawable.avatar_1)
-
-            holder.name.text = accounts[position].full_name
-            holder.dob.text = accounts[position].dob
-            holder.email.text = accounts[position].email
-        }
-    }
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var accountListAdapter : AccountsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         setContentView(R.layout.activity_account_management)
 
         customAccountListView = findViewById(R.id.accountManagement_list) as RecyclerView;
-        val accountListAdapter = AccountManagementActivity.AccountsAdapter(accountList);
+        accountListAdapter = AccountsAdapter(accountList);
         customAccountListView!!.adapter = accountListAdapter;
         customAccountListView!!.layoutManager = LinearLayoutManager(this);
         val itemDecoration: RecyclerView.ItemDecoration =
@@ -89,6 +60,55 @@ class AccountManagementActivity : AppCompatActivity() {
 
         accountListAdapter!!.onItemClick = {chapter, position ->
             // DO SOMETHING
+        }
+        // Search View
+        val searchView = findViewById<SearchView>(R.id.searchViewAccount)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // Called when the user submits the query
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                // Called when the query text is changed by the user
+                filterAccount(newText);
+                return true
+            }
+        })
+
+        // Back
+        var btnBack = findViewById<ImageButton>(R.id.btnBackManageScreen)
+        btnBack.setOnClickListener {
+            finish()
+        }
+
+        userViewModel.getAllUser {users -> kotlin.run {
+            accountList.clear()
+            for (user in users.children) {
+                val acc = user.getValue(User::class.java)
+                if (acc != null) {
+                    accountList.add(acc)
+                }
+            }
+            accountListAdapter.notifyDataSetChanged()
+        }
+        }
+    }
+
+    private fun filterAccount(newText: String) {
+        var filterList: MutableList<User> = mutableListOf()
+
+        for (item in accountList) {
+            if (item.full_name.toLowerCase().contains(newText.toLowerCase())) {
+                filterList.add(item)
+            }
+        }
+
+        if (filterList.isEmpty()) {
+            Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
+        } else {
+            accountListAdapter.setFilterList(filterList)
+            accountListAdapter.notifyDataSetChanged()
         }
     }
 }

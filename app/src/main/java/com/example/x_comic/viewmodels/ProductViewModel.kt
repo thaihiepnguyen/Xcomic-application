@@ -320,5 +320,11 @@ class ProductViewModel : ViewModel() {
             }
         })
     }
+
+    fun updateView(id_book : String, view : Long) {
+        db.child(id_book)
+            .child("view")
+            .setValue(view)
+    }
 }
 

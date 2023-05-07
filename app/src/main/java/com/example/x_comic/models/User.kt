@@ -9,7 +9,7 @@ class User : java.io.Serializable
     var bio: String = "no data yet"
     var dob: String = "no data yet"
     var email: String = ""
-    var hide: Boolean = true
+    var hide: Boolean = false
     var penname: String = "no data yet"
     var phone: String = "no data yet"
     var gender: String = "male"
@@ -28,7 +28,7 @@ class User : java.io.Serializable
         bio: String = "no data yet",
         dob: String = "no data yet",
         email: String = "",
-        hide: Boolean = true,
+        hide: Boolean = false,
         penname: String = "no data yet",
         phone: String = "no data yet",
         gender: String = "male",

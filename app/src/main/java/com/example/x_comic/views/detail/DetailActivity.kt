@@ -193,6 +193,8 @@ class DetailActivity : AppCompatActivity() {
         //read
         val readBtn = findViewById<Button>(R.id.readBtn)
         readBtn.setOnClickListener {
+            bookData.view += 1
+            productViewModel.updateView(bookData.id, bookData.view)
             readingCurrentBook(bookData)
         }
 
