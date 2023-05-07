@@ -145,8 +145,8 @@ class ReadBookActivity : AppCompatActivity() {
 
             var cover = findViewById(R.id.ivCoverChapter) as ImageView;
             val storage = FirebaseStorage.getInstance()
-            val imageName = book!!.cover // Replace with your image name
-            val imageRef = storage.reference.child("book_cover/$imageName")
+            val imageName = book?.cover // Replace with your image name
+            val imageRef = storage.reference.child("book/$imageName")
             imageRef.getBytes(Long.MAX_VALUE)
                 .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
                     val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -176,7 +176,7 @@ class ReadBookActivity : AppCompatActivity() {
             var minititle = dl.findViewById<TextView>(R.id.book_title)
             val storage = FirebaseStorage.getInstance()
             val imageName = book!!.cover // Replace with your image name
-            val imageRef = storage.reference.child("book_cover/$imageName")
+            val imageRef = storage.reference.child("book/$imageName")
             minititle.text = book?.title
             imageRef.getBytes(Long.MAX_VALUE)
                 .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap

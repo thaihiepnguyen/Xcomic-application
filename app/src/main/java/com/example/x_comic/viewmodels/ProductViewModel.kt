@@ -166,7 +166,7 @@ class ProductViewModel : ViewModel() {
     fun uploadCover(filename: String, bitmap: Bitmap, imgCov: ImageView){
         val storage = FirebaseStorage.getInstance()
         val fileName = "${filename}"
-        val storageRef = storage.reference.child("book_cover/$fileName")
+        val storageRef = storage.reference.child("book/$fileName")
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val data = baos.toByteArray()
