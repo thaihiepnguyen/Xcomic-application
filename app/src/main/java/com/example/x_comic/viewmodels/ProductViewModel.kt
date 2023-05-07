@@ -297,7 +297,7 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllReadingBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("reading").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {
@@ -325,6 +325,18 @@ class ProductViewModel : ViewModel() {
         db.child(id_book)
             .child("view")
             .setValue(view)
+    }
+
+    fun hide(book: Product) {
+        db.child(book.id)
+            .child("hide")
+            .setValue(true)
+    }
+
+    fun display(book: Product) {
+        db.child(book.id)
+            .child("hide")
+            .setValue(false)
     }
 }
 

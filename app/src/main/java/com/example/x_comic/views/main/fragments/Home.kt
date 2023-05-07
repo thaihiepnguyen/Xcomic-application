@@ -133,7 +133,7 @@ class Home : Fragment() {
                 bookListSlideShow.clear()
                 for (book in books.children) {
                     val product = book.getValue(Product::class.java)
-                    if (product != null) {
+                    if (product != null && !product.hide) {
                         bookListSlideShow.add(product)
                     }
                 }
@@ -162,7 +162,7 @@ class Home : Fragment() {
 
                 for (book in books.children) {
                     val product = book.getValue(Product::class.java)
-                    if (product != null) {
+                    if (product != null && !product.hide) {
                         bookPopularList.add(product)
 
                     }
@@ -185,7 +185,7 @@ class Home : Fragment() {
                 bookCompletedList.clear()
                 for (book in books.children) {
                     val product = book.getValue(Product::class.java)
-                    if (product != null) {
+                    if (product != null && !product.hide) {
                         bookCompletedList.add(product)
                     }
                 }
@@ -207,7 +207,7 @@ class Home : Fragment() {
                 bookLatestList.clear()
                 for (book in books.children) {
                     val product = book.getValue(Product::class.java)
-                    if (product != null) {
+                    if (product != null && !product.hide) {
                         bookLatestList.add(product)
                     }
                 }

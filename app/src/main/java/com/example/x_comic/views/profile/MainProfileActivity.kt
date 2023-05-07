@@ -20,6 +20,7 @@ import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityMainProfileBinding
 import com.example.x_comic.databinding.ActivityProfileBinding
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
@@ -113,7 +114,7 @@ class MainProfileActivity : AppCompatActivity() {
                         productViewModel.getBookById(bookid.value as String) {
                             book -> run {
                                 Log.d("BOOKKKKK", book.title)
-                                if (book.islove(uid)) {
+                                if (book.islove(uid) && !book.hide) {
                                     cnt++
                                     bookList.add(book)
                                 }
@@ -128,14 +129,21 @@ class MainProfileActivity : AppCompatActivity() {
             }
 
             productViewModel.getAllReadingBook(uid) {
-                    booksID -> run {
+                    list -> run {
                     readingList.clear()
+                    val readings = ArrayList<Reading>()
                     var cnt: Int = 0
-                    for (bookid in booksID.children) {
-                        productViewModel.getBookById(bookid.value as String) {
+                    for (item in list.children) {
+                        var reading = item.getValue(Reading::class.java)
+                        if (reading != null) {
+                            readings.add(reading)
+                        }
+                        productViewModel.getBookById(reading?.id_book as String) {
                             book -> run {
-                                cnt++
-                                readingList.add(book)
+                                if (!book.hide) {
+                                    cnt++
+                                    readingList.add(book)
+                                }
                                 }
                             readingAdapter.notifyDataSetChanged()
                             binding.readingTV.text = "${cnt} Stories"
@@ -176,7 +184,7 @@ class MainProfileActivity : AppCompatActivity() {
                         }
 
                         binding.followNumber.text = user.have_followed.size.toString()
-                        binding.readListNumber.text = user.collection.size.toString()
+                        binding.readListNumber.text = user.reading.size.toString()
                     }
                 })
         }

@@ -153,27 +153,7 @@ class DetailActivity : AppCompatActivity() {
         //button back to previous activity
         val backBtn = findViewById<Button>(R.id.backBtn)
         backBtn.setOnClickListener {
-            if (!_currentUser?.isExits(bookData.id)!!) {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Message")
-                builder.setMessage("Do you want to save it to your reading list?")
-
-                builder.setPositiveButton("Yes") { dialog, which ->
-                    _currentUser?.addToReadingList(bookData)
-                    userViewModel.saveReadingList(_currentUser!!)
-                    finish()
-                }
-
-                builder.setNegativeButton("No") { dialog, which ->
-                    finish()
-                }
-
-                val dialog = builder.create()
-                dialog.show()
-            }
-            else {
-                finish()
-            }
+            finish()
         }
 
         favorBtn.setOnClickListener{

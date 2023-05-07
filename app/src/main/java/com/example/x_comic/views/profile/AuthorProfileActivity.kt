@@ -16,6 +16,7 @@ import com.example.x_comic.R
 import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityAuthorProfileBinding
 import com.example.x_comic.models.Product
+import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
@@ -165,11 +166,16 @@ class AuthorProfileActivity : AppCompatActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
         productViewModel.getAllReadingBook(author.id) {
-                booksID -> run {
+                list -> run {
                 bookList.clear()
+                val readings = ArrayList<Reading>()
                 var cnt: Int = 0
-                for (bookid in booksID.children) {
-                    productViewModel.getBookById(bookid.value as String) {
+                for (item in list.children) {
+                    var reading = item.getValue(Reading::class.java)
+                    if (reading != null) {
+                        readings.add(reading)
+                    }
+                    productViewModel.getBookById(reading?.id_book as String) {
                             book -> run {
                         cnt++
                         bookList.add(book)

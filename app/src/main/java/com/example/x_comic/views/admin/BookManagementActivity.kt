@@ -46,5 +46,7 @@ class BookManagementActivity : AppCompatActivity() {
             bookListAdapter.notifyDataSetChanged()
         }
         }
+
+
     }
 }

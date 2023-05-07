@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.ProductViewModel
 import com.google.firebase.storage.FirebaseStorage
 
 class BookManagementListAdapter(
@@ -64,6 +65,22 @@ class BookManagementListAdapter(
 
         title.setText(book.title);
         author.setText(book.author);
+
+        if (book.hide) {
+            blockBtn.text = "BLOCKED"
+        }
+        var productViewModel = ProductViewModel()
+        blockBtn.setOnClickListener {
+            book.hide = !book.hide
+            if (book.hide) {
+                productViewModel.hide(book)
+                blockBtn.text = "BLOCKED"
+            }else {
+                productViewModel.display(book)
+                blockBtn.text = "BLOCK"
+            }
+        }
+
         val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
         val imageRef = storage.reference.child("book/$imageName")
