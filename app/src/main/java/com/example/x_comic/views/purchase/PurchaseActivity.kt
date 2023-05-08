@@ -18,10 +18,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.approve.Approval
 import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.config.CheckoutConfig
 import com.paypal.checkout.config.Environment
 import com.paypal.checkout.config.SettingsConfig
 import com.paypal.checkout.createorder.*
+import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.*
 import com.paypal.checkout.paymentbutton.PayPalButton
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -94,69 +96,69 @@ class PurchaseActivity : AppCompatActivity() {
 
 
         val paymentButton = findViewById<PayPalButton>(R.id.payment_button_container)
-        paymentButton.setup(
-            object : CreateOrder {
-                override fun create(createOrderActions: CreateOrderActions) {
-                    val purchaseUnits: ArrayList<PurchaseUnit> = ArrayList()
-                    purchaseUnits.add(
-                        PurchaseUnit.Builder()
-                            .amount(
-                                Amount.Builder()
-                                    .currencyCode(CurrencyCode.USD)
-                                    .value("10.00")
-                                    .build()
-                            )
-                            .build()
-                    )
-                    val order = Order(
-                        OrderIntent.CAPTURE,
-                        AppContext.Builder()
-                            .userAction(UserAction.PAY_NOW)
-                            .build(),
-                        purchaseUnits
-                    )
-                    createOrderActions.create(order, null as CreateOrderActions.OnOrderCreated?)
-                }
-            },
-            object : OnApprove {
-                override fun onApprove(approval: Approval) {
-                    approval.orderActions.capture(object : OnCaptureComplete {
-                        override fun onCaptureComplete(result: CaptureOrderResult) {
-                            Log.i("CaptureOrder", String.format("CaptureOrderResult: %s", result))
-                        }
-                    })
-                }
-            }
-
-        )
-//        paymentButtonContainer.setup(
-//            createOrder =
-//            CreateOrder { createOrderActions ->
-//                val order =
-//                    Order(
-//                        intent = OrderIntent.CAPTURE,
-//                        appContext = AppContext(userAction = UserAction.PAY_NOW),
-//                        purchaseUnitList =
-//                        listOf(
-//                            PurchaseUnit(
-//                                amount =
-//                                Amount(currencyCode = CurrencyCode.USD, value = "10.00")
+//        paymentButton.setup(
+//            object : CreateOrder {
+//                override fun create(createOrderActions: CreateOrderActions) {
+//                    val purchaseUnits: ArrayList<PurchaseUnit> = ArrayList()
+//                    purchaseUnits.add(
+//                        PurchaseUnit.Builder()
+//                            .amount(
+//                                Amount.Builder()
+//                                    .currencyCode(CurrencyCode.USD)
+//                                    .value("10.00")
+//                                    .build()
 //                            )
-//                        )
+//                            .build()
 //                    )
-//                createOrderActions.create(order)
-//            },
-//            onApprove =
-//            OnApprove { approval ->
-//                approval.orderActions.capture { captureOrderResult ->
-//                    Log.i("CaptureOrder", "CaptureOrderResult: $captureOrderResult")
+//                    val order = Order(
+//                        OrderIntent.CAPTURE,
+//                        AppContext.Builder()
+//                            .userAction(UserAction.PAY_NOW)
+//                            .build(),
+//                        purchaseUnits
+//                    )
+//                    createOrderActions.create(order, null as CreateOrderActions.OnOrderCreated?)
 //                }
 //            },
-//            onCancel = OnCancel {
-//                Log.d("OnCancel", "Buyer canceled the PayPal experience.")
-//            },
-//            onError = OnError { errorInfo ->
-//                Log.d("OnError", "Error: $errorInfo")
+//            object : OnApprove {
+//                override fun onApprove(approval: Approval) {
+//                    approval.orderActions.capture(object : OnCaptureComplete {
+//                        override fun onCaptureComplete(result: CaptureOrderResult) {
+//                            Log.i("CaptureOrder", String.format("CaptureOrderResult: %s", result))
+//                        }
+//                    })
+//                }
 //            }
+//
 //        )
+        paymentButton.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    Order(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD, value = "10.00")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                approval.orderActions.capture { captureOrderResult ->
+                    Log.i("CaptureOrder", "CaptureOrderResult: $captureOrderResult")
+                }
+            },
+            onCancel = OnCancel {
+                Log.d("OnCancel", "Buyer canceled the PayPal experience.")
+            },
+            onError = OnError { errorInfo ->
+                Log.d("OnError", "Error: $errorInfo")
+            }
+        )
     }}
