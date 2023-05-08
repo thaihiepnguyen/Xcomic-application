@@ -60,7 +60,8 @@
             android:exported="false" />
         <activity
             android:name=".views.purchase.PurchaseActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true"/>
         <activity
             android:name=".views.post.NewChapterActivity"
             android:exported="false"
@@ -122,6 +123,30 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token"
             tools:replace="android:value" />
+
+
+        <activity
+            android:name="com.paypal.openid.RedirectUriReceiverActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <data
+                    android:host="paypalpay"
+                    android:scheme="com.example.xcomic" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.paypal.pyplcheckout.home.view.activities.PYPLInitiateCheckoutActivity"
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <data
+                    android:host="paypalxo"
+                    android:scheme="com.example.xcomic" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

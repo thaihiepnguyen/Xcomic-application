@@ -72,7 +72,7 @@ class Search : Fragment() {
         customBookListView?.addItemDecoration(itemDecoration)
 
 
-        val database = FirebaseDatabase.getInstance().getReference("book")
+        val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("book")
 
         database.orderByChild("title")
             .addValueEventListener(object : ValueEventListener {
@@ -134,7 +134,7 @@ class Search : Fragment() {
                 var searchEditText = view.findViewById<EditText>(R.id.searchEditText)
                 keyword = searchEditText.text.toString()
                 myFilter = com.example.x_comic.models.Filter()
-                val database = FirebaseDatabase.getInstance().getReference("book")
+                val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("book")
 
                 database.orderByChild("title")
                     .addValueEventListener(object : ValueEventListener {

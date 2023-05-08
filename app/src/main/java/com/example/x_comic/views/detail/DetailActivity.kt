@@ -221,6 +221,7 @@ class DetailActivity : AppCompatActivity() {
                     val intent = Intent(this, PurchaseActivity::class.java)
                     intent.putExtra("bookdata", Klaxon().toJsonString(bookData))
                     intent.putExtra("chapter", Klaxon().toJsonString(bookData.chapters[i]))
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     ActivityCompat.startActivityForResult(this, intent, 700, null)
                 }
 

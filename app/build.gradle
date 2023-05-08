@@ -76,7 +76,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
 
     //blur library
-    implementation 'com.github.Dimezis:BlurView:version-2.0.3'
+    //implementation 'com.github.Dimezis:BlurView:version-2.0.3'
 
 
     //card view
@@ -108,7 +108,8 @@ dependencies {
 
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
-    //implementation("com.paypal.checkout:android-sdk:0.112.0")
+    implementation 'com.paypal.checkout:android-sdk:0.2.0'
+
 }
 
 kapt {
