@@ -139,6 +139,14 @@
                 android:padding="10dp"
                 android:textStyle="bold"
                 android:background="@drawable/mybutton" />
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:text="Logout"
+                android:textColor="@color/love"
+                />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

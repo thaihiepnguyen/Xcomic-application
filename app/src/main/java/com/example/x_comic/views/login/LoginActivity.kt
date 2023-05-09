@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.databinding.ActivityLoginBinding
 import com.example.x_comic.databinding.LayoutDialogSendpassBinding
@@ -52,10 +54,13 @@ class LoginActivity : AppCompatActivity() {
     private var RC_SIGN_IN = 123321
     private lateinit var mClient: GoogleSignInClient
     private val _users: MutableList<User> = mutableListOf()
-
+    private lateinit var _sharedPreferences: SharedPreferences
     override fun onStart() {
         super.onStart()
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        var sharedPreferences: SharedPreferences = getSharedPreferences("MySharedPreferences02032002", MODE_PRIVATE)
+        _sharedPreferences = sharedPreferences
 
         userViewModel.getAllUser {users-> kotlin.run {
             _users.clear()
@@ -68,20 +73,21 @@ class LoginActivity : AppCompatActivity() {
         }
         }
         // TODO: Lúc này người dùng đã đăng nhập rồi.
-//        if (FirebaseAuthManager.auth.currentUser != null) {
-//            var currentUser = FirebaseAuthManager.auth.currentUser
-//
-//            for (user in _users) {
-//                if (user.id == currentUser!!.uid) {
-//                    if (user.role.compareTo(3) == 0) {
-//                        nextHomeActivity()
-//                        break
-//                    } else {
-//                        nextMainActivity()
-//                    }
-//                }
-//            }
-//        }
+        if (FirebaseAuthManager.auth.currentUser != null) {
+            if (sharedPreferences.contains("currentRole")) {
+                val currentRole = sharedPreferences.getLong("currentRole", 1)
+                // parse có lỗi gì thì mặc định vô main
+                if (currentRole.compareTo(3) == 0) {
+                    nextHomeActivity()
+                } else {
+                    nextMainActivity()
+                }
+            } else {
+                // lỡ đâu code lỗi gì thì vô main; tránh crash
+                // hoặc đăng nhập bằng gg thì vô main; chắc chắn không phải là admin
+                nextMainActivity()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,11 +122,15 @@ class LoginActivity : AppCompatActivity() {
                         if (userAuth != null) {
                             for (user in _users) {
                                 if (user.id == userAuth.uid) {
+                                    val editor = _sharedPreferences.edit()
+                                    editor.putLong("currentRole", user.role)
+                                    editor.apply()
                                     if (user.role.compareTo(3) == 0) {
                                         nextHomeActivity()
                                         break
                                     } else {
                                         nextMainActivity()
+                                        break
                                     }
                                 }
                             }
@@ -204,6 +214,9 @@ class LoginActivity : AppCompatActivity() {
                                 user.id = userAuth.uid
                                 user.email = userAuth.email.toString()
 
+                                val editor = _sharedPreferences.edit()
+                                editor.putLong("currentRole", user.role)
+                                editor.apply()
                                 userViewModel.addUser(user)
                             }
                         }

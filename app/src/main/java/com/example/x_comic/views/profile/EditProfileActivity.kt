@@ -1,6 +1,7 @@
 package com.example.x_comic.views.profile
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,10 +28,14 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         setContentView(binding.root)
-
+        val sharedPreferences: SharedPreferences = getSharedPreferences("MySharedPreferences02032002", MODE_PRIVATE)
         binding.logout.setOnClickListener {
             // đăng xuất khỏi firebase
             FirebaseAuthManager.auth.signOut();
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.remove("currentRole")
+            editor.apply()
             nextLoginActivity();
         }
 
