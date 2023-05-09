@@ -28,6 +28,7 @@ import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.*
 import com.example.x_comic.views.admin.HomeActivity
 import com.example.x_comic.views.main.MainActivity
+import com.example.x_comic.views.profile.BlockUserActivity
 import com.example.x_comic.views.signup.SignupActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -74,6 +75,17 @@ class LoginActivity : AppCompatActivity() {
         }
         // TODO: Lúc này người dùng đã đăng nhập rồi.
         if (FirebaseAuthManager.auth.currentUser != null) {
+            // Show Man hinh Block nhung ma chua hop ly lam
+            var id_user = FirebaseAuthManager.auth.uid
+            id_user?.let {
+                userViewModel.getUserById(id_user) { user ->
+                    kotlin.run {
+                        if (user.hide)
+                            nextBlockUserActivity()
+                    }
+                }
+            }
+
             if (sharedPreferences.contains("currentRole")) {
                 val currentRole = sharedPreferences.getLong("currentRole", 1)
                 // parse có lỗi gì thì mặc định vô main
@@ -125,6 +137,10 @@ class LoginActivity : AppCompatActivity() {
                                     val editor = _sharedPreferences.edit()
                                     editor.putLong("currentRole", user.role)
                                     editor.apply()
+                                    if (user.hide) {
+                                        nextBlockUserActivity()
+                                        break
+                                    }
                                     if (user.role.compareTo(3) == 0) {
                                         nextHomeActivity()
                                         break
@@ -320,6 +336,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun nextSignupActivity() {
         val intent = Intent(this, SignupActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextBlockUserActivity() {
+        val intent = Intent(this, BlockUserActivity::class.java)
         startActivity(intent)
     }
 }
