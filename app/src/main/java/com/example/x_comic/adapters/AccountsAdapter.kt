@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.UserViewModel
@@ -79,18 +81,23 @@ class AccountsAdapter (
                 holder.btnBlock.text = "BLOCK"
         }
 
-        val storage = FirebaseStorage.getInstance()
-        val imageName = accounts[position].id + ".png" // Replace with your image name
-        val imageRef = storage.reference.child("users/$imageName")
-        imageRef.getBytes(Long.MAX_VALUE)
-            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                // Set the Bitmap to the ImageView
-                holder.avatar.setImageBitmap(bitmap)
-
-            }.addOnFailureListener {
-                // Handle any errors
-            }
+//        val storage = FirebaseStorage.getInstance()
+//        val imageName = accounts[position].id + ".png" // Replace with your image name
+//        val imageRef = storage.reference.child("users/$imageName")
+//        imageRef.getBytes(Long.MAX_VALUE)
+//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                // Set the Bitmap to the ImageView
+//                holder.avatar.setImageBitmap(bitmap)
+//
+//            }.addOnFailureListener {
+//                // Handle any errors
+//            }
+        Glide.with(holder.avatar.context)
+            .load(accounts[position].avatar)
+            .apply(RequestOptions().override(250, 250))
+            .circleCrop()
+            .into(holder.avatar)
     }
 
     public fun setFilterList(list: MutableList<User>) {

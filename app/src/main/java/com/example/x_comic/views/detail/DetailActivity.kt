@@ -45,6 +45,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
+import java.lang.Math.min
 import java.lang.Math.round
 import kotlin.math.roundToInt
 
@@ -110,24 +111,32 @@ class DetailActivity : AppCompatActivity() {
             }
         }
         // Get a reference to the Firebase Storage instance
-        val storage = FirebaseStorage.getInstance()
+//        val storage = FirebaseStorage.getInstance()
         val imageName = bookData?.cover // Replace with your image name
-        val imageRef = storage.reference.child("book/$imageName")
-        imageRef.getBytes(Long.MAX_VALUE)
-            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                // Set the Bitmap to the ImageView
-                cover.setImageBitmap(bitmap)
-
-
-                Glide.with(this)
-                    .load(bitmap)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                    .into(backCover)
-            }.addOnFailureListener {
-                // Handle any errors
-            }
+//        val imageRef = storage.reference.child("book/$imageName")
+//        imageRef.getBytes(Long.MAX_VALUE)
+//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//
+//                // Set the Bitmap to the ImageView
+//                cover.setImageBitmap(bitmap)
+//
+//
+//                Glide.with(this)
+//                    .load(bitmap)
+//                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+//                    .into(backCover)
+//            }.addOnFailureListener {
+//                // Handle any errors
+//            }
+        Glide.with(cover.context)
+            .load(imageName)
+            .apply(RequestOptions().override(500, 600))
+            .into(cover)
+        Glide.with(this)
+            .load(imageName)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+            .into(backCover)
         view.text = bookData?.view.toString()
         chapter.text = bookData?.chapters?.size.toString()
         if (bookData!!.status){
@@ -189,21 +198,29 @@ class DetailActivity : AppCompatActivity() {
             var minicover = dl.findViewById<ImageView>(R.id.book)
             var minititle = dl.findViewById<TextView>(R.id.book_title)
             minititle.text = bookData.title
-            imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                    // Set the Bitmap to the ImageView
-                    minicover.setImageBitmap(bitmap)
-
-
-                    Glide.with(this)
-                        .load(bitmap)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                        .into(bgcover)
-                }.addOnFailureListener {
-                    // Handle any errors
-                }
+//            imageRef.getBytes(Long.MAX_VALUE)
+//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//
+//                    // Set the Bitmap to the ImageView
+//                    minicover.setImageBitmap(bitmap)
+//
+//
+//                    Glide.with(this)
+//                        .load(bitmap)
+//                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+//                        .into(bgcover)
+//                }.addOnFailureListener {
+//                    // Handle any errors
+//                }
+            Glide.with(minicover.context)
+                .load(imageName)
+                .apply(RequestOptions().override(500, 600))
+                .into(minicover)
+            Glide.with(this)
+                .load(imageName)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                .into(bgcover)
 
 
 
@@ -321,8 +338,11 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
                 totalRating /= feedbackList.size
-                totalRating = ((totalRating * 100.0).roundToInt() / 100.0)
-
+                // TODO: Xu ly NaN lai
+                if (!totalRating.isNaN())
+                    totalRating = ((totalRating * 100.0).roundToInt() / 100.0)
+                else
+                    totalRating = 0.0
                 ratingTextView.text = totalRating.toString()
                 val bookRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("book").child(bookData.id)
                 bookRef.child("rating").setValue(totalRating)

@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 
 class ProductViewModel : ViewModel() {
@@ -163,7 +164,7 @@ class ProductViewModel : ViewModel() {
         return _productsPopular
     }
 
-    fun uploadCover(filename: String, bitmap: Bitmap, imgCov: ImageView){
+    fun uploadCover(filename: String, bitmap: Bitmap, imgCov: ImageView) : UploadTask{
         val storage = FirebaseStorage.getInstance()
         val fileName = "${filename}"
         val storageRef = storage.reference.child("book/$fileName")
@@ -171,20 +172,8 @@ class ProductViewModel : ViewModel() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
         val data = baos.toByteArray()
         val uploadTask = storageRef.putBytes(data)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
-                val downloadUrl = uri.toString()
-                Glide.with(imgCov.context)
-                    .load(downloadUrl)
-                    .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(150)))
-                    .into(imgCov)
-            }
 
-
-        }.addOnFailureListener { exception ->
-            // Tải lên ảnh thất bại
-            exception.printStackTrace()
-        }
+        return uploadTask
     }
 
     fun getCover(bookID: String, imgCov: ImageView) {

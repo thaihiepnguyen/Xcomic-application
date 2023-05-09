@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.GestureDetector
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.view.animation.AlphaAnimation
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -110,6 +112,7 @@ class ReadBookActivity : AppCompatActivity() {
         return index;
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_book)
@@ -144,18 +147,22 @@ class ReadBookActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.numOfChapterTextView).text = book?.chapters?.size.toString() + " Chapters"
 
             var cover = findViewById(R.id.ivCoverChapter) as ImageView;
-            val storage = FirebaseStorage.getInstance()
-            val imageName = book?.cover // Replace with your image name
-            val imageRef = storage.reference.child("book/$imageName")
-            imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                    // Set the Bitmap to the ImageView
-                    cover.setImageBitmap(bitmap)
-                }.addOnFailureListener {
-                    // Handle any errors
-                }
+//            val storage = FirebaseStorage.getInstance()
+//            val imageName = book?.cover // Replace with your image name
+//            val imageRef = storage.reference.child("book/$imageName")
+//            imageRef.getBytes(Long.MAX_VALUE)
+//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//
+//                    // Set the Bitmap to the ImageView
+//                    cover.setImageBitmap(bitmap)
+//                }.addOnFailureListener {
+//                    // Handle any errors
+//                }
+            Glide.with(cover.context)
+                .load(book?.cover)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
         }
 
         userViewModel.callApi(uid!!).observe(this, Observer { user ->
@@ -178,21 +185,29 @@ class ReadBookActivity : AppCompatActivity() {
             val imageName = book!!.cover // Replace with your image name
             val imageRef = storage.reference.child("book/$imageName")
             minititle.text = book?.title
-            imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                    // Set the Bitmap to the ImageView
-                    minicover.setImageBitmap(bitmap)
-
-
-                    Glide.with(this)
-                        .load(bitmap)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                        .into(bgcover)
-                }.addOnFailureListener {
-                    // Handle any errors
-                }
+//            imageRef.getBytes(Long.MAX_VALUE)
+//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//
+//                    // Set the Bitmap to the ImageView
+//                    minicover.setImageBitmap(bitmap)
+//
+//
+//                    Glide.with(this)
+//                        .load(bitmap)
+//                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+//                        .into(bgcover)
+//                }.addOnFailureListener {
+//                    // Handle any errors
+//                }
+            Glide.with(minicover.context)
+                .load(book?.cover)
+                .apply(RequestOptions().override(500, 600))
+                .into(minicover)
+            Glide.with(this)
+                .load(book?.cover)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                .into(bgcover)
 
 
 

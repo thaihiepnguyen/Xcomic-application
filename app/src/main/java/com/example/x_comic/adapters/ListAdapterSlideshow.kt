@@ -11,6 +11,8 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.Klaxon
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
@@ -66,18 +68,22 @@ class ListAdapterSlideshow (
         var _currentUser: User? = null
         title.setText(book.title);
         author.setText(book.author);
-        val storage = FirebaseStorage.getInstance()
+//        val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
-        val imageRef = storage.reference.child("book/$imageName")
-        imageRef.getBytes(Long.MAX_VALUE)
-            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                // Set the Bitmap to the ImageView
-                cover.setImageBitmap(bitmap)
-            }.addOnFailureListener {
-                // Handle any errors
-            }
+//        val imageRef = storage.reference.child("book/$imageName")
+//        imageRef.getBytes(Long.MAX_VALUE)
+//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//
+//                // Set the Bitmap to the ImageView
+//                cover.setImageBitmap(bitmap)
+//            }.addOnFailureListener {
+//                // Handle any errors
+//            }
+        Glide.with(cover.context)
+            .load(imageName)
+            .apply(RequestOptions().override(500, 600))
+            .into(cover)
         rating.text= Html.fromHtml("<font>${book.rating} </font>" +
                 "<font color='#FFC000'> ★ </font>")
         var userViewModel : UserViewModel = UserViewModel()

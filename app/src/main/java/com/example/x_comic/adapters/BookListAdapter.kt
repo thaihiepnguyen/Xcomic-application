@@ -91,18 +91,22 @@ class BookListAdapter (
         var favourite = false
         title.setText(book.title);
         author.setText(book.author);
-        val storage = FirebaseStorage.getInstance()
+//        val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
-        val imageRef = storage.reference.child("book/$imageName")
-        imageRef.getBytes(Long.MAX_VALUE)
-            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                // Set the Bitmap to the ImageView
-                cover.setImageBitmap(bitmap)
-
-            }.addOnFailureListener {
-                // Handle any errors
-            }
+//        val imageRef = storage.reference.child("book/$imageName")
+//        imageRef.getBytes(Long.MAX_VALUE)
+//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                // Set the Bitmap to the ImageView
+//                cover.setImageBitmap(bitmap)
+//
+//            }.addOnFailureListener {
+//                // Handle any errors
+//            }
+        Glide.with(cover.context)
+            .load(imageName)
+            .apply(RequestOptions().override(500, 600))
+            .into(cover)
 
         view.setText(book.view.toString());
         favorite.setText(book.favorite.toString());

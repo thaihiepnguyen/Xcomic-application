@@ -20,6 +20,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.adapters.CategoryChooseAdapter
@@ -97,18 +101,22 @@ class PostNewActivity : AppCompatActivity() {
             findViewById<Button>(R.id.btnNext).text = "SAVE"
 
             var cover = findViewById<ImageView>(R.id.ivCover)
-            val storage = FirebaseStorage.getInstance()
-            val imageName = curBook.cover // Replace with your image name
-            val imageRef = storage.reference.child("book/$imageName")
-            imageRef.getBytes(Long.MAX_VALUE)
-                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    // Set the Bitmap to the ImageView
-                    cover.setImageBitmap(bitmap)
-
-                }.addOnFailureListener {
-                    // Handle any errors
-                }
+//            val storage = FirebaseStorage.getInstance()
+//            val imageName = curBook.cover // Replace with your image name
+//            val imageRef = storage.reference.child("book/$imageName")
+//            imageRef.getBytes(Long.MAX_VALUE)
+//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                    // Set the Bitmap to the ImageView
+//                    cover.setImageBitmap(bitmap)
+//
+//                }.addOnFailureListener {
+//                    // Handle any errors
+//                }
+            Glide.with(cover.context)
+                .load(curBook.cover)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
             fileNameCover = curBook.cover
 
             findViewById<EditText>(R.id.etTitle).setText(curBook.title.toString())
@@ -266,7 +274,7 @@ class PostNewActivity : AppCompatActivity() {
             // Lay ten file cua anh
             fileNameCover = curBook.id +".png"
             // Lưu ảnh vào profile
-            saveImageToProfile(imageUri, fileNameCover)
+            saveImageToDB(imageUri, fileNameCover)
         }
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {
@@ -296,12 +304,22 @@ class PostNewActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveImageToProfile(imageUri: Uri?, filename : String) {
+    private fun saveImageToDB(imageUri: Uri?, filename : String) {
         try {
             val uid = FirebaseAuthManager.auth.uid
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             if (uid != null) {
-                productViewModel.uploadCover(filename, bitmap, findViewById(R.id.ivCover))
+                var uploadTask = productViewModel.uploadCover(filename, bitmap, findViewById(R.id.ivCover))
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { uri ->
+                        val downloadUrl = uri.toString()
+
+                        fileNameCover = downloadUrl
+                    }
+                }.addOnFailureListener { exception ->
+                    // Tải lên ảnh thất bại
+                    exception.printStackTrace()
+                }
             }
         } catch (e: IOException) {
             e.printStackTrace()

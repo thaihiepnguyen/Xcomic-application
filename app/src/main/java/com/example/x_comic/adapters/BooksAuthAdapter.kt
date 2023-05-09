@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Product
 import com.google.firebase.storage.FirebaseStorage
@@ -57,19 +59,23 @@ class BooksAuthAdapter (private val books: MutableList<Product>) : RecyclerView.
         }
 
         holder.chapter.text = "${countChapterIsPosted(books[position])} of ${books[position].chapters.size} Chapter was posted"
-        var cover = holder.imageView
-        val storage = FirebaseStorage.getInstance()
-        val imageName = books[position].cover // Replace with your image name
-        val imageRef = storage.reference.child("book/$imageName")
-        imageRef.getBytes(Long.MAX_VALUE)
-            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                // Set the Bitmap to the ImageView
-                cover.setImageBitmap(bitmap)
-
-            }.addOnFailureListener {
-                // Handle any errors
-            }
+//        var cover = holder.imageView
+//        val storage = FirebaseStorage.getInstance()
+//        val imageName = books[position].cover // Replace with your image name
+//        val imageRef = storage.reference.child("book/$imageName")
+//        imageRef.getBytes(Long.MAX_VALUE)
+//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
+//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                // Set the Bitmap to the ImageView
+//                cover.setImageBitmap(bitmap)
+//
+//            }.addOnFailureListener {
+//                // Handle any errors
+//            }
+        Glide.with(holder.imageView.context)
+            .load(books[position].cover)
+            .apply(RequestOptions().override(500, 600))
+            .into(holder.imageView)
     }
 
     private fun countChapterIsPosted (p : Product) : Int {
