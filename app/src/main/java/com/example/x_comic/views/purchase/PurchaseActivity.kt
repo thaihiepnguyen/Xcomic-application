@@ -26,6 +26,7 @@ import com.paypal.checkout.createorder.*
 import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.*
 import com.paypal.checkout.paymentbutton.PayPalButton
+import com.paypal.checkout.paymentbutton.PaymentButtonContainer
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 
@@ -39,18 +40,7 @@ class PurchaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchase)
-        val config = CheckoutConfig(
-            application = application,
-            clientId = PAYPAL_CLIENT_ID,
-            environment = Environment.SANDBOX,
-            returnUrl = "com.example.xcomic://paypalpay",
-            currencyCode = CurrencyCode.USD,
-            userAction = UserAction.PAY_NOW,
-            settingsConfig = SettingsConfig(
-                loggingEnabled = true
-            )
-        )
-        PayPalCheckout.setConfig(config)
+
 
         val intent = intent
         val stringData = intent.getStringExtra("bookdata")
@@ -95,7 +85,7 @@ class PurchaseActivity : AppCompatActivity() {
 
 
 
-        val paymentButton = findViewById<PayPalButton>(R.id.payment_button_container)
+        val paymentButton = findViewById<PaymentButtonContainer>(R.id.payment_button_container)
 //        paymentButton.setup(
 //            object : CreateOrder {
 //                override fun create(createOrderActions: CreateOrderActions) {
@@ -135,7 +125,7 @@ class PurchaseActivity : AppCompatActivity() {
             createOrder =
             CreateOrder { createOrderActions ->
                 val order =
-                    Order(
+                    OrderRequest(
                         intent = OrderIntent.CAPTURE,
                         appContext = AppContext(userAction = UserAction.PAY_NOW),
                         purchaseUnitList =

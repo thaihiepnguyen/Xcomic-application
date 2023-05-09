@@ -36,6 +36,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.paypal.checkout.PayPalCheckout
+import com.paypal.checkout.config.CheckoutConfig
+import com.paypal.checkout.config.Environment
+import com.paypal.checkout.config.SettingsConfig
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.UserAction
 
 
 class LoginActivity : AppCompatActivity() {

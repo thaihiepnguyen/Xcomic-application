@@ -14,6 +14,12 @@ import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.main.fragments.*
+import com.paypal.checkout.PayPalCheckout
+import com.paypal.checkout.config.CheckoutConfig
+import com.paypal.checkout.config.Environment
+import com.paypal.checkout.config.SettingsConfig
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.UserAction
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +29,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val config = CheckoutConfig(
+            application = application,
+            clientId = "AetqiuaX2ZoHcRciOFWmqHOGSUcasvGCdv0wqrqFsLYxezwE_f2mvjaWrR0nwmep-nSPp_b_CITJitd7",
+            environment = Environment.SANDBOX,
+            returnUrl = "com.example.xcomic://paypalpay",
+            currencyCode = CurrencyCode.USD,
+            userAction = UserAction.PAY_NOW,
+            settingsConfig = SettingsConfig(
+                loggingEnabled = true
+            )
+        )
+        PayPalCheckout.setConfig(config)
         if (FirebaseAuthManager.auth.currentUser == null) {
             nextLoginActivity()
             return
