@@ -103,6 +103,10 @@ class PostNewActivity : AppCompatActivity() {
             findViewById<Button>(R.id.btnNext).text = "SAVE"
 
             var cover = findViewById<ImageView>(R.id.ivCover)
+            cover.setOnClickListener {
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+            }
 //            val storage = FirebaseStorage.getInstance()
 //            val imageName = curBook.cover // Replace with your image name
 //            val imageRef = storage.reference.child("book/$imageName")
@@ -281,6 +285,11 @@ class PostNewActivity : AppCompatActivity() {
             fileNameCover = curBook.id +".png"
             // Lưu ảnh vào profile
             saveImageToDB(imageUri, fileNameCover)
+            val cover = findViewById<ImageView>(R.id.ivCover)
+            Glide.with(cover.context)
+                .load(imageUri)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
         }
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {

@@ -214,12 +214,16 @@ class DetailActivity : AppCompatActivity() {
             userViewModel.saveHeartList(_currentUser!!)
         }
         //read
-        val readBtn = findViewById<Button>(R.id.readBtn)
-        readBtn.setOnClickListener {
-            bookData.view += 1
-            productViewModel.updateView(bookData.id, bookData.view)
-            readingCurrentBook(bookData)
+        if (bookData.chapters.size!=0){
+            val readBtn = findViewById<Button>(R.id.readBtn)
+            readBtn.setOnClickListener {
+                bookData.view += 1
+                productViewModel.updateView(bookData.id, bookData.view)
+                readingCurrentBook(bookData)
+            }
         }
+
+
 
         //open dialog choose chapter to read
         val chooseBtn = findViewById<Button>(R.id.chooseChapterBtn)
