@@ -49,16 +49,16 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val readingAdapter = BookListAdapter(bookList)
+        val collectionAdapter = BookListAdapter(bookList)
         val avatarAdapter = AvatarListAdapter(followList)
 
-        readingAdapter.onItemClick = {
+        collectionAdapter.onItemClick = {
             book -> nextBookDetailActivity(book)
         }
         avatarAdapter.onItemClick = {
             author -> nextAuthorProfileActivity(author)
         }
-        binding.listView.adapter = readingAdapter
+        binding.listView.adapter = collectionAdapter
         binding.profileListView.adapter = avatarAdapter
 
         binding.backBtn.setOnClickListener {
@@ -165,25 +165,22 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.listView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        productViewModel.getAllReadingBook(author.id) {
+        productViewModel.getAllCollectionBook(author.id) {
                 list -> run {
                 bookList.clear()
-                val readings = ArrayList<Reading>()
                 var cnt: Int = 0
-                for (item in list.children) {
-                    var reading = item.getValue(Reading::class.java)
-                    if (reading != null) {
-                        readings.add(reading)
+                for (snapshot in list.children) {
+                    val productid = snapshot.getValue(String::class.java)
+                    if (productid != null) {
+                        productViewModel.getBookById(productid) { book -> run {
+                            cnt++
+                            bookList.add(book)
+                        }
+                            collectionAdapter.notifyDataSetChanged()
+                            binding.readingTV.text = "${cnt} Stories"
+                        }
                     }
-                    productViewModel.getBookById(reading?.id_book as String) {
-                            book -> run {
-                        cnt++
-                        bookList.add(book)
-                    }
-                        readingAdapter.notifyDataSetChanged()
-                        binding.readingTV.text = "${cnt} Stories"
-                    }
-                    readingAdapter.notifyDataSetChanged()
+                    collectionAdapter.notifyDataSetChanged()
                 }
             }
         }
