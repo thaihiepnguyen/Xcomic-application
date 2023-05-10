@@ -82,22 +82,23 @@ class LoginActivity : AppCompatActivity() {
                     kotlin.run {
                         if (user.hide)
                             nextBlockUserActivity()
+                        else {
+                            if (sharedPreferences.contains("currentRole")) {
+                                val currentRole = sharedPreferences.getLong("currentRole", 1)
+                                // parse có lỗi gì thì mặc định vô main
+                                if (currentRole.compareTo(3) == 0) {
+                                    nextHomeActivity()
+                                } else {
+                                    nextMainActivity()
+                                }
+                            } else {
+                                // lỡ đâu code lỗi gì thì vô main; tránh crash
+                                // hoặc đăng nhập bằng gg thì vô main; chắc chắn không phải là admin
+                                nextMainActivity()
+                            }
+                        }
                     }
                 }
-            }
-
-            if (sharedPreferences.contains("currentRole")) {
-                val currentRole = sharedPreferences.getLong("currentRole", 1)
-                // parse có lỗi gì thì mặc định vô main
-                if (currentRole.compareTo(3) == 0) {
-                    nextHomeActivity()
-                } else {
-                    nextMainActivity()
-                }
-            } else {
-                // lỡ đâu code lỗi gì thì vô main; tránh crash
-                // hoặc đăng nhập bằng gg thì vô main; chắc chắn không phải là admin
-                nextMainActivity()
             }
         }
     }
@@ -225,6 +226,14 @@ class LoginActivity : AppCompatActivity() {
                         userViewModel.isExist(uid) { ok ->
                             if (ok) {
                                 // User exists
+                                userViewModel.getUserById(userAuth.uid) { user ->
+                                    kotlin.run {
+                                        if (user.hide)
+                                            nextBlockUserActivity()
+                                        else
+                                            nextMainActivity()
+                                    }
+                                }
                             } else {
                                 val user = User()
                                 user.id = userAuth.uid
@@ -236,8 +245,6 @@ class LoginActivity : AppCompatActivity() {
                                 userViewModel.addUser(user)
                             }
                         }
-
-                        nextMainActivity()
                     }
                     progressDialog.cancel()
                 } else {
