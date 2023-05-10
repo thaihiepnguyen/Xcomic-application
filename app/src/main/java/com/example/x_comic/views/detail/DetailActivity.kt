@@ -104,7 +104,7 @@ class DetailActivity : AppCompatActivity() {
             _currentBook = product
             favourite = _currentUser?.let { _currentBook!!.islove(it.id) } == true
             if (favourite) {
-                favorBtn.text = "\uD83D\uDC95"
+                favorBtn.text = "-"
 
             } else {
                 favorBtn.text = "ღ"
@@ -170,7 +170,7 @@ class DetailActivity : AppCompatActivity() {
             if (favourite) {
                 _currentUser!!.love(_currentBook!!)
                 _currentBook!!.love(_currentUser!!)
-                favorBtn.text = "\uD83D\uDC95"
+                favorBtn.text = "-"
             }else {
                 _currentUser!!.unLove(_currentBook!!)
                 _currentBook!!.notlove(_currentUser!!)
