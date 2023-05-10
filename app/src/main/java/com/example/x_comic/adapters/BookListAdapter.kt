@@ -115,7 +115,7 @@ class BookListAdapter (
             .into(cover)
 
         view.setText(book.view.toString());
-        favorite.setText(book.favorite.toString());
+        favorite.setText(book.have_loved.size.toString());
         chapter.setText(book.chapters.size.toString());
         val category = book.categories.take(3);
             for (i in category) {
