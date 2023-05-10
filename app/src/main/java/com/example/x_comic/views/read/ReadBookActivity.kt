@@ -143,7 +143,7 @@ class ReadBookActivity : AppCompatActivity() {
             titleTv.text = curChapter.name
             textViewContentBook?.text = curChapter.content
             findViewById<TextView>(R.id.viewTextView).text = book?.view.toString() + " view";
-            findViewById<TextView>(R.id.favoriteTextView).text = book?.favorite.toString() + "K favor";
+            findViewById<TextView>(R.id.favoriteTextView).text = book?.have_loved!!.size.toString() + " favor";
             findViewById<TextView>(R.id.numOfChapterTextView).text = book?.chapters?.size.toString() + " Chapters"
 
             var cover = findViewById(R.id.ivCoverChapter) as ImageView;
