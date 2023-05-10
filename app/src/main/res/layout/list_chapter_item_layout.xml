@@ -41,5 +41,14 @@
         app:layout_constraintStart_toEndOf="@+id/tvChapterName"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_lock_24" />
+    <ImageView
+        android:id="@+id/unlock_icon"
+        android:layout_width="17dp"
+        android:layout_height="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvDate"
+        app:layout_constraintStart_toEndOf="@+id/tvChapterName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_unlock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

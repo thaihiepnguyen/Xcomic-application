@@ -10,6 +10,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.User
@@ -65,7 +66,7 @@ class FeedbackAdapter (
                     if (user.avatar != ""){
                         val avatarUrl: String = user!!.avatar
                         // Load the avatar into your ImageView using your preferred image loading library
-                        Glide.with(context).load(avatarUrl).into(avatarImageView)
+                        Glide.with(context).load(avatarUrl).apply(RequestOptions().override(150,150)).circleCrop().into(avatarImageView)
                         if(user.full_name!="no data yet") feedback_author.text = user.full_name
                     }
                 }
@@ -76,7 +77,7 @@ class FeedbackAdapter (
             override fun onCancelled(databaseError: DatabaseError) {
             }
         }
-        userRef.addValueEventListener(userListener)
+        userRef.addListenerForSingleValueEvent(userListener)
 
 
     }
