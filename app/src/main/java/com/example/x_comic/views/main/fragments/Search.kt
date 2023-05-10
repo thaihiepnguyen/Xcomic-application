@@ -56,7 +56,7 @@ class Search : Fragment() {
             myFilter = Klaxon().parse<com.example.x_comic.models.Filter>(json)!!
         }
 
-
+        view.findViewById<EditText>(R.id.searchEditText).setText(keyword)
         customBookListView = view.findViewById(R.id.searchBookList);
 
         val bookListAdapter = BookListAdapter(bookDetailList)
@@ -177,9 +177,10 @@ class Search : Fragment() {
 
     fun nextBookDetailActivity(book: Product) {
         val intent = Intent(context, DetailActivity::class.java)
-        val bundle = Bundle()
-        bundle.putSerializable("bookKey", book)
-        intent.putExtras(bundle)
+//        val bundle = Bundle()
+//        bundle.putSerializable("productKey", book)
+        intent.putExtra("book_data", Klaxon().toJsonString(book))
+
         startActivity(intent)
     }
 }
