@@ -271,9 +271,6 @@ class PostNewActivity : AppCompatActivity() {
         curBook.categories = categoryList
         curBook.chapters = ArrayList(chapterList)
 
-        _user.addToCollection(curBook)
-        userViewModel.saveCollection(_user)
-
         return curBook
     }
 

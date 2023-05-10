@@ -63,12 +63,16 @@ class MainProfileActivity : AppCompatActivity() {
         binding.readingListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val favoriteAdapter = ListAdapterSlideshow(this, bookList)
+        val favoriteAdapter = BookListAdapter(bookList)
         val readingAdapter = BookListAdapter(readingList)
         val avatarAdapter = AvatarListAdapter(followList)
 
         readingAdapter.onItemClick = {
             book -> nextBookDetailActivity(book)
+        }
+
+        favoriteAdapter.onItemClick = {
+                book -> nextBookDetailActivity(book)
         }
 
         avatarAdapter.onItemClick = {
