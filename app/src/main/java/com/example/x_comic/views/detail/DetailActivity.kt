@@ -82,6 +82,7 @@ class DetailActivity : AppCompatActivity() {
         var favorite = findViewById(R.id.favoriteTextView) as TextView;
         var chapter = findViewById(R.id.numOfChapterTextView) as TextView;
         var authorAvt = findViewById(R.id.avatar_picture) as ImageView
+        var authorName = findViewById(R.id.book_author) as TextView
 
         var categoryView = findViewById(R.id.category_list) as RecyclerView
         var rest = findViewById(R.id.rest) as TextView;
@@ -118,6 +119,10 @@ class DetailActivity : AppCompatActivity() {
         }
 
         authorAvt.setOnClickListener {
+            _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
+        }
+
+        authorName.setOnClickListener {
             _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
         }
 
