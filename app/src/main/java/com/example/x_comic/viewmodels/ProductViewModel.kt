@@ -65,7 +65,7 @@ class ProductViewModel : ViewModel() {
 
                     for (snapshot in dataSnapshot.children) {
                         val product = snapshot.getValue(Product::class.java)
-                        if (product != null && _user.penname == product.author) {
+                        if (product != null && _user.id == product.author) {
                             products.add(product)
                         }
                     }

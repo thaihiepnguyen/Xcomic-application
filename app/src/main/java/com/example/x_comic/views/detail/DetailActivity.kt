@@ -30,6 +30,7 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
+import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
 import com.facebook.appevents.AppEventsLogger
@@ -54,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
     private var _currentUser: User? = null
     // TODO: biến đồng bộ với firebase
     private var _currentBook: Product? = null
+    private var _currentAuthor: User? = null
     var favourite = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +81,7 @@ class DetailActivity : AppCompatActivity() {
         var view = findViewById(R.id.viewTextView) as TextView;
         var favorite = findViewById(R.id.favoriteTextView) as TextView;
         var chapter = findViewById(R.id.numOfChapterTextView) as TextView;
+        var authorAvt = findViewById(R.id.avatar_picture) as ImageView
 
         var categoryView = findViewById(R.id.category_list) as RecyclerView
         var rest = findViewById(R.id.rest) as TextView;
@@ -91,7 +94,33 @@ class DetailActivity : AppCompatActivity() {
 
         val backCover = findViewById<ImageView>(R.id.background)
         title.text = bookData?.title
-        author.text = bookData?.author
+//        avatar_picture
+
+        userViewModel.getUserById(bookData!!.author) {
+            user -> run {
+                _currentAuthor = user
+                author.text = user.penname
+                if (user.avatar != "") {
+                    Glide.with(authorAvt.context)
+                        .load(user.avatar)
+                        .apply(RequestOptions().override(100, 100))
+                        .circleCrop()
+                        .into(authorAvt)
+                } else {
+                    Glide.with(authorAvt.context)
+                        .load(R.drawable.avatar)
+                        .apply(RequestOptions().override(100, 100))
+                        .circleCrop()
+                        .into(authorAvt)
+                }
+
+            }
+        }
+
+        authorAvt.setOnClickListener {
+            _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
+        }
+
         favorite.text = bookData?.favorite.toString()
 
         val uid = FirebaseAuthManager.auth.uid
@@ -395,5 +424,13 @@ class DetailActivity : AppCompatActivity() {
         intent.putExtra("book",bookData)
         intent.putExtra("id_chapter", id_chap)
         ActivityCompat.startActivityForResult(this, intent, 302, null)
+    }
+
+    fun nextAuthorProfileActivity(author: User) {
+        val intent = Intent(this, AuthorProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }
