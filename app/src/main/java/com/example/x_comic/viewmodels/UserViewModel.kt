@@ -279,7 +279,7 @@ class UserViewModel : ViewModel() {
             .setValue(user.heart_list)
     }
 
-    fun saveReadingList(user: User) {
+    fun saveCollection(user: User) {
         db.child(user.id).child("collection")
             .setValue(user.collection)
     }

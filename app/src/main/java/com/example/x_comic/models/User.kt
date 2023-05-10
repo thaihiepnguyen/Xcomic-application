@@ -38,6 +38,7 @@ class User : java.io.Serializable
         heart_list: ArrayList<String> = ArrayList(),
         collection: ArrayList<String> = ArrayList(),
         reading: ArrayList<Reading> = ArrayList(),
+        mylist: ArrayList<String> = ArrayList(),
         role: Long = 1, // Role = 1: là đọc giả; 2: là người đọc giả có thể đăng truyện; 3: là admin
     ) {
         this.id = id
@@ -61,11 +62,11 @@ class User : java.io.Serializable
         this.reading = reading
     }
 
-    fun addToReadingList(book: Product) {
+    fun addToCollection(book: Product) {
         this.collection.add(book.id)
     }
 
-    fun removeFromReadingList(book: Product) {
+    fun removeFromCollection(book: Product) {
         var index: Int? = null
 
         for (i in 0 until this.collection.size) {

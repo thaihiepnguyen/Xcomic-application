@@ -92,6 +92,8 @@ class PostNewActivity : AppCompatActivity() {
             curBook.id = id
         }
 
+
+
         var intent = intent
         val _book = intent.getSerializableExtra(Product.MESSAGE1) as? Product
         _book?.let {
@@ -255,6 +257,7 @@ class PostNewActivity : AppCompatActivity() {
     private fun getCurBook () : Product {
 
         curBook.author = _user.penname
+//        curBook.author = _user.id
         curBook.title = findViewById<EditText>(R.id.etTitle).text.toString()
         curBook.tiny_des = findViewById<EditText>(R.id.etDescription).text.toString()
         curBook.status = findViewById<Switch>(R.id.sStatus).isChecked
@@ -263,6 +266,9 @@ class PostNewActivity : AppCompatActivity() {
         curBook.cover = fileNameCover
         curBook.categories = categoryList
         curBook.chapters = ArrayList(chapterList)
+
+        _user.addToCollection(curBook)
+        userViewModel.saveCollection(_user)
 
         return curBook
     }
