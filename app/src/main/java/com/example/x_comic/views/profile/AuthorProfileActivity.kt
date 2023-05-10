@@ -174,7 +174,8 @@ class AuthorProfileActivity : AppCompatActivity() {
                     if (productid != null) {
                         productViewModel.getBookById(productid) { book -> run {
                             cnt++
-                            bookList.add(book)
+                            if (!book.hide)
+                                bookList.add(book)
                         }
                             collectionAdapter.notifyDataSetChanged()
                             binding.readingTV.text = "${cnt} Stories"

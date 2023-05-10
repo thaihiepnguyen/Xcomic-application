@@ -126,7 +126,7 @@ class DetailActivity : AppCompatActivity() {
             _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
         }
 
-        favorite.text = bookData?.favorite.toString()
+        favorite.text = bookData?.have_loved!!.size.toString()
 
         val uid = FirebaseAuthManager.auth.uid
         userViewModel.callApi(uid!!).observe(this, Observer {
