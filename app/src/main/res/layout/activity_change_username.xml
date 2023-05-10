@@ -66,6 +66,6 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
         android:text="Save username"
-        android:textColor="@color/love"
+        android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
