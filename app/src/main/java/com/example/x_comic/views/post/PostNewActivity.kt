@@ -256,8 +256,8 @@ class PostNewActivity : AppCompatActivity() {
 
     private fun getCurBook () : Product {
 
-        curBook.author = _user.penname
-//        curBook.author = _user.id
+//        curBook.author = _user.penname
+        curBook.author = _user.id
         curBook.title = findViewById<EditText>(R.id.etTitle).text.toString()
         curBook.tiny_des = findViewById<EditText>(R.id.etDescription).text.toString()
         curBook.status = findViewById<Switch>(R.id.sStatus).isChecked

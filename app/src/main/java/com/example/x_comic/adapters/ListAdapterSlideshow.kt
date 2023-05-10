@@ -57,6 +57,8 @@ class ListAdapterSlideshow (
         return bookList.size;
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var userViewModel : UserViewModel = UserViewModel()
+        var bookViewModel : ProductViewModel = ProductViewModel()
         val book = bookList.get(position);
         val title = holder.title;
         val author = holder.author;
@@ -67,7 +69,9 @@ class ListAdapterSlideshow (
 
         var _currentUser: User? = null
         title.setText(book.title);
-        author.setText(book.author);
+        userViewModel.getUserById(book.author) {
+                user -> author.setText(user.penname);
+        }
 //        val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
 //        val imageRef = storage.reference.child("book/$imageName")
@@ -86,8 +90,6 @@ class ListAdapterSlideshow (
             .into(cover)
         rating.text= Html.fromHtml("<font>${book.rating} </font>" +
                 "<font color='#FFC000'> ★ </font>")
-        var userViewModel : UserViewModel = UserViewModel()
-        var bookViewModel : ProductViewModel = ProductViewModel()
         FirebaseAuthManager.auth.uid?.let { userViewModel.getUserById(it) { user ->
             run {
                 _currentUser = user

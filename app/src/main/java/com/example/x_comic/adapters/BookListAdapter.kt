@@ -71,9 +71,12 @@ class BookListAdapter (
     }
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var userViewModel : UserViewModel = UserViewModel()
+        var bookViewModel : ProductViewModel = ProductViewModel()
         val book = bookList.get(position);
 
         val title = holder.title;
+
         val author = holder.author;
         val cover = holder.cover;
 
@@ -90,7 +93,10 @@ class BookListAdapter (
         var rest = holder.rest;
         var favourite = false
         title.setText(book.title);
-        author.setText(book.author);
+        userViewModel.getUserById(book.author) {
+            user -> author.setText(user.penname);
+        }
+
 //        val storage = FirebaseStorage.getInstance()
         val imageName = book.cover // Replace with your image name
 //        val imageRef = storage.reference.child("book/$imageName")
@@ -167,8 +173,7 @@ class BookListAdapter (
             }
 
         rest.setText(if ((book.categories.size -3)>0) "+ ${book.categories.size -3} more" else "");
-        var userViewModel : UserViewModel = UserViewModel()
-        var bookViewModel : ProductViewModel = ProductViewModel()
+
         FirebaseAuthManager.auth.uid?.let { userViewModel.getUserById(it) { user ->
             run {
                 _currentUser = user
