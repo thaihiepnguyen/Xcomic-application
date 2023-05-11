@@ -57,6 +57,9 @@ class BookReadingAdapter (
     }
 
     override fun getItemCount(): Int {
+        println("hello "+bookReadingList.size);
+
+       
         return bookReadingList.size;
     }
 

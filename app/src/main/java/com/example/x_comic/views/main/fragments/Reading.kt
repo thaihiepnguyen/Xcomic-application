@@ -134,13 +134,14 @@ class Reading : Fragment() {
 
 
 
-
+        listReading.clear();
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
 
             productViewModel.getAllReadingBook(uid) { booksID ->
                 run {
-                    listReading.clear()
+
+
 
 
                     for (snapshot in booksID.children) {
@@ -152,6 +153,10 @@ class Reading : Fragment() {
 
                                         if ( bookInner!=null && !bookInner.hide) {
                                             println("Hello")
+                                            Product()
+                                            var temp = Product(bookInner.id, bookInner.title, bookInner.cover, bookInner.status, bookInner.tiny_des, bookInner.author, bookInner.view, bookInner.favorite, bookInner.age, bookInner.rating, bookInner.hide, bookInner.categories, bookInner.chapters, bookInner.have_loved)
+                                            var readingBook = BookReading(temp,1,1);
+
                                             listReading.add(0,
                                                 BookReading(
                                                     bookInner,
@@ -163,12 +168,14 @@ class Reading : Fragment() {
 
                                             println(listReading);
 
-                                       //  OnlineAdapter.notifyItemInserted(0);
-
+                                        OnlineAdapter.notifyItemInserted(0);
+                                            OnlineAdapter.notifyDataSetChanged()
                                         }
+                                   //     OnlineAdapter.notifyDataSetChanged()
 
                                     }
                                   //
+                                 //  OnlineAdapter.notifyDataSetChanged()
 
 
 
@@ -177,14 +184,13 @@ class Reading : Fragment() {
                                 }
 
 
-                                OnlineAdapter.notifyDataSetChanged()
 
 
-                            }
+                    }
 
 
-
-
+                    //OnlineAdapter.notifyItemRangeChanged(0, listReading.size);
+                        OnlineAdapter.notifyDataSetChanged();
 
                 }
 
