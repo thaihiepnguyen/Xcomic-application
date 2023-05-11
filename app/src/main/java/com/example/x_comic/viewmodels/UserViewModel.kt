@@ -189,23 +189,7 @@ class UserViewModel : ViewModel() {
         return _authors
     }
 
-    inline fun getAllReadingList(uid: String, bookId: String, crossinline callback: (Reading)->Unit) {
-
-        val ref = db.child(uid).child("reading").child(bookId)
-        println("Hello");
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var book: Reading = dataSnapshot.getValue(Reading::class.java)!!
-                println(book);
-                callback(book)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // TODO: Xử lý lỗi, bỏ thread đi
-                db.removeEventListener(this)
-            }
-        })
-    }
+    
     fun changeUsername(username: String) {
         var currentUser = FirebaseAuthManager.getUser()
         if (currentUser != null) {

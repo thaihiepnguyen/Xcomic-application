@@ -138,51 +138,59 @@ class Reading : Fragment() {
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
 
-            productViewModel.getAllBookIsLoved(uid) { booksID ->
+            productViewModel.getAllReadingBook(uid) { booksID ->
                 run {
                     listReading.clear()
-                    var cnt: Int = 0
-                    for (bookid in booksID.children) {
 
-                        userViewModel.getAllReadingList(uid,bookid.value as String) { book ->
-                            run {
 
-                                productViewModel.getBookById(bookid.value as String) { bookInner ->
+                    for (snapshot in booksID.children) {
+
+                                var bookid = snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+
+                                productViewModel.getBookById(bookid!!.id_book) { bookInner ->
                                     run {
-                                        Log.d("BOOKKKKK", bookInner.title)
-                                        if (bookInner.islove(uid) && !bookInner.hide && book!=null) {
-                                            cnt++
-                                            listReading.add(
+
+                                        if ( bookInner!=null && !bookInner.hide) {
+                                            println("Hello")
+                                            listReading.add(0,
                                                 BookReading(
                                                     bookInner,
-                                                    book.posChap,
-                                                    book.numChap
+                                                    bookid.posChap,
+                                                    bookid.numChap
                                                 )
+
                                             )
+
+                                            println(listReading);
+
+                                       //  OnlineAdapter.notifyItemInserted(0);
+
                                         }
-                                        else {
-                                            cnt++
-                                            listReading.add(
-                                                BookReading(
-                                                    bookInner,
-                                                    0,
-                                                    0
-                                                )
-                                            )
-                                        }
+
                                     }
+                                  //
+
 
 
 
 
                                 }
-                            }
-                        }
-                    }
 
-                    OnlineAdapter.notifyDataSetChanged()
+
+                                OnlineAdapter.notifyDataSetChanged()
+
+
+                            }
+
+
+
+
+
                 }
+
+
             }
+
         }
 
 
