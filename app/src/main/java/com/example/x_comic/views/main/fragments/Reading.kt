@@ -1,11 +1,13 @@
 package com.example.x_comic.views.main.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
@@ -14,6 +16,10 @@ import com.example.x_comic.adapters.CategoryAdapter
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookReading
 import com.example.x_comic.models.BookSneek
+import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -35,67 +41,64 @@ class Reading : Fragment() {
         BookSneek("The Victim's Picture", "gizashey", R.drawable.book_cover_7, 4.2)
 
     )
-    var bookDetailList: MutableList<Book> = mutableListOf(
+//    var bookDetailList: MutableList<Book> = mutableListOf(
+//
+//        Book(
+//            bookList[0],
+//            253.2,
+//            125.5,
+//            20,
+//            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
+//        ),
+//        Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
+//        Book(bookList[2], 179.6, 122.2, 25, arrayListOf("School Life", "Humor", "Short Story")),
+//        Book(
+//            bookList[3],
+//            211.3,
+//            112.6,
+//            34,
+//            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
+//        ),
+//        Book(
+//            bookList[4],
+//            236.2,
+//            109.7,
+//            36,
+//            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
+//        )
+//    )
+//    var listReadingOffline: MutableList<BookReading> = mutableListOf(
+//        BookReading(
+//            bookDetailList[1],
+//            current = 12
+//        ),
+//        BookReading(
+//            bookDetailList[0],
+//            current = 5
+//        ),
+//        BookReading(
+//            bookDetailList[4],
+//            current = 10
+//        ),
+//        BookReading(
+//            bookDetailList[3],
+//            current = 11
+//        ),
+//        BookReading(
+//            bookDetailList[2],
+//            current = 8
+//        )
+//
+//    )
 
-        Book(
-            bookList[0],
-            253.2,
-            125.5,
-            20,
-            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
-        ),
-        Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
-        Book(bookList[2], 179.6, 122.2, 25, arrayListOf("School Life", "Humor", "Short Story")),
-        Book(
-            bookList[3],
-            211.3,
-            112.6,
-            34,
-            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
-        ),
-        Book(
-            bookList[4],
-            236.2,
-            109.7,
-            36,
-            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
-        )
-    )
-    var listReadingOffline: MutableList<BookReading> = mutableListOf(
-        BookReading(
-            bookDetailList[1],
-            current = 12
-        ),
-        BookReading(
-            bookDetailList[0],
-            current = 5
-        ),
-        BookReading(
-            bookDetailList[4],
-            current = 10
-        ),
-        BookReading(
-            bookDetailList[3],
-            current = 11
-        ),
-        BookReading(
-            bookDetailList[2],
-            current = 8
-        )
 
-    )
+    var bookDetailList: MutableList<Product> = mutableListOf()
+    var listReadingOffline: MutableList<BookReading> = mutableListOf()
 
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var productViewModel: ProductViewModel
     var listReading: MutableList<BookReading> = mutableListOf();
-    fun getListRead(){
-    repeat(50)
-    {
-        val bookReading = BookReading(
-            bookDetailList[it % 5],
-            current = listReadingOffline[it % 5].current
-        )
-        listReading.add(bookReading)
-    }
-    }
+
     var customOfflineBookList : RecyclerView? = null;
     var customOnlineBookList: RecyclerView? = null;
 
@@ -110,13 +113,11 @@ class Reading : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_reading, container, false)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         customOfflineBookList = view.findViewById(R.id.offline_books);
         customOnlineBookList = view.findViewById(R.id.online_books);
-
-        getListRead();
-
-
 
         val adapter = BookReadingAdapter(listReadingOffline);
 
@@ -130,6 +131,48 @@ class Reading : Fragment() {
 
         customOfflineBookList!!.layoutManager = GridLayoutManager(this.context,3);
         customOnlineBookList!!.layoutManager = GridLayoutManager(this.context,3);
+
+
+
+
+        val uid = FirebaseAuthManager.auth.uid
+        if (uid != null) {
+
+            productViewModel.getAllBookIsLoved(uid) { booksID ->
+                run {
+                    listReading.clear()
+                    var cnt: Int = 0
+                    for (bookid in booksID.children) {
+
+                        userViewModel.getAllReadingList(uid,bookid.value as String) { book ->
+                            run {
+
+                                productViewModel.getBookById(bookid.value as String) { bookInner ->
+                                    run {
+                                        Log.d("BOOKKKKK", bookInner.title)
+                                        if (bookInner.islove(uid) && !bookInner.hide) {
+                                            cnt++
+                                            listReading.add(
+                                                BookReading(
+                                                    bookInner,
+                                                    book.posChap,
+                                                    book.numChap
+                                                )
+                                            )
+                                        }
+                                    }
+
+                                    OnlineAdapter.notifyDataSetChanged();
+
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
 
 
 

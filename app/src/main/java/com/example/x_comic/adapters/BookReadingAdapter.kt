@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookReading
@@ -69,16 +71,23 @@ class BookReadingAdapter (
 
 
 
-        cover.setImageResource(book.book.book.cover);
-        title.setText(book.book.book.title);
+       // cover.setImageResource(book.book.book.cover);
 
-        var total = book.book.chapter;
+
+        val imageName = book.book.cover
+        Glide.with(cover.context)
+            .load(imageName)
+            .apply(RequestOptions().override(500, 600))
+            .into(cover)
+        title.setText(book.book.title);
+
+        var total = book.chapter;
         var current = book.current;
 
         progressbar.progress = current*100/total;
 
         holder.itemView.setOnLongClickListener {
-            val dialog = BookDialog(book.book.book.title);
+            val dialog = BookDialog(book.book.title);
             dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
             true // Return true to indicate the event has been consumed
         }
