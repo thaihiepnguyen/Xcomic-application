@@ -150,7 +150,7 @@ class Reading : Fragment() {
                                 productViewModel.getBookById(bookid.value as String) { bookInner ->
                                     run {
                                         Log.d("BOOKKKKK", bookInner.title)
-                                        if (bookInner.islove(uid) && !bookInner.hide) {
+                                        if (bookInner.islove(uid) && !bookInner.hide && book!=null) {
                                             cnt++
                                             listReading.add(
                                                 BookReading(
@@ -160,9 +160,19 @@ class Reading : Fragment() {
                                                 )
                                             )
                                         }
+                                        else {
+                                            cnt++
+                                            listReading.add(
+                                                BookReading(
+                                                    bookInner,
+                                                    0,
+                                                    0
+                                                )
+                                            )
+                                        }
                                     }
 
-                                    OnlineAdapter.notifyDataSetChanged();
+
 
 
                                 }
@@ -170,6 +180,7 @@ class Reading : Fragment() {
                         }
                     }
 
+                    OnlineAdapter.notifyDataSetChanged()
                 }
             }
         }
