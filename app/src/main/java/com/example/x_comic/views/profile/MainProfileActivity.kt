@@ -63,8 +63,8 @@ class MainProfileActivity : AppCompatActivity() {
         binding.readingListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val favoriteAdapter = BookListAdapter(bookList)
-        val readingAdapter = BookListAdapter(readingList)
+        val favoriteAdapter = ProfileBookListAdapter(bookList)
+        val readingAdapter = ProfileBookListAdapter(readingList)
         val avatarAdapter = AvatarListAdapter(followList)
 
         readingAdapter.onItemClick = {
