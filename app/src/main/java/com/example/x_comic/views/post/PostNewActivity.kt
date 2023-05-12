@@ -270,7 +270,7 @@ class PostNewActivity : AppCompatActivity() {
         curBook.age = age
         curBook.cover = fileNameCover
         curBook.categories = categoryList
-        curBook.chapters = ArrayList(chapterList)
+        curBook.chapters = ArrayList()
 
         return curBook
     }
@@ -293,8 +293,18 @@ class PostNewActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
 
+            if (is_new) {
+                var temp = Product()
+                temp.id = curBook.id
+
+                productViewModel.updateProduct(temp)
+            }
+
+            productViewModel.updateChapter(reply.id_book, chapterList.size, reply);
+
             chapterList.add(reply)
             chapterListAdapter?.notifyDataSetChanged()
+
         }
 
         if (requestCode == REQUEST_CODE_UPDATE_CHAPTER && resultCode == RESULT_OK && data != null) {
@@ -308,8 +318,12 @@ class PostNewActivity : AppCompatActivity() {
                     }
                 temp?.let {
                     chapterList.remove(temp);
+                    productViewModel.deleteAllChapter(temp.id_book);
+                    for (i in chapterList)
+                        productViewModel.updateChapter(i.id_book,chapterList.indexOf(i),i)
                 }
             } else {
+                productViewModel.updateChapter(reply.id_book, index, reply);
                 chapterList[index] = reply
             }
 

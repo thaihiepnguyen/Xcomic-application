@@ -172,8 +172,16 @@ class Writing : Fragment() {
                 productViewModel.deleteProduct(reply)
             } else {
                 // TODO: Update book tren BD
+                productViewModel.updateAuthor(reply.id, reply.author)
+                productViewModel.updateTitle(reply.id, reply.title)
+                productViewModel.updateTinyDes(reply.id, reply.tiny_des)
+                productViewModel.updateCover(reply.id, reply.cover)
+                productViewModel.updateStatus(reply.id, reply.status)
+                productViewModel.updateHide(reply.id, reply.hide)
+                productViewModel.updateAge(reply.id, reply.age)
+                productViewModel.updateCategory(reply.id, reply.categories)
 
-                productViewModel.updateProduct(reply)
+//                productViewModel.updateProduct(reply)
             }
         }
 
@@ -183,7 +191,16 @@ class Writing : Fragment() {
             // TODO: Post book len DB
             _user.addToCollection(reply)
             userViewModel.saveCollection(_user)
-            productViewModel.updateProduct(reply)
+            productViewModel.updateAuthor(reply.id, reply.author)
+            productViewModel.updateTitle(reply.id, reply.title)
+            productViewModel.updateTinyDes(reply.id, reply.tiny_des)
+            productViewModel.updateCover(reply.id, reply.cover)
+            productViewModel.updateStatus(reply.id, reply.status)
+            productViewModel.updateHide(reply.id, reply.hide)
+            productViewModel.updateAge(reply.id, reply.age)
+            productViewModel.updateCategory(reply.id, reply.categories)
+
+//            productViewModel.updateProduct(reply)
         }
     }
 }
