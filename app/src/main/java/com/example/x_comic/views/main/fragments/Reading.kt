@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 
@@ -33,14 +32,14 @@ import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.read.ReadBookActivity
 
-
+var listReading: MutableList<BookReading> = mutableListOf();
 class Reading : Fragment() {
 
     var listReadingOffline: MutableList<BookReading> = mutableListOf()
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var productViewModel: ProductViewModel
-    var listReading: MutableList<BookReading> = mutableListOf();
+
 
     var customOfflineBookList : RecyclerView? = null;
     var customOnlineBookList: RecyclerView? = null;
@@ -143,7 +142,7 @@ class Reading : Fragment() {
 
         OnlineAdapter.setOnItemLongClickListener {
             book, position ->
-            val dialog = BookDialog(book, true, position);
+            val dialog = BookDialog(book, true, position, OnlineAdapter);
             dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
         }
 
@@ -171,7 +170,7 @@ class Reading : Fragment() {
 }
 
 
-class BookDialog(private val book: BookReading, private val type: Boolean, private val position: Int) : DialogFragment() {
+class BookDialog(private val book: BookReading, private val type: Boolean, private val position: Int, private val adapter: BookReadingAdapter) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { // Use the Builder class for convenient dialog construction
             var builder = AlertDialog.Builder(it)
@@ -192,7 +191,7 @@ class BookDialog(private val book: BookReading, private val type: Boolean, priva
                                 nextBookInfoActivity(book)
                             }
                             2-> {
-                                removeBook(position)
+                                removeBook(position, adapter)
                             }
                             else -> {
 
@@ -218,17 +217,30 @@ class BookDialog(private val book: BookReading, private val type: Boolean, priva
     }
 
 
-    private fun removeBook(position: Int){
+    private fun removeBook(position: Int, adapter: BookReadingAdapter){
         var userViewModel: UserViewModel
         var productViewModel: ProductViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
+            productViewModel.getAllReadingBook(uid) { booksID ->
+                run {
+                    //  productViewModel.removeBookReading(uid,position)
+                    val childrenList: ArrayList<com.example.x_comic.models.Reading> = arrayListOf();
+                    for (snapshot in booksID.children){
+                        var bookid = snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+                        if (bookid!=null) {
+                            childrenList.add(bookid!!)
+                        }
+                    }
+                    childrenList.removeAt(position);
+                    listReading.removeAt(position)
 
-            productViewModel.removeBookReading(uid,position)
-
-
+                    userViewModel.updateReadingUserList(childrenList)
+                    adapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 
