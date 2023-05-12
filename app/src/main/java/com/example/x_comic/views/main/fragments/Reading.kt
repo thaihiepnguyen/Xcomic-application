@@ -1,5 +1,6 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Intent
 import android.os.Bundle
 
 import androidx.fragment.app.Fragment
@@ -7,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.adapters.BookReadingAdapter
 
@@ -20,7 +23,8 @@ import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
-
+import com.example.x_comic.views.detail.DetailActivity
+import com.example.x_comic.views.read.ReadBookActivity
 
 
 class Reading : Fragment() {
@@ -126,9 +130,25 @@ class Reading : Fragment() {
         }
 
 
+        OnlineAdapter.onItemClick = {
+                book -> nextBookDetailActivity(book)
+        }
 
 
         return view
+    }
+
+    fun nextBookDetailActivity(book: BookReading) {
+
+        if (book != null) {
+
+            val intent = Intent(context, ReadBookActivity::class.java)
+            intent.putExtra("book", book.book)
+            intent.putExtra("id_chapter", book.current.toString())
+            ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
+        } else {
+            // Handle the case when the book is null
+        }
     }
 
 

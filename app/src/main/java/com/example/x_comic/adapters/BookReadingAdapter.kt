@@ -90,7 +90,7 @@ class BookReadingAdapter (
         progressbar.progress = current*100/total;
 
         holder.itemView.setOnLongClickListener {
-            val dialog = BookDialog(book.book.title);
+            val dialog = BookDialog(book.book.title, isOnline);
             dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
             true // Return true to indicate the event has been consumed
         }
