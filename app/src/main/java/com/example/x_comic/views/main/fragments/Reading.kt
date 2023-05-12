@@ -142,8 +142,8 @@ class Reading : Fragment() {
         }
 
         OnlineAdapter.setOnItemLongClickListener {
-            book ->
-            val dialog = BookDialog(book, true);
+            book, position ->
+            val dialog = BookDialog(book, true, position);
             dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
         }
 
@@ -165,23 +165,19 @@ class Reading : Fragment() {
     }
 
 
-
-
-}
-
-class BookDialog(private val book: BookReading, private val type: Boolean) : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let { // Use the Builder class for convenient dialog construction
-            var builder = AlertDialog.Builder(it)
-            builder.setTitle(book.book.title)
-            if (!type){
-                builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library","Remove from Offline"),
-                    DialogInterface.OnClickListener { dialog, which ->
-                        Log.d("nlhdung", "Selected item index $which") }) // Create the AlertDialog object and return it
-            }
-            else {
-                builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library"),
-                    DialogInterface.OnClickListener { dialog, which ->
+    class BookDialog(private val book: BookReading, private val type: Boolean, private val position: Int) : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return activity?.let { // Use the Builder class for convenient dialog construction
+                var builder = AlertDialog.Builder(it)
+                builder.setTitle(book.book.title)
+                if (!type){
+                    builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library","Remove from Offline"),
+                        DialogInterface.OnClickListener { dialog, which ->
+                            Log.d("nlhdung", "Selected item index $which") }) // Create the AlertDialog object and return it
+                }
+                else {
+                    builder.setItems(arrayOf("Read", "Story Info", "Remove from Library"),
+                        DialogInterface.OnClickListener { dialog, which ->
                             when(which){
                                 0 -> {
                                     nextBookDetailActivity(book)
@@ -189,31 +185,50 @@ class BookDialog(private val book: BookReading, private val type: Boolean) : Dia
                                 1-> {
                                     nextBookInfoActivity(book)
                                 }
+                                2-> {
+                                    removeBook(position)
+                                }
                                 else -> {
 
                                 }
                             }
 
-                    }) // Create the AlertDialog object and return it
+                        }) // Create the AlertDialog object and return it
+                }
+
+                builder.create() } ?: throw IllegalStateException("Activity cannot be null") }
+
+        private fun nextBookDetailActivity(book: BookReading) {
+            val intent = Intent(context, ReadBookActivity::class.java)
+            intent.putExtra("book", book.book)
+            intent.putExtra("id_chapter", book.current.toString())
+            ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
+        }
+
+        private fun nextBookInfoActivity(book: BookReading) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("book_data",  Klaxon().toJsonString(book.book))
+            startActivity(intent)
+        }
+
+
+        private fun removeBook(position: Int){
+            var userViewModel: UserViewModel
+            var productViewModel: ProductViewModel
+            userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+            productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+            val uid = FirebaseAuthManager.auth.uid
+            if (uid != null) {
+
+                productViewModel.removeBookReading(uid,position)
+
+
             }
+        }
 
-            builder.create() } ?: throw IllegalStateException("Activity cannot be null") }
-
-    private fun nextBookDetailActivity(book: BookReading) {
-        val intent = Intent(context, ReadBookActivity::class.java)
-        intent.putExtra("book", book.book)
-        intent.putExtra("id_chapter", book.current.toString())
-        ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
     }
-
-    private fun nextBookInfoActivity(book: BookReading) {
-        val intent = Intent(context, DetailActivity::class.java)
-        intent.putExtra("book_data",  Klaxon().toJsonString(book.book))
-        startActivity(intent)
-    }
-
-
 
 
 }
+
 

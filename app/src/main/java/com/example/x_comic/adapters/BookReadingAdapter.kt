@@ -20,10 +20,10 @@ class BookReadingAdapter (
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
-    private var longClickListener: ((BookReading) -> Unit)? = null
+    private var longClickListener: ((BookReading,Int) -> Unit)? = null
 
     // Create a function to set the long click listener
-    fun setOnItemLongClickListener(listener: (BookReading) -> Unit) {
+    fun setOnItemLongClickListener(listener: (BookReading,Int) -> Unit) {
         longClickListener = listener
     }
     var context: Context? = null;
@@ -91,7 +91,7 @@ class BookReadingAdapter (
 
         holder.itemView.setOnLongClickListener {
 
-            longClickListener?.invoke(book)
+            longClickListener?.invoke(book,position)
             true // Return true to indicate the event has been consumed
         }
 
@@ -102,6 +102,8 @@ class BookReadingAdapter (
     }
 
 }
+
+
 
 
 
