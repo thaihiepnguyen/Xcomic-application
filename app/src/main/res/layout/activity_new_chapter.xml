@@ -83,23 +83,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
-    <EditText
-        android:id="@+id/etContent"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:fontFamily="@font/poppins_light"
-        android:inputType="textMultiLine"
-        android:maxLines="100"
-        android:scrollbars="vertical"
-        android:hint="Start writting"
+        android:layout_marginTop="160dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
+        app:layout_constraintTop_toBottomOf="@+id/sLockChapter">
+        <EditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:ems="10"
+            android:fontFamily="@font/poppins_light"
+            android:inputType="textMultiLine"
+            android:maxLines="100"
+            android:scrollbars="vertical"
+            android:hint="Start writting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
+    </androidx.core.widget.NestedScrollView>
+
+
 
     <TextView
         android:id="@+id/tvCountWords"
