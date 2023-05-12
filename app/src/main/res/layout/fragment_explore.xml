@@ -15,7 +15,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="140dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="20dp"
 
                     android:text="Explore"
                     android:textColor="@color/white"
@@ -97,6 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Category"
+                        android:fontFamily="@font/poppins_bold"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         android:paddingHorizontal="30dp"
