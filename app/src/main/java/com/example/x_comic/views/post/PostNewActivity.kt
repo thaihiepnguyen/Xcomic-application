@@ -92,6 +92,11 @@ class PostNewActivity : AppCompatActivity() {
             curBook.id = id
         }
 
+        var cover = findViewById<ImageView>(R.id.ivCover)
+        cover.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+        }
 
 
         var intent = intent
@@ -102,11 +107,7 @@ class PostNewActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.title).text = "Update Book"
             findViewById<Button>(R.id.btnNext).text = "SAVE"
 
-            var cover = findViewById<ImageView>(R.id.ivCover)
-            cover.setOnClickListener {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
-            }
+
 //            val storage = FirebaseStorage.getInstance()
 //            val imageName = curBook.cover // Replace with your image name
 //            val imageRef = storage.reference.child("book/$imageName")
@@ -270,9 +271,6 @@ class PostNewActivity : AppCompatActivity() {
         curBook.cover = fileNameCover
         curBook.categories = categoryList
         curBook.chapters = ArrayList(chapterList)
-
-        _user.addToCollection(curBook)
-        userViewModel.saveCollection(_user)
 
         return curBook
     }

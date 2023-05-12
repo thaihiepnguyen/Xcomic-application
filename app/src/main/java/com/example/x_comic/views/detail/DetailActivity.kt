@@ -1,17 +1,15 @@
 package com.example.x_comic.views.detail
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +31,6 @@ import com.example.x_comic.views.main.fragments.*
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
-import com.facebook.appevents.AppEventsLogger
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -44,388 +41,343 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
-import java.lang.Math.min
-import java.lang.Math.round
 import kotlin.math.roundToInt
 
 
 class DetailActivity : AppCompatActivity() {
     private var _currentUser: User? = null
-    // TODO: biến đồng bộ với firebase
+    //Sync with firebase
     private var _currentBook: Product? = null
     private var _currentAuthor: User? = null
-    var favourite = false
+    private var favourite = false
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        var productViewModel: ProductViewModel
-        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        var userViewModel: UserViewModel
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-
-        // TODO: nhanh hơn
-//        var bundle = Bundle()
-//        bundle = intent.extras!!
-//
-//        var bookData: Product = bundle.get("productKey") as Product;
+        //Declare view model to get data
+        val productViewModel: ProductViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        val userViewModel: UserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        //get data of book to display detail
         val stringData = intent.getStringExtra("book_data")
-        val bookData = stringData?.let{ Klaxon().parse<Product>(it)}
+        var bookData:Product? = Product()
+        val databaseReference = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("book").child(stringData!!)
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                bookData = dataSnapshot.getValue(Product::class.java)
+                if (bookData != null){
+                    //declare member of ui
+                    val title = findViewById<TextView>(R.id.book_title)
+                    val author = findViewById<TextView>(R.id.book_author)
+                    val cover = findViewById<ImageView>(R.id.book_cover)
+                    val view = findViewById<TextView>(R.id.viewTextView)
+                    val favorite = findViewById<TextView>(R.id.favoriteTextView)
+                    val chapter = findViewById<TextView>(R.id.numOfChapterTextView)
+                    val authorAvt = findViewById<ImageView>(R.id.avatar_picture)
+                    val authorName = findViewById<TextView>(R.id.book_author)
+                    val categoryView = findViewById<RecyclerView>(R.id.category_list)
+                    val status = findViewById<TextView>(R.id.statusTV)
+                    val age = findViewById<TextView>(R.id.ageTV)
+                    val descTextView = findViewById<TextView>(R.id.descTextView)
+                    val ratingTextView = findViewById<TextView>(R.id.ratingTV)
+                    val chooseChapterBtn = findViewById<Button>(R.id.chooseChapterBtn)
+                    val favorBtn = findViewById<Button>(R.id.favorBtn)
+                    val backCover = findViewById<ImageView>(R.id.background)
+                    //assign data to view
+                    title.text = bookData?.title
 
-        var title = findViewById(R.id.book_title) as TextView;
-        var author = findViewById(R.id.book_author) as TextView;
-        var cover = findViewById(R.id.book_cover) as ImageView;
-        var view = findViewById(R.id.viewTextView) as TextView;
-        var favorite = findViewById(R.id.favoriteTextView) as TextView;
-        var chapter = findViewById(R.id.numOfChapterTextView) as TextView;
-        var authorAvt = findViewById(R.id.avatar_picture) as ImageView
-        var authorName = findViewById(R.id.book_author) as TextView
+                    userViewModel.getUserById(bookData!!.author) {
+                            user -> run {
+                        _currentAuthor = user
+                        author.text = user.penname
+                        if (user.avatar != "") {
+                            Glide.with(authorAvt.context)
+                                .load(user.avatar)
+                                .apply(RequestOptions().override(100, 100))
+                                .circleCrop()
+                                .into(authorAvt)
+                        } else {
+                            Glide.with(authorAvt.context)
+                                .load(R.drawable.avatar)
+                                .apply(RequestOptions().override(100, 100))
+                                .circleCrop()
+                                .into(authorAvt)
+                        }
 
-        var categoryView = findViewById(R.id.category_list) as RecyclerView
-        var rest = findViewById(R.id.rest) as TextView;
-        var status = findViewById(R.id.statusTV) as TextView;
-        var age = findViewById(R.id.ageTV) as TextView;
-        var descTextView = findViewById(R.id.descTextView) as TextView
-        var ratingTextView = findViewById(R.id.ratingTV) as TextView;
-        var chooseChapterBtn = findViewById(R.id.chooseChapterBtn) as Button;
-        var favorBtn = findViewById(R.id.favorBtn) as Button
+                    }
+                    }
+                    authorAvt.setOnClickListener {
+                        _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
+                    }
+                    authorName.setOnClickListener {
+                        _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
+                    }
 
-        val backCover = findViewById<ImageView>(R.id.background)
-        title.text = bookData?.title
-//        avatar_picture
+                    favorite.text = bookData!!.have_loved.size.toString()
 
-        userViewModel.getUserById(bookData!!.author) {
-            user -> run {
-                _currentAuthor = user
-                author.text = user.penname
-                if (user.avatar != "") {
-                    Glide.with(authorAvt.context)
-                        .load(user.avatar)
-                        .apply(RequestOptions().override(100, 100))
-                        .circleCrop()
-                        .into(authorAvt)
-                } else {
-                    Glide.with(authorAvt.context)
-                        .load(R.drawable.avatar)
-                        .apply(RequestOptions().override(100, 100))
-                        .circleCrop()
-                        .into(authorAvt)
-                }
+                    //check book is in favorite list
+                    val uid = FirebaseAuthManager.auth.uid
+                    userViewModel.callApi(uid!!).observe(this@DetailActivity) { user ->
+                        _currentUser = user
+                    }
+                    productViewModel.getBookById(bookData!!.id) { product ->
+                        // TODO: realtime
+                        _currentBook = product
+                        favourite = _currentUser?.let { _currentBook!!.islove(it.id) } == true
+                        if (favourite) {
+                            favorBtn.text = "✗"
 
-            }
-        }
+                        } else {
+                            favorBtn.text = "ღ"
+                        }
+                    }
 
-        authorAvt.setOnClickListener {
-            _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
-        }
+                    val imageName = bookData!!.cover
+                    Glide.with(cover.context)
+                        .load(imageName)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(cover)
+                    Glide.with(this@DetailActivity)
+                        .load(imageName)
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                        .into(backCover)
 
-        authorName.setOnClickListener {
-            _currentAuthor?.let { it1 -> nextAuthorProfileActivity(it1) }
-        }
+                    view.text = bookData!!.view.toString()
 
-        favorite.text = bookData?.have_loved!!.size.toString()
+                    chapter.text = bookData!!.chapters.size.toString()
 
-        val uid = FirebaseAuthManager.auth.uid
-        userViewModel.callApi(uid!!).observe(this, Observer {
-            user -> _currentUser = user
-        })
+                    if (bookData!!.status){
+                        status.text = "Completed"
+                    }else{
+                        status.text = "Ongoing"
+                    }
 
-        productViewModel.getBookById(bookData!!.id) { product ->
-            // TODO: realtime
-            _currentBook = product
-            favourite = _currentUser?.let { _currentBook!!.islove(it.id) } == true
-            if (favourite) {
-                favorBtn.text = "✗"
+                    age.text = bookData!!.age.toString() + "+"
 
-            } else {
-                favorBtn.text = "ღ"
-            }
-        }
-        // Get a reference to the Firebase Storage instance
-//        val storage = FirebaseStorage.getInstance()
-        val imageName = bookData?.cover // Replace with your image name
-//        val imageRef = storage.reference.child("book/$imageName")
-//        imageRef.getBytes(Long.MAX_VALUE)
-//            .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-//                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-//
-//                // Set the Bitmap to the ImageView
-//                cover.setImageBitmap(bitmap)
-//
-//
-//                Glide.with(this)
-//                    .load(bitmap)
-//                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-//                    .into(backCover)
-//            }.addOnFailureListener {
-//                // Handle any errors
-//            }
-        Glide.with(cover.context)
-            .load(imageName)
-            .apply(RequestOptions().override(500, 600))
-            .into(cover)
-        Glide.with(this)
-            .load(imageName)
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-            .into(backCover)
-        view.text = bookData?.view.toString()
-        chapter.text = bookData?.chapters?.size.toString()
-        if (bookData!!.status){
-            status.text = "Completed"
-        }else{
-            status.text = "Ongoing"
-        }
-        age.text = bookData.age.toString() + "+"
-        descTextView.text = bookData.tiny_des
-        ratingTextView.text = bookData.rating.toString()
+                    descTextView.text = bookData!!.tiny_des
 
-        val adapter = CategoryAdapter(bookData.categories);
-        categoryView!!.adapter = adapter;
-        val layoutManager = FlexboxLayoutManager(this);
-        layoutManager!!.flexWrap = FlexWrap.WRAP;
-        layoutManager!!.flexDirection = FlexDirection.ROW;
-        layoutManager!!.alignItems = AlignItems.FLEX_START;
-        categoryView!!.layoutManager = layoutManager;
+                    ratingTextView.text = bookData!!.rating.toString()
+                    //display categories of the book
+                    val adapter = CategoryAdapter(bookData!!.categories)
+                    categoryView.adapter = adapter
+                    val layoutManager = FlexboxLayoutManager(this@DetailActivity)
+                    layoutManager.flexWrap = FlexWrap.WRAP
+                    layoutManager.flexDirection = FlexDirection.ROW
+                    layoutManager.alignItems = AlignItems.FLEX_START
+                    categoryView.layoutManager = layoutManager
 
+                    chooseChapterBtn.text = "☰ " +  bookData!!.chapters.size.toString()  +" Chapters"
 
-        chooseChapterBtn.setText("☰ " +  bookData.chapters.size.toString()  +" Chapters")
+                    //button back to previous activity
+                    val backBtn = findViewById<Button>(R.id.backBtn)
+                    backBtn.setOnClickListener {
+                        finish()
+                    }
+                    //process favorite feature
+                    favorBtn.setOnClickListener{
+                        favourite = !favourite
+                        if (favourite) {
+                            _currentUser!!.love(_currentBook!!)
+                            _currentBook!!.love(_currentUser!!)
+                            favorBtn.text = "✗"
+                        }else {
+                            _currentUser!!.unLove(_currentBook!!)
+                            _currentBook!!.notlove(_currentUser!!)
+                            favorBtn.text = "ღ"
+                        }
+                        productViewModel.saveCurrentIsLove(_currentBook!!)
+                        userViewModel.saveHeartList(_currentUser!!)
+                    }
+                    //process read button
+                    if (bookData!!.chapters.size!=0){
+                        val readBtn = findViewById<Button>(R.id.readBtn)
+                        readBtn.setOnClickListener {
+                            bookData!!.view += 1
+                            productViewModel.updateView(bookData!!.id, bookData!!.view)
+                            readingCurrentBook(bookData!!)
+                        }
+                    }
 
-        //button back to previous activity
-        val backBtn = findViewById<Button>(R.id.backBtn)
-        backBtn.setOnClickListener {
-            finish()
-        }
+                    //open dialog choose chapter to read
+                    val chooseBtn = findViewById<Button>(R.id.chooseChapterBtn)
+                    chooseBtn.setOnClickListener {
+                        val dl = Dialog(this@DetailActivity)
+                        dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        dl.setContentView(R.layout.list_chapter_dialog)
+                        dl.show()
+                        val bgCover = dl.findViewById<ImageView>(R.id.background)
+                        val miniCover = dl.findViewById<ImageView>(R.id.book)
+                        val miniTitle = dl.findViewById<TextView>(R.id.book_title)
+                        miniTitle.text = bookData!!.title
+                        Glide.with(miniCover.context)
+                            .load(imageName)
+                            .apply(RequestOptions().override(500, 600))
+                            .into(miniCover)
+                        Glide.with(this@DetailActivity)
+                            .load(imageName)
+                            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                            .into(bgCover)
+                        val chapterListView = dl.findViewById<ListView>(R.id.chapterListView)
+                        val adapter = ChapterAdapter(this@DetailActivity, bookData!!.chapters)
+                        chapterListView.adapter = adapter
+                        chapterListView.setOnItemClickListener { adapterView, view, i, l ->
+                            //Click and read book
+                            if(!bookData!!.chapters[i]._lock){
+                                val intent = Intent(this@DetailActivity, ReadBookActivity::class.java)
+                                intent.putExtra("book",bookData)
+                                intent.putExtra("id_chapter",bookData!!.chapters[i].id_chapter)
+                                ActivityCompat.startActivityForResult(this@DetailActivity, intent, 302, null)
+                            }else{
+                                val intent = Intent(this@DetailActivity, PurchaseActivity::class.java)
+                                intent.putExtra("book_data", bookData!!.id)
+                                intent.putExtra("chapter", Klaxon().toJsonString(bookData!!.chapters[i]))
+                                ActivityCompat.startActivityForResult(this@DetailActivity, intent, 700, null)
+                            }
 
-        favorBtn.setOnClickListener{
-            favourite = !favourite;
-            if (favourite) {
-                _currentUser!!.love(_currentBook!!)
-                _currentBook!!.love(_currentUser!!)
-                favorBtn.text = "✗"
-            }else {
-                _currentUser!!.unLove(_currentBook!!)
-                _currentBook!!.notlove(_currentUser!!)
-                favorBtn.text = "ღ"
-            }
-            productViewModel.saveCurrentIsLove(_currentBook!!)
-            userViewModel.saveHeartList(_currentUser!!)
-        }
-        //read
-        if (bookData.chapters.size!=0){
-            val readBtn = findViewById<Button>(R.id.readBtn)
-            readBtn.setOnClickListener {
-                bookData.view += 1
-                productViewModel.updateView(bookData.id, bookData.view)
-                readingCurrentBook(bookData)
-            }
-        }
+                        }
+                    }
+                    //open dialog feedback and rating
+                    val ratingBtn = findViewById<Button>(R.id.ratingBtn)
+                    ratingBtn.setOnClickListener {
+                        val dl = Dialog(this@DetailActivity)
+                        dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        dl.setContentView(R.layout.dialog_fb_rating)
+                        dl.show()
 
+                        val ratingBar = dl.findViewById<RatingBar>(R.id.ratingBar)
+                        val ratingTextView = dl.findViewById<TextView>(R.id.ratingTextView)
+                        val submitBtn = dl.findViewById<Button>(R.id.submitBtn)
+                        val comment = dl.findViewById<EditText>(R.id.editText)
 
+                        ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
+                            ratingTextView.text = String.format("(%s)", fl)
+                        }
 
-        //open dialog choose chapter to read
-        val chooseBtn = findViewById<Button>(R.id.chooseChapterBtn)
-        chooseBtn.setOnClickListener {
-            val dl = Dialog(this)
-            dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dl.setContentView(R.layout.list_chapter_dialog)
-            dl.show()
-            var bgcover = dl.findViewById<ImageView>(R.id.background)
-            var minicover = dl.findViewById<ImageView>(R.id.book)
-            var minititle = dl.findViewById<TextView>(R.id.book_title)
-            minititle.text = bookData.title
-//            imageRef.getBytes(Long.MAX_VALUE)
-//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-//
-//                    // Set the Bitmap to the ImageView
-//                    minicover.setImageBitmap(bitmap)
-//
-//
-//                    Glide.with(this)
-//                        .load(bitmap)
-//                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-//                        .into(bgcover)
-//                }.addOnFailureListener {
-//                    // Handle any errors
-//                }
-            Glide.with(minicover.context)
-                .load(imageName)
-                .apply(RequestOptions().override(500, 600))
-                .into(minicover)
-            Glide.with(this)
-                .load(imageName)
-                .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                .into(bgcover)
-
-
-
-            var chapterListView = dl.findViewById<ListView>(R.id.chapterListView)
-            val adapter = ChapterAdapter(this, bookData.chapters)
-            chapterListView.adapter = adapter
-            chapterListView.setOnItemClickListener { adapterView, view, i, l ->
-                //TODO: Code doc sach khi click vo chapter o day ne
-                if(!bookData.chapters[i]._lock){
-                    val intent = Intent(this, ReadBookActivity::class.java)
-                    intent.putExtra("book",bookData)
-                    intent.putExtra("id_chapter",bookData.chapters[i].id_chapter)
-                    ActivityCompat.startActivityForResult(this, intent, 302, null)
-                }else{
-                    val intent = Intent(this, PurchaseActivity::class.java)
-                    intent.putExtra("bookdata", Klaxon().toJsonString(bookData))
-                    intent.putExtra("chapter", Klaxon().toJsonString(bookData.chapters[i]))
-                    ActivityCompat.startActivityForResult(this, intent, 700, null)
-                }
-
-            }
-        }
-        //open dialog feedback and rating
-        val ratingBtn = findViewById<Button>(R.id.ratingBtn)
-        ratingBtn.setOnClickListener {
-            val dl = Dialog(this)
-            dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dl.setContentView(R.layout.dialog_fb_rating)
-            dl.show()
-
-            val ratingBar = dl.findViewById<RatingBar>(R.id.ratingBar)
-            val ratingTextView = dl.findViewById<TextView>(R.id.ratingTextView)
-            val submitBtn = dl.findViewById<Button>(R.id.submitBtn)
-            val comment = dl.findViewById<EditText>(R.id.editText)
-
-            ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
-                ratingTextView.text = String.format("(%s)", fl)
-            }
-
-            submitBtn.setOnClickListener {
-                if (FirebaseAuthManager.auth.currentUser != null) {
-                    val currentUser = FirebaseAuthManager.getUser()
-                    if (currentUser != null) {
-                        val uid = currentUser.uid
-                        val bid = bookData.id
-
-                        // Check if the user has already left feedback for the book/comic
-                        val feedbackRef = Firebase.database("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").reference.child("feedback")
-                        val query = feedbackRef.orderByChild("uid").equalTo(uid)
-                        query.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                var flag = 0
-                                if (snapshot.exists()) {
-                                    // If there is existing feedback, update it with the new rating and feedback
-                                    for (feedbackSnapshot in snapshot.children) {
-                                        val feedback = feedbackSnapshot.getValue(Feedback::class.java)
-                                        if (feedback?.bid == bid) {
-                                            feedback?.let {
-                                                it.rating = ratingBar.rating.toDouble()
-                                                it.feedback = comment.text.toString()
-                                                feedbackSnapshot.ref.setValue(feedback)
-                                                flag = 1
+                        submitBtn.setOnClickListener {
+                            if (FirebaseAuthManager.auth.currentUser != null) {
+                                val currentUser = FirebaseAuthManager.getUser()
+                                if (currentUser != null) {
+                                    val uid = currentUser.uid
+                                    val bid = bookData!!.id
+                                    // Check if the user has already left feedback for the book/comic
+                                    val feedbackRef = Firebase.database("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").reference.child("feedback")
+                                    val query = feedbackRef.orderByChild("uid").equalTo(uid)
+                                    query.addListenerForSingleValueEvent(object : ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            var flag = 0
+                                            if (snapshot.exists()) {
+                                                // If there is existing feedback, update it with the new rating and feedback
+                                                for (feedbackSnapshot in snapshot.children) {
+                                                    val feedback = feedbackSnapshot.getValue(Feedback::class.java)
+                                                    if (feedback?.bid == bid) {
+                                                        feedback.let {
+                                                            it.rating = ratingBar.rating.toDouble()
+                                                            it.feedback = comment.text.toString()
+                                                            feedbackSnapshot.ref.setValue(feedback)
+                                                            flag = 1
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (flag == 0){
+                                                // If there is no existing feedback, push a new feedback
+                                                val newFeedback = Feedback(
+                                                    id = "", // leave the ID empty to generate a unique key in Firebase
+                                                    uid = uid,
+                                                    bid = bid,
+                                                    rating = ratingBar.rating.toDouble(),
+                                                    feedback = comment.text.toString() // replace with the user's feedback
+                                                )
+                                                val feedbackKey = feedbackRef.push().key
+                                                feedbackKey?.let { key ->
+                                                    newFeedback.id =
+                                                        key // assign the generated key to the Feedback object
+                                                    feedbackRef.child(key).setValue(newFeedback)
+                                                }
                                             }
                                         }
-                                    }
-                                }
-                                if (flag == 0){
-                                    // If there is no existing feedback, push a new feedback
-                                    val newFeedback = Feedback(
-                                        id = "", // leave the ID empty to generate a unique key in Firebase
-                                        uid = uid,
-                                        bid = bid,
-                                        rating = ratingBar.rating.toDouble(),
-                                        feedback = comment.text.toString() // replace with the user's feedback
-                                    )
-                                    val feedbackKey = feedbackRef.push().key
-                                    feedbackKey?.let { key ->
-                                        newFeedback.id =
-                                            key // assign the generated key to the Feedback object
-                                        feedbackRef.child(key).setValue(newFeedback)
-                                    }
+                                        override fun onCancelled(error: DatabaseError) {
+                                            Log.i("FEEDBACK-ERROR", error.toString())
+                                        }
+                                    })
                                 }
                             }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                // Handle any errors here
+                            dl.dismiss()
+                        }
+                    }
+                    //display feedback and rating of the book
+                    val feedbackList = mutableListOf<Feedback>()
+                    val listFeedback = findViewById<RecyclerView>(R.id.listFeedback)
+                    val fbAdapter = FeedbackAdapter(this@DetailActivity, feedbackList)
+                    listFeedback.adapter = fbAdapter
+                    listFeedback.layoutManager =
+                        LinearLayoutManager(this@DetailActivity, RecyclerView.VERTICAL, false)
+                    val feedbackRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("feedback")
+                    val query = feedbackRef.orderByChild("bid").equalTo(bookData!!.id)
+                    query.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            feedbackList.clear()
+                            var totalRating = 0.0
+                            for (data in snapshot.children) {
+                                val feedback = data.getValue(Feedback::class.java)
+                                if (feedback != null) {
+                                    feedbackList.add(feedback)
+                                    totalRating += feedback.rating
+                                }
                             }
-                        })
+                            totalRating /= feedbackList.size
+                            //solve NaN error
+                            totalRating = if (!totalRating.isNaN())
+                                ((totalRating * 100.0).roundToInt() / 100.0)
+                            else
+                                0.0
+                            ratingTextView.text = totalRating.toString()
+                            val bookRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("book").child(bookData!!.id)
+                            bookRef.child("rating").setValue(totalRating)
+                            fbAdapter.notifyDataSetChanged()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+                    })
+                    val bookList: MutableList<Product> = mutableListOf()
+                    val customSlideView: RecyclerView? = findViewById(R.id.listView)
+                    val adapterSlide = ListAdapterSlideshow(this@DetailActivity, bookList)
+                    customSlideView!!.adapter = adapterSlide
+                    customSlideView.layoutManager = LinearLayoutManager(this@DetailActivity, RecyclerView.HORIZONTAL, false)
+                    productViewModel.getAllBook { books ->
+                        run {
+                            for (book in books.children) {
+                                val product = book.getValue(Product::class.java)
+                                if (product != null) {
+                                    bookList.add(product)
+                                }
+                            }
+                            adapterSlide.notifyDataSetChanged()
+                        }
                     }
                 }
-                dl.dismiss()
-            }
-        }
 
-        val feedbackList = mutableListOf<Feedback>()
-
-        val listFeedback = findViewById<RecyclerView>(R.id.listFeedback)
-        val fbAdapter = FeedbackAdapter(this, feedbackList)
-        listFeedback.adapter = fbAdapter
-        listFeedback.layoutManager =
-            LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-
-        val feedbackRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("feedback")
-        val query = feedbackRef.orderByChild("bid").equalTo(bookData.id)
-
-        query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                feedbackList.clear()
-                var totalRating = 0.0
-                for (data in snapshot.children) {
-                    val feedback = data.getValue(Feedback::class.java)
-                    if (feedback != null) {
-                        feedbackList.add(feedback)
-                        totalRating += feedback.rating
-                    }
-                }
-                totalRating /= feedbackList.size
-                // TODO: Xu ly NaN lai
-                if (!totalRating.isNaN())
-                    totalRating = ((totalRating * 100.0).roundToInt() / 100.0)
-                else
-                    totalRating = 0.0
-                ratingTextView.text = totalRating.toString()
-                val bookRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("book").child(bookData.id)
-                bookRef.child("rating").setValue(totalRating)
-                fbAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle the error if any
             }
         })
-        val bookList: MutableList<Product> = mutableListOf()
-        var customSlideView: RecyclerView? = null;
-        customSlideView = findViewById(R.id.listView);
-        val adapterSlide = ListAdapterSlideshow(this, bookList);
-        customSlideView!!.adapter = adapterSlide;
-        customSlideView!!.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-        productViewModel.getAllBook { books ->
-            run {
-                for (book in books.children) {
-                    val product = book.getValue(Product::class.java)
-                    if (product != null) {
-                        bookList.add(product)
-                    }
-                }
-                adapterSlide.notifyDataSetChanged()
-            }
-        }
-//            .observe(this, Observer { products ->
-//                run {
-//                    bookList.clear()
-//                    println(products)
-//                    bookList.addAll(products)
 
-//                }
-//            })
+
     }
 
     private fun readingCurrentBook(bookData: Product) {
-        var reading = _currentUser!!.reading
+        val reading = _currentUser!!.reading
         var id_chap = bookData.chapters[0].id_chapter
         for (i in reading)
             if (i.id_book.equals(_currentBook!!.id)) {
                 for (j in _currentBook!!.chapters)
                     if (i.id_chapter.equals(j.id_chapter)) {
-                        id_chap = j!!.id_chapter
+                        id_chap = j.id_chapter
                     }
             }
 
@@ -434,8 +386,7 @@ class DetailActivity : AppCompatActivity() {
         intent.putExtra("id_chapter", id_chap)
         ActivityCompat.startActivityForResult(this, intent, 302, null)
     }
-
-    fun nextAuthorProfileActivity(author: User) {
+    private fun nextAuthorProfileActivity(author: User) {
         val intent = Intent(this, AuthorProfileActivity::class.java)
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)

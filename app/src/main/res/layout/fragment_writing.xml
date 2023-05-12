@@ -38,7 +38,8 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="Writting"
                 android:textColor="@color/white"
@@ -56,18 +57,20 @@
 
             app:layout_constraintTop_toBottomOf="@+id/header" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnWriteNewBook"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="25dp"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/mybutton"
+
+            android:background="@drawable/readbutton"
             android:drawableLeft="@drawable/notebook"
-            android:drawableTint="@color/white"
+            android:drawableTint="@color/button_blue"
             android:fontFamily="@font/poppins_medium"
-            android:padding="1dp"
-            android:text="Write new book"
+            android:padding="8dp"
+            android:text=" Write a new book"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

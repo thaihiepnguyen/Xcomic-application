@@ -179,7 +179,7 @@ class Search : Fragment() {
         val intent = Intent(context, DetailActivity::class.java)
 //        val bundle = Bundle()
 //        bundle.putSerializable("productKey", book)
-        intent.putExtra("book_data", Klaxon().toJsonString(book))
+        intent.putExtra("book_data", book.id)
 
         startActivity(intent)
     }

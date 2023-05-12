@@ -87,6 +87,7 @@ class Writing : Fragment() {
     var scrollView: NestedScrollView? = null;
     var btnEditBook : Button? = null;
     var btnNewBook : Button? = null;
+    var _user : User = User()
 
     private lateinit var productViewModel: ProductViewModel
     private lateinit var userViewModel: UserViewModel
@@ -104,7 +105,7 @@ class Writing : Fragment() {
         customBookListView = view.findViewById(R.id.listViewWriting) as RecyclerView;
         scrollView = view.findViewById(R.id.nestedScrollView);
         btnNewBook = view.findViewById(R.id.btnWriteNewBook)
-        var _user : User = User()
+
         userViewModel.callApi(FirebaseAuthManager.getUser()!!.uid)
             .observe(this, Observer { user ->
                 run {
@@ -165,10 +166,13 @@ class Writing : Fragment() {
         if (requestCode == REQUEST_CODE_PICK_UPDATE_PRODUCT && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
             val isDelete = data!!.getBooleanExtra("DELETE", false)
+
+
             if (isDelete) {
                 productViewModel.deleteProduct(reply)
             } else {
                 // TODO: Update book tren BD
+
                 productViewModel.updateProduct(reply)
             }
         }
@@ -177,6 +181,8 @@ class Writing : Fragment() {
             val reply = data!!.getSerializableExtra(Product.MESSAGE2) as Product
 
             // TODO: Post book len DB
+            _user.addToCollection(reply)
+            userViewModel.saveCollection(_user)
             productViewModel.updateProduct(reply)
         }
     }

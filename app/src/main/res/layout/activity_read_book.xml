@@ -46,9 +46,9 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayout3"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_margin="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="40dp"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@id/book_author"
                         tools:layout_editor_absoluteX="30dp">
@@ -56,19 +56,19 @@
                         <ImageView
                             android:id="@+id/viewIcon"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="20dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:srcCompat="@drawable/ic_view"
-                            android:layout_marginLeft="20dp"
                             tools:layout_editor_absoluteY="49dp" />
 
                         <TextView
                             android:id="@+id/viewTextView"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:text="200K view"
-                            android:layout_marginRight="20dp"
                             android:textAlignment="center" />
 
                         <ImageView
@@ -81,28 +81,28 @@
 
                         <TextView
                             android:id="@+id/favoriteTextView"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:text="167K favor"
-                            android:layout_marginRight="20dp"
                             android:textAlignment="center" />
 
                         <ImageView
                             android:id="@+id/chapterIcon"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:srcCompat="@drawable/ic_list_chapter"
                             tools:layout_editor_absoluteY="49dp" />
 
                         <TextView
                             android:id="@+id/numOfChapterTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:text="4 Chapters"
-                            android:layout_marginRight="20dp"
                             android:textAlignment="center" />
 
                     </LinearLayout>
@@ -111,7 +111,7 @@
                     <TextView
                         android:id="@+id/tvTitleChapter"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/fui_transparent"
 
                         android:text="Chapter 1"
@@ -130,8 +130,7 @@
                         android:fontFamily="@font/poppins_light"
                         android:padding="20dp"
                         android:textAlignment="viewStart"
-                        android:textSize="20sp">
-                    </TextView>
+                        android:textSize="20sp"></TextView>
 
                 </LinearLayout>
             </ScrollView>

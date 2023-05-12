@@ -63,12 +63,16 @@ class MainProfileActivity : AppCompatActivity() {
         binding.readingListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val favoriteAdapter = ListAdapterSlideshow(this, bookList)
-        val readingAdapter = BookListAdapter(readingList)
+        val favoriteAdapter = ProfileBookListAdapter(bookList)
+        val readingAdapter = ProfileBookListAdapter(readingList)
         val avatarAdapter = AvatarListAdapter(followList)
 
         readingAdapter.onItemClick = {
             book -> nextBookDetailActivity(book)
+        }
+
+        favoriteAdapter.onItemClick = {
+                book -> nextBookDetailActivity(book)
         }
 
         avatarAdapter.onItemClick = {
@@ -242,7 +246,7 @@ class MainProfileActivity : AppCompatActivity() {
         val intent = Intent(this, DetailActivity::class.java)
 //        val bundle = Bundle()
 //        bundle.putSerializable("productKey", book)
-        intent.putExtra("book_data", Klaxon().toJsonString(book))
+        intent.putExtra("book_data", book.id)
 
         startActivity(intent)
     }
