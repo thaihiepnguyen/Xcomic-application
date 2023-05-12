@@ -1,122 +1,62 @@
 package com.example.x_comic.views.main.fragments
 
+
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.adapters.BookReadingAdapter
-import com.example.x_comic.adapters.CategoryAdapter
-import com.example.x_comic.models.Book
+
 import com.example.x_comic.models.BookReading
-import com.example.x_comic.models.BookSneek
-import com.github.aakira.expandablelayout.ExpandableRelativeLayout
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
 
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.detail.DetailActivity
+import com.example.x_comic.views.read.ReadBookActivity
 
+var listReading: MutableList<BookReading> = mutableListOf();
 class Reading : Fragment() {
 
+    var listReadingOffline: MutableList<BookReading> = mutableListOf()
 
-    val bookList: MutableList<BookSneek> = mutableListOf(
-        BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
-        BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
-        BookSneek("Rome Is Us", "ann_beyond", R.drawable.book_cover_2, 4.0),
-        BookSneek("Fool Man", "landyshere", R.drawable.book_cover_3, 4.7),
-        BookSneek("The Mind Of A Leader", "vivianneee", R.drawable.book_cover_4, 4.3),
-        BookSneek("The Light Beyond The Garden Wall", "pixiequinn", R.drawable.book_cover_5, 4.5),
-        BookSneek("The Secret At The Joneses", "rhjulxie", R.drawable.book_cover_6, 3.9),
-        BookSneek("The Victim's Picture", "gizashey", R.drawable.book_cover_7, 4.2)
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var productViewModel: ProductViewModel
 
-    )
-    var bookDetailList: MutableList<Book> = mutableListOf(
 
-        Book(
-            bookList[0],
-            253.2,
-            125.5,
-            20,
-            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
-        ),
-        Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
-        Book(bookList[2], 179.6, 122.2, 25, arrayListOf("School Life", "Humor", "Short Story")),
-        Book(
-            bookList[3],
-            211.3,
-            112.6,
-            34,
-            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
-        ),
-        Book(
-            bookList[4],
-            236.2,
-            109.7,
-            36,
-            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
-        )
-    )
-    var listReadingOffline: MutableList<BookReading> = mutableListOf(
-        BookReading(
-            bookDetailList[1],
-            current = 12
-        ),
-        BookReading(
-            bookDetailList[0],
-            current = 5
-        ),
-        BookReading(
-            bookDetailList[4],
-            current = 10
-        ),
-        BookReading(
-            bookDetailList[3],
-            current = 11
-        ),
-        BookReading(
-            bookDetailList[2],
-            current = 8
-        )
-
-    )
-
-    var listReading: MutableList<BookReading> = mutableListOf();
-    fun getListRead(){
-    repeat(50)
-    {
-        val bookReading = BookReading(
-            bookDetailList[it % 5],
-            current = listReadingOffline[it % 5].current
-        )
-        listReading.add(bookReading)
-    }
-    }
     var customOfflineBookList : RecyclerView? = null;
     var customOnlineBookList: RecyclerView? = null;
 
-    var btnOffline: TextView? = null;
-    var btnOnline: TextView? = null;
 
-    var layoutExpand: ExpandableRelativeLayout? = null;
-    var layoutExpand2: ExpandableRelativeLayout? = null;
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_reading, container, false)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         customOfflineBookList = view.findViewById(R.id.offline_books);
         customOnlineBookList = view.findViewById(R.id.online_books);
-
-        getListRead();
-
-
+        var online_number = view.findViewById<TextView>(R.id.number_online)
 
         val adapter = BookReadingAdapter(listReadingOffline);
 
@@ -133,38 +73,175 @@ class Reading : Fragment() {
 
 
 
-        btnOffline = view.findViewById(R.id.offline);
-        btnOnline = view.findViewById(R.id.online);
 
-        layoutExpand = view.findViewById(R.id.expandableLayoutOffline);
+        val uid = FirebaseAuthManager.auth.uid
+        if (uid != null) {
+
+            productViewModel.getAllReadingBook(uid) { booksID ->
+                run {
+                    listReading.clear();
+                    var cnt: Int = 0
 
 
-        layoutExpand2 = view.findViewById(R.id.expandableLayoutOnline);
+                    for (snapshot in booksID.children) {
+
+                                var bookid = snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+
+                                productViewModel.getBookById(bookid!!.id_book) { bookInner ->
+                                    run {
+
+                                        if ( bookInner!=null && !bookInner.hide) {
+
+                                            cnt++
+                                            listReading.add(0,
+                                                BookReading(
+                                                    bookInner,
+                                                    bookid.posChap,
+                                                    bookid.numChap
+                                                )
+
+                                            )
+
+                                            println(listReading);
+
+                                      OnlineAdapter.notifyItemInserted(0);
+                                           // OnlineAdapter.notifyDataSetChanged()
+                                        }
+                                   //     OnlineAdapter.notifyDataSetChanged()
+
+                                    }
+                                  //
+                                    online_number.text = "${cnt} Stories"
 
 
-        btnOffline!!.setOnClickListener{
-            layoutExpand!!.toggle();
-            if (layoutExpand!!.isExpanded){
-                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevronup,0)
+
+
+
+                                }
+
+
+
+
+                    }
+
+
+
+
+
+                }
+
+
             }
-            else {
-                btnOffline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevrondown,0)
 
-            }
         }
 
-        btnOnline!!.setOnClickListener{
-            layoutExpand2!!.toggle();
-            if (layoutExpand2!!.isExpanded){
-                btnOnline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevronup,0)
-            }
-            else {
-                btnOnline!!.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.chevrondown,0)
 
-            }
+        OnlineAdapter.onItemClick = {
+                book -> nextBookDetailActivity(book)
         }
+
+        OnlineAdapter.setOnItemLongClickListener {
+            book, position ->
+            val dialog = BookDialog(book, true, position, OnlineAdapter);
+            dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+        }
+
+
         return view
     }
 
+    fun nextBookDetailActivity(book: BookReading) {
+
+        if (book != null) {
+
+            val intent = Intent(context, ReadBookActivity::class.java)
+            intent.putExtra("book", book.book)
+            intent.putExtra("id_chapter", book.current.toString())
+            ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
+        } else {
+            // Handle the case when the book is null
+        }
+    }
+
+
+
+
+
+}
+
+
+class BookDialog(private val book: BookReading, private val type: Boolean, private val position: Int, private val adapter: BookReadingAdapter) : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return activity?.let { // Use the Builder class for convenient dialog construction
+            var builder = AlertDialog.Builder(it)
+            builder.setTitle(book.book.title)
+            if (!type){
+                builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library","Remove from Offline"),
+                    DialogInterface.OnClickListener { dialog, which ->
+                        Log.d("nlhdung", "Selected item index $which") }) // Create the AlertDialog object and return it
+            }
+            else {
+                builder.setItems(arrayOf("Read", "Story Info", "Remove from Library"),
+                    DialogInterface.OnClickListener { dialog, which ->
+                        when(which){
+                            0 -> {
+                                nextBookDetailActivity(book)
+                            }
+                            1-> {
+                                nextBookInfoActivity(book)
+                            }
+                            2-> {
+                                removeBook(position, adapter)
+                            }
+                            else -> {
+
+                            }
+                        }
+
+                    }) // Create the AlertDialog object and return it
+            }
+
+            builder.create() } ?: throw IllegalStateException("Activity cannot be null") }
+
+    private fun nextBookDetailActivity(book: BookReading) {
+        val intent = Intent(context, ReadBookActivity::class.java)
+        intent.putExtra("book", book.book)
+        intent.putExtra("id_chapter", book.current.toString())
+        ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
+    }
+
+    private fun nextBookInfoActivity(book: BookReading) {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra("book_data",  Klaxon().toJsonString(book.book))
+        startActivity(intent)
+    }
+
+
+    private fun removeBook(position: Int, adapter: BookReadingAdapter){
+        var userViewModel: UserViewModel
+        var productViewModel: ProductViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        val uid = FirebaseAuthManager.auth.uid
+        if (uid != null) {
+            productViewModel.getAllReadingBook(uid) { booksID ->
+                run {
+                    //  productViewModel.removeBookReading(uid,position)
+                    val childrenList: ArrayList<com.example.x_comic.models.Reading> = arrayListOf();
+                    for (snapshot in booksID.children){
+                        var bookid = snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+                        if (bookid!=null) {
+                            childrenList.add(bookid!!)
+                        }
+                    }
+                    childrenList.removeAt(position);
+                    listReading.removeAt(position)
+
+                    userViewModel.updateReadingUserList(childrenList)
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
 
 }
