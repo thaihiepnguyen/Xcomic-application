@@ -189,6 +189,7 @@ class UserViewModel : ViewModel() {
         return _authors
     }
 
+    
     fun changeUsername(username: String) {
         var currentUser = FirebaseAuthManager.getUser()
         if (currentUser != null) {
