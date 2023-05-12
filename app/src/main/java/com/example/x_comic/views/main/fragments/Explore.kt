@@ -1,6 +1,7 @@
 package com.example.x_comic.views.main.fragments
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -15,11 +16,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.beust.klaxon.Klaxon
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CategoryAdapter
+import com.example.x_comic.adapters.ExploreGridBookAdapter
 import com.example.x_comic.models.Category
+import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.CategoryViewModel
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout
@@ -271,7 +276,24 @@ class Explore : Fragment() {
             }
             false
         })
-
+        val bookListSlideShow: MutableList<Product> = mutableListOf()
+        val gridView = view.findViewById<RecyclerView>(R.id.gridView)
+        val exploreGridBookAdapter = ExploreGridBookAdapter(requireActivity(), bookListSlideShow)
+        gridView.adapter = exploreGridBookAdapter
+        gridView.layoutManager = GridLayoutManager(requireContext(), 2)
+        var productViewModel: ProductViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        productViewModel.getAllBook { books ->
+            run {
+                bookListSlideShow.clear()
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null && !product.hide) {
+                        bookListSlideShow.add(product)
+                    }
+                }
+                exploreGridBookAdapter.notifyDataSetChanged()
+            }
+        }
         return view
     }
     fun hideKeyboard(view: View) {

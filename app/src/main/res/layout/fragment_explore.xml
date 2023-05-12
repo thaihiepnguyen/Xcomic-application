@@ -329,7 +329,22 @@
                             </FrameLayout>
                         </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
                     </LinearLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/gridView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </FrameLayout>
+
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

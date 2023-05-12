@@ -34,6 +34,8 @@ import com.paypal.checkout.order.OrderRequest
 import com.paypal.checkout.order.PurchaseUnit
 import com.paypal.checkout.paymentbutton.PaymentButtonContainer
 import jp.wasabeef.glide.transformations.BlurTransformation
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class PurchaseActivity : AppCompatActivity() {
@@ -111,7 +113,10 @@ class PurchaseActivity : AppCompatActivity() {
                                 val bid = chapterPurchase.id_book
                                 val cid = chapterPurchase.id_chapter
                                 val cost = 10.0
-                                val order = Order("",uid!!, bid, cid!!, cost)
+                                val currentTime = Calendar.getInstance().time
+                                val dateFormat = SimpleDateFormat("HH:mm:ss yyyy-MM-dd", Locale.getDefault())
+                                val time = dateFormat.format(currentTime)
+                                val order = Order("",uid!!, bid, cid!!, cost, time)
                                 val newOrderRef = ordersRef.push()
                                 val newOrderId = newOrderRef.key
                                 order.id = newOrderId!!

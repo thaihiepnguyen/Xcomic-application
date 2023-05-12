@@ -1,33 +1,32 @@
 package com.example.x_comic.adapters
+
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 
-class ListAdapterSlideshow (
+class ExploreGridBookAdapter (
     private  var context: Activity,
     private var bookList: MutableList<Product>,
-) : RecyclerView.Adapter<ListAdapterSlideshow.ViewHolder>()
+) : RecyclerView.Adapter<ExploreGridBookAdapter.ViewHolder>()
 {
     var onItemClick: ((Product) -> Unit)? = null
 
@@ -113,6 +112,3 @@ class ListAdapterSlideshow (
     }
 
 }
-
-
-
