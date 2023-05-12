@@ -10,6 +10,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.models.Category
+import com.example.x_comic.models.Chapter
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.google.firebase.database.*
@@ -346,6 +348,67 @@ class ProductViewModel : ViewModel() {
         db.child(book.id)
             .child("hide")
             .setValue(false)
+    }
+
+    fun updateChapter(idBook: String, size: Int, reply: Chapter) {
+        db.child(idBook)
+            .child("chapters")
+            .child(size.toString())
+            .setValue(reply)
+    }
+
+    fun deleteAllChapter(idBook: String) {
+        db.child(idBook)
+            .child("chapters")
+            .removeValue()
+    }
+
+    fun updateAuthor(id: String, author: String) {
+        db.child(id)
+            .child("author")
+            .setValue(author)
+    }
+
+    fun updateTitle(id: String, title: String) {
+        db.child(id)
+            .child("title")
+            .setValue(title)
+    }
+
+    fun updateTinyDes(id: String, tinyDes: String) {
+        db.child(id)
+            .child("tiny_des")
+            .setValue(tinyDes)
+    }
+
+    fun updateCover(id: String, cover: String) {
+        db.child(id)
+            .child("cover")
+            .setValue(cover)
+    }
+
+    fun updateStatus(id: String, status: Boolean) {
+        db.child(id)
+            .child("status")
+            .setValue(status)
+    }
+
+    fun updateHide(id: String, hide: Boolean) {
+        db.child(id)
+            .child("hide")
+            .setValue(hide)
+    }
+
+    fun updateAge(id: String, age: Int) {
+        db.child(id)
+            .child("age")
+            .setValue(age)
+    }
+
+    fun updateCategory(id: String, categories: ArrayList<Category>) {
+        db.child(id)
+            .child("categories")
+            .setValue(categories)
     }
 }
 
