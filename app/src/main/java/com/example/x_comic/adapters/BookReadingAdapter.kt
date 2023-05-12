@@ -1,23 +1,17 @@
 package com.example.x_comic.adapters
 
-import BookDialog
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.models.Book
+
 import com.example.x_comic.models.BookReading
 
 class BookReadingAdapter (
@@ -26,7 +20,12 @@ class BookReadingAdapter (
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
+    private var longClickListener: ((BookReading) -> Unit)? = null
 
+    // Create a function to set the long click listener
+    fun setOnItemLongClickListener(listener: (BookReading) -> Unit) {
+        longClickListener = listener
+    }
     var context: Context? = null;
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
@@ -37,6 +36,7 @@ class BookReadingAdapter (
             listItemView.setOnClickListener {
                 onItemClick?.invoke(bookReadingList[adapterPosition])
             }
+
 
 
         }
@@ -90,8 +90,8 @@ class BookReadingAdapter (
         progressbar.progress = current*100/total;
 
         holder.itemView.setOnLongClickListener {
-            val dialog = BookDialog(book.book.title, isOnline);
-            dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+
+            longClickListener?.invoke(book)
             true // Return true to indicate the event has been consumed
         }
 
