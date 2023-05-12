@@ -41,7 +41,7 @@ class Reading : Fragment() {
     private lateinit var productViewModel: ProductViewModel
 
 
-    var customOfflineBookList : RecyclerView? = null;
+
     var customOnlineBookList: RecyclerView? = null;
 
 
@@ -54,21 +54,21 @@ class Reading : Fragment() {
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
-        customOfflineBookList = view.findViewById(R.id.offline_books);
+
         customOnlineBookList = view.findViewById(R.id.online_books);
         var online_number = view.findViewById<TextView>(R.id.number_online)
 
         val adapter = BookReadingAdapter(listReadingOffline);
 
-        val OnlineAdapter = BookReadingAdapter(listReading, true);
+        val OnlineAdapter = BookReadingAdapter(listReading);
 
 
-        customOfflineBookList!!.adapter = adapter;
+
 
         customOnlineBookList!!.adapter = OnlineAdapter;
 
 
-        customOfflineBookList!!.layoutManager = GridLayoutManager(this.context,3);
+
         customOnlineBookList!!.layoutManager = GridLayoutManager(this.context,3);
 
 
@@ -124,7 +124,7 @@ class Reading : Fragment() {
 
                     }
 
-
+                    OnlineAdapter.notifyDataSetChanged();
 
 
 
@@ -142,7 +142,7 @@ class Reading : Fragment() {
 
         OnlineAdapter.setOnItemLongClickListener {
             book, position ->
-            val dialog = BookDialog(book, true, position, OnlineAdapter);
+            val dialog = BookDialog(book, position, OnlineAdapter);
             dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
         }
 
@@ -170,17 +170,12 @@ class Reading : Fragment() {
 }
 
 
-class BookDialog(private val book: BookReading, private val type: Boolean, private val position: Int, private val adapter: BookReadingAdapter) : DialogFragment() {
+class BookDialog(private val book: BookReading, private val position: Int, private val adapter: BookReadingAdapter) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { // Use the Builder class for convenient dialog construction
             var builder = AlertDialog.Builder(it)
             builder.setTitle(book.book.title)
-            if (!type){
-                builder.setItems(arrayOf("Read", "Story Info", "Share Story", "Remove from Library","Remove from Offline"),
-                    DialogInterface.OnClickListener { dialog, which ->
-                        Log.d("nlhdung", "Selected item index $which") }) // Create the AlertDialog object and return it
-            }
-            else {
+
                 builder.setItems(arrayOf("Read", "Story Info", "Remove from Library"),
                     DialogInterface.OnClickListener { dialog, which ->
                         when(which){
@@ -199,7 +194,7 @@ class BookDialog(private val book: BookReading, private val type: Boolean, priva
                         }
 
                     }) // Create the AlertDialog object and return it
-            }
+
 
             builder.create() } ?: throw IllegalStateException("Activity cannot be null") }
 

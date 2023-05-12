@@ -4,19 +4,24 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 
 import com.example.x_comic.models.BookReading
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.main.fragments.listReading
 
 class BookReadingAdapter (
     private var bookReadingList: MutableList<BookReading>,
-    private val isOnline: Boolean = false
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
@@ -31,6 +36,8 @@ class BookReadingAdapter (
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
         var title = listItemView.findViewById(R.id.bookname) as TextView;
         var progressBar = listItemView.findViewById(R.id.progress_bar) as ProgressBar;
+        var removeBook = listItemView.findViewById(R.id.remove_book) as ImageButton;
+
 
         init {
             listItemView.setOnClickListener {
@@ -48,10 +55,8 @@ class BookReadingAdapter (
         val inflater = LayoutInflater.from(context)
 
 
-        var columnView = inflater.inflate(R.layout.book_reading, parent, false);
-        if (isOnline){
-            columnView = inflater.inflate(R.layout.book_reading_online, parent, false);
-        }
+        var columnView = inflater.inflate(R.layout.book_reading_online, parent, false);
+
 
         return ViewHolder(columnView);
     }
@@ -71,7 +76,7 @@ class BookReadingAdapter (
         val cover = holder.cover;
         val title = holder.title;
         var progressbar = holder.progressBar;
-
+        var remove = holder.removeBook;
 
 
        // cover.setImageResource(book.book.book.cover);
@@ -95,6 +100,34 @@ class BookReadingAdapter (
             true // Return true to indicate the event has been consumed
         }
 
+        var userViewModel : UserViewModel = UserViewModel()
+        var productViewModel : ProductViewModel = ProductViewModel()
+
+        remove.setOnClickListener{
+
+            val uid = FirebaseAuthManager.auth.uid
+            if (uid != null) {
+                productViewModel.getAllReadingBook(uid) { booksID ->
+                    run {
+                        //  productViewModel.removeBookReading(uid,position)
+                        val childrenList: ArrayList<com.example.x_comic.models.Reading> =
+                            arrayListOf();
+                        for (snapshot in booksID.children) {
+                            var bookid =
+                                snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+                            if (bookid != null) {
+                                childrenList.add(bookid!!)
+                            }
+                        }
+                        childrenList.removeAt(position);
+                        listReading.removeAt(position)
+
+                        userViewModel.updateReadingUserList(childrenList)
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        }
 
 
 
