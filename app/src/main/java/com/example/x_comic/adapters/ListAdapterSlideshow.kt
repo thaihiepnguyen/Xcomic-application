@@ -118,7 +118,7 @@ class ListAdapterSlideshow (
         }
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("book_data", Klaxon().toJsonString(book))
+            intent.putExtra("book_data", book.id)
             ActivityCompat.startActivityForResult(context, intent, 302, null)
         }
     }

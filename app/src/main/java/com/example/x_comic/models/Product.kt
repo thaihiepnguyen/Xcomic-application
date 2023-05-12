@@ -18,6 +18,22 @@ class Product : java.io.Serializable
     var categories = ArrayList<Category>()
     var chapters = ArrayList<Chapter>()
     var have_loved: ArrayList<String> = ArrayList()
+    constructor(product: Product){
+        this.id = product.id
+        this.title = product.title
+        this.cover = product.cover
+        this.status = product.status
+        this.tiny_des = product.tiny_des
+        this.author = product.author
+        this.view = product.view
+        this.favorite = product.favorite
+        this.age = product.age
+        this.hide = product.hide
+        this.rating = product.rating
+        this.categories = product.categories
+        this.chapters = product.chapters
+        this.have_loved = product.have_loved
+    }
     constructor(
         id: String = "",
         title: String = "",
