@@ -103,23 +103,11 @@ class PostNewActivity : AppCompatActivity() {
         val _book = intent.getSerializableExtra(Product.MESSAGE1) as? Product
         _book?.let {
             curBook = _book
+
             is_new = false
             findViewById<TextView>(R.id.title).text = "Update Book"
             findViewById<Button>(R.id.btnNext).text = "SAVE"
 
-
-//            val storage = FirebaseStorage.getInstance()
-//            val imageName = curBook.cover // Replace with your image name
-//            val imageRef = storage.reference.child("book/$imageName")
-//            imageRef.getBytes(Long.MAX_VALUE)
-//                .addOnSuccessListener { bytes -> // Decode the byte array into a Bitmap
-//                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-//                    // Set the Bitmap to the ImageView
-//                    cover.setImageBitmap(bitmap)
-//
-//                }.addOnFailureListener {
-//                    // Handle any errors
-//                }
             Glide.with(cover.context)
                 .load(curBook.cover)
                 .apply(RequestOptions().override(500, 600))
@@ -135,8 +123,19 @@ class PostNewActivity : AppCompatActivity() {
             val curIndex = ageRanges.indexOfFirst { it.second == curBook.age }
             val index = if (curIndex == -1) ageRanges.lastIndex else curIndex
             findViewById<Spinner>(R.id.ageSpinner).setSelection(index)
-            chapterList = curBook.chapters
+
             categoryListChoose = curBook.categories
+
+            productViewModel.getBookById(curBook.id) {book -> kotlin.run {
+                chapterList.clear()
+                for (i in book.chapters) {
+                    if (i != null) {
+                        chapterList.add(i)
+                    }
+                }
+                chapterListAdapter.notifyDataSetChanged()
+            }
+            }
         }
 
         // Category
@@ -300,10 +299,10 @@ class PostNewActivity : AppCompatActivity() {
                 productViewModel.updateProduct(temp)
             }
 
-            productViewModel.updateChapter(reply.id_book, chapterList.size, reply);
-
             chapterList.add(reply)
             chapterListAdapter?.notifyDataSetChanged()
+            for (i in chapterList)
+                productViewModel.updateChapter(i.id_book,chapterList.indexOf(i),i)
 
         }
 

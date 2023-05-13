@@ -255,6 +255,8 @@ class ProductViewModel : ViewModel() {
     }
 
     fun deleteProduct(product: Product) {
+        if (product.id.equals(""))
+            return
         db
             .child(product.id)
             .removeValue()

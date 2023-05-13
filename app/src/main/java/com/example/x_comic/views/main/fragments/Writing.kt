@@ -122,6 +122,7 @@ class Writing : Fragment() {
 
                                 bookListAdapter!!.onItemClick = {book, position ->
                                     // TODO: Edit activity
+                                    book.chapters = ArrayList()
                                     val intent = Intent(requireContext(), PostNewActivity::class.java)
                                     intent.putExtra(Product.MESSAGE1, book)
                                     startActivityForResult(intent, REQUEST_CODE_PICK_UPDATE_PRODUCT)
