@@ -10,10 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.x_comic.R
 import com.example.x_comic.adapters.NotificationAdapter
-import com.example.x_comic.models.Chapter
-import com.example.x_comic.models.Feedback
-import com.example.x_comic.models.Order
+import com.example.x_comic.models.*
 import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.OrderViewModel
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -33,45 +34,51 @@ class Notification : Fragment() {
         list_noti.adapter = notiAdapter
 
         val uid = FirebaseAuthManager.getUser()?.uid
-        val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/")
-        val ordersRef = database.getReference("orders")
-        val uidQuery = ordersRef.orderByChild("uid").equalTo(uid)
-        uidQuery.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//        val database = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/")
+//        val ordersRef = database.getReference("orders")
+//        val uidQuery = ordersRef.orderByChild("uid").equalTo(uid)
+        var userViewModel = UserViewModel()
+        var productViewModel = ProductViewModel()
+        var orderViewModel = OrderViewModel()
+
+        orderViewModel.getOrdersByUid(uid!!) {dataSnapshot ->
+            run {
                 if (dataSnapshot.exists()) {
                     listNoti.clear()
                     for (orderSnapshot in dataSnapshot.children) {
                         val order = orderSnapshot.getValue(Order::class.java)
                         val title = "You purchased a chapter"
                         var message = ""
-                        val query = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                            .getReference("book").child(order!!.bid).child("chapter").orderByChild("id_chapter")
-                            .equalTo(order.cid).addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
+                        productViewModel.getAllChapter(order!!.bid) {snapshots->
+                            run {
+                                for (snapshot in snapshots.children) {
                                     if (snapshot.exists()) {
                                         var chapter = snapshot.getValue(Chapter::class.java)
-                                        message = chapter!!.name + "at" + order.time
-                                        val total = "$" + order.cost
-                                        var noti = com.example.x_comic.models.Notification(title,message, total)
-                                        listNoti.add(noti)
+                                        if (chapter!!.id_chapter.equals(order.cid)) {
+                                            productViewModel.getBookById(chapter!!.id_book) {book ->
+                                                run {
+                                                    message = book.title + "\n"+ chapter!!.name + "\nat " + order.time
+                                                    val total = "$" + order.cost
+                                                    var noti = Notification(title,message, total)
+                                                    Log.d("TEST", noti.message)
+                                                    listNoti.add(noti)
+                                                }
+                                                notiAdapter.notifyDataSetChanged()
+                                            }
+                                        }
                                     }
-
+                                    notiAdapter.notifyDataSetChanged()
                                 }
-                                override fun onCancelled(error: DatabaseError) {
-                                    Log.i("FEEDBACK-ERROR", error.toString())
-                                }
-                            })
+                            }
+                        }
+                        notiAdapter.notifyDataSetChanged()
                     }
 
                 } else {
 
                 }
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // handle the error case here
-            }
-        })
+        }
         return view
     }
 

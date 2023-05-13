@@ -415,5 +415,19 @@ class ProductViewModel : ViewModel() {
             .child("categories")
             .setValue(categories)
     }
+
+    inline fun getAllChapter(bid: String,crossinline callback: (DataSnapshot)->Unit){
+        // tạo thread mới.
+        db.child(bid).child("chapters").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
 }
 
