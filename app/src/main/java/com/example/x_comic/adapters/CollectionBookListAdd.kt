@@ -37,7 +37,7 @@ class CollectionBookListAdd (
 ) : RecyclerView.Adapter<CollectionBookListAdd.ViewHolder>()
 {
     var context: Context? = null;
-    var onItemClick: ((ProductCheck) -> Unit)? = null
+    var onItemClick: ((ProductCheck,ImageView, ImageView) -> Unit)? = null
     var bookSelectedList: MutableList<String> = mutableListOf()
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
@@ -55,7 +55,7 @@ class CollectionBookListAdd (
 
         init {
             listItemView.setOnClickListener {
-                onItemClick?.invoke(bookList[adapterPosition])
+                onItemClick?.invoke(bookList[adapterPosition],being_selected, cover)
             }
         }
 
@@ -169,43 +169,7 @@ class CollectionBookListAdd (
 
         rest.setText(if ((book.product.categories.size -3)>0) "+ ${book.product.categories.size -3} more" else "");
 
-        holder.itemView.setOnClickListener{
-            book.check = !book.check;
-            println(book.check)
-
-
-            if (book.check) {
-                bookSelectedList.add(book.product.id);
-                Glide.with(cover.context)
-                    .load(imageName)
-                    .apply(RequestOptions().override(500, 600))
-                    .apply(bitmapTransform(BlurTransformation(25, 3)))
-
-                    .into(cover)
-
-                cover.setColorFilter(ContextCompat.getColor(
-                    context!!,
-                    R.color.black_trans),
-                    PorterDuff.Mode.SRC_OVER
-                );
-
-                being_selected.visibility = View.VISIBLE
-
-
-                notifyDataSetChanged();
-
-            }
-            else {
-                bookSelectedList.remove(book.product.id);
-                Glide.with(cover.context)
-                    .load(imageName)
-                    .apply(RequestOptions().override(500, 600))
-                    .into(cover)
-                cover.clearColorFilter()
-                being_selected.visibility = View.GONE
-                notifyDataSetChanged();
-            }
-        }
+      
     }
 
 }

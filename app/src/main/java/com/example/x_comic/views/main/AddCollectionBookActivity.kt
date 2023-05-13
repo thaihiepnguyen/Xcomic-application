@@ -1,11 +1,17 @@
 package com.example.x_comic.views.main
 
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CollectionBookList
 import com.example.x_comic.adapters.CollectionBookListAdd
@@ -16,6 +22,8 @@ import com.example.x_comic.models.ProductCheck
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import jp.wasabeef.glide.transformations.BlurTransformation
+
 
 
 class AddCollectionBookActivity : AppCompatActivity() {
@@ -25,11 +33,12 @@ class AddCollectionBookActivity : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
 
     var customBookListView: RecyclerView? = null;
+    var numSelected: TextView? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_collection_book)
 
-
+        numSelected = findViewById(R.id.num_selected);
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         customBookListView = findViewById(R.id.collectionBookList);
@@ -95,6 +104,53 @@ class AddCollectionBookActivity : AppCompatActivity() {
 
         }
 
+
+        bookListAdapter.onItemClick = {
+            book, being_selected, cover ->
+            run {
+                book.check = !book.check;
+                println(book.check)
+
+                val imageName = book.product.cover
+
+                if (book.check) {
+                    bookListAdapter.bookSelectedList.add(book.product.id);
+                    Glide.with(cover.context)
+                        .load(imageName)
+                        .apply(RequestOptions().override(500, 600))
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
+
+                        .into(cover)
+
+                    cover.setColorFilter(
+                        ContextCompat.getColor(
+                        this,
+                        R.color.black_trans),
+                        PorterDuff.Mode.SRC_OVER
+                    );
+
+                    being_selected.visibility = View.VISIBLE
+
+
+                   bookListAdapter.notifyDataSetChanged();
+                    numSelected!!.setText("${bookListAdapter.bookSelectedList.size} Selected");
+
+                }
+                else {
+                    bookListAdapter.bookSelectedList.remove(book.product.id);
+                    Glide.with(cover.context)
+                        .load(imageName)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(cover)
+                    cover.clearColorFilter()
+                    being_selected.visibility = View.GONE
+                    bookListAdapter.notifyDataSetChanged();
+                    numSelected!!.setText("${bookListAdapter.bookSelectedList.size} Selected");
+                }
+            }
+        }
+
+        numSelected!!.setText("${bookListAdapter.bookSelectedList.size} Selected");
 
 
 
