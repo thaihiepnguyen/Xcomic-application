@@ -6,9 +6,11 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +33,7 @@ class CollectionAdapter (
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
         var title = listItemView.findViewById(R.id.collection_name) as TextView;
         var number = listItemView.findViewById(R.id.books_number) as TextView
-
+        var options = listItemView.findViewById(R.id.option) as TextView
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(CollectionList[adapterPosition])
@@ -62,6 +64,7 @@ class CollectionAdapter (
         var number = holder.number;
         var first_collection = collection.bookList[0];
 
+
         var bookViewModel : ProductViewModel = ProductViewModel()
         var imageName: String? = null;
         bookViewModel.getBookById(first_collection){
@@ -74,8 +77,11 @@ class CollectionAdapter (
         }
         }
 
+        var option = holder.options;
 
-
+       option.setOnClickListener{
+           showPopup(it)
+       }
 
 
 //        Glide.with(context!!)
@@ -93,4 +99,10 @@ class CollectionAdapter (
 
     }
 
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(context, v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.option_collection_menu, popup.menu)
+        popup.show()
+    }
 }

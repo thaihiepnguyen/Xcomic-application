@@ -9,19 +9,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CollectionAdapter
 import com.example.x_comic.models.*
+import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.AddCollectionBookActivity
 import com.example.x_comic.views.main.CollectionActivity
 import com.example.x_comic.views.read.ReadBookActivity
@@ -35,6 +41,8 @@ class Collection : Fragment() {
     var btnAddCollection: Button? = null;
     var adapter: CollectionAdapter? = null;
     var collectionBook: RecyclerView? = null;
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var productViewModel: ProductViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +82,41 @@ class Collection : Fragment() {
 
         collectionBook!!.layoutManager = GridLayoutManager(this.context, 3)
 
+
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+
+        val uid = FirebaseAuthManager.auth.uid;
+
+
+        if (uid != null) {
+
+            productViewModel.getAllCollection(uid) { booksID ->
+                run {
+                    listCollection.clear();
+
+                    for (snapshot in booksID.children) {
+
+                        var bookid = snapshot.getValue(CollectionReading::class.java)
+                        if (bookid!=null) {
+                            listCollection.add(bookid)
+                            println(listCollection)
+                            adapter!!.notifyDataSetChanged();
+                        }
+
+                    }
+
+                    adapter!!.notifyDataSetChanged();
+
+
+                }
+
+
+            }
+
+        }
+
+
         adapter!!.onItemClick = { collection ->
 
             val intent = Intent(getActivity(), CollectionActivity::class.java)
@@ -112,6 +155,11 @@ class Collection : Fragment() {
                 if (reply != null) {
                     listCollection.add(reply);
                     adapter!!.notifyDataSetChanged();
+                    val uid = FirebaseAuthManager.auth.uid;
+                    var productViewModel: ProductViewModel = ProductViewModel();
+                    if (uid!=null) {
+                        productViewModel.updateCollection(uid, listCollection);
+                    }
 
                 }
             }
@@ -163,5 +211,12 @@ class CollectionDialogFragment : DialogFragment() {
         return super.onCreateDialog(savedInstanceState).apply {
             setCanceledOnTouchOutside(false)
         }
+    }
+
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(context, v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.option_collection_menu, popup.menu)
+        popup.show()
     }
 }

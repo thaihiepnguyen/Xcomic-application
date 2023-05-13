@@ -1,4 +1,14 @@
 package com.example.x_comic.models
 
-data class CollectionReading(var name: String, var bookList: MutableList<String>): java.io.Serializable {
+class CollectionReading: java.io.Serializable {
+
+    var name: String= ""
+    var bookList: MutableList<String> = mutableListOf()
+
+    constructor() {}
+
+    constructor( name: String, bookList: MutableList<String>) {
+       this.name = name;
+        this.bookList = bookList;
+    }
 }

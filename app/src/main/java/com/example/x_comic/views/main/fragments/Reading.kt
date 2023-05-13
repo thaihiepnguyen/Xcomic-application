@@ -70,7 +70,7 @@ class Reading : Fragment() {
 
 
         customOnlineBookList!!.layoutManager = GridLayoutManager(this.context,3);
-
+        listReading.clear();
 
 
 
@@ -104,8 +104,8 @@ class Reading : Fragment() {
 
                                             println(listReading);
 
-                                      OnlineAdapter.notifyItemInserted(listReading.size);
-                                           // OnlineAdapter.notifyDataSetChanged()
+                                      //OnlineAdapter.notifyItemInserted(listReading.size);
+                                        OnlineAdapter.notifyDataSetChanged()
                                         }
                                    //     OnlineAdapter.notifyDataSetChanged()
 
@@ -174,7 +174,7 @@ class BookDialog(private val book: BookReading, private val position: Int, priva
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { // Use the Builder class for convenient dialog construction
             var builder = AlertDialog.Builder(it)
-            builder.setTitle(book.book.title)
+            builder.setTitle(book.book?.title)
 
                 builder.setItems(arrayOf("Read", "Story Info", "Remove from Library"),
                     DialogInterface.OnClickListener { dialog, which ->
