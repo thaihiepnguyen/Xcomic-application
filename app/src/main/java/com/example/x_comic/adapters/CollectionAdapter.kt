@@ -20,7 +20,9 @@ import com.example.x_comic.R
 import com.example.x_comic.models.BookReading
 import com.example.x_comic.models.CollectionBook
 import com.example.x_comic.models.CollectionReading
+import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.viewmodels.UserViewModel
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CollectionAdapter (
@@ -80,7 +82,7 @@ class CollectionAdapter (
         var option = holder.options;
 
        option.setOnClickListener{
-           showPopup(it)
+           showPopup(it, position)
        }
 
 
@@ -99,10 +101,31 @@ class CollectionAdapter (
 
     }
 
-    private fun showPopup(v: View) {
+    private fun showPopup(v: View, position: Int) {
         val popup = PopupMenu(context, v)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.option_collection_menu, popup.menu)
+        popup.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.delete -> {
+                   CollectionList.removeAt(position);
+                    notifyDataSetChanged();
+
+                    var bookViewModel : ProductViewModel = ProductViewModel()
+                    FirebaseAuthManager.auth.uid?.let{
+                        bookViewModel.updateCollection(it,CollectionList);
+                    }
+                    true
+                }
+                R.id.rename -> {
+                    true
+                }
+                R.id.edit -> {
+                    true
+                }
+                else -> true
+            }
+        }
         popup.show()
     }
 }
