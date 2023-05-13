@@ -93,7 +93,7 @@ class Reading : Fragment() {
                                         if ( bookInner!=null && !bookInner.hide) {
 
                                             cnt++
-                                            listReading.add(0,
+                                            listReading.add(
                                                 BookReading(
                                                     bookInner,
                                                     bookid.posChap,
@@ -104,7 +104,7 @@ class Reading : Fragment() {
 
                                             println(listReading);
 
-                                      OnlineAdapter.notifyItemInserted(0);
+                                      OnlineAdapter.notifyItemInserted(listReading.size);
                                            // OnlineAdapter.notifyDataSetChanged()
                                         }
                                    //     OnlineAdapter.notifyDataSetChanged()
