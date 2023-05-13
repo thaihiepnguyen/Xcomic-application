@@ -1,9 +1,12 @@
 package com.example.x_comic.views.main
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -15,10 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CollectionBookList
 import com.example.x_comic.adapters.CollectionBookListAdd
-import com.example.x_comic.models.Book
-import com.example.x_comic.models.BookReading
-import com.example.x_comic.models.Product
-import com.example.x_comic.models.ProductCheck
+import com.example.x_comic.models.*
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
@@ -34,11 +34,14 @@ class AddCollectionBookActivity : AppCompatActivity() {
 
     var customBookListView: RecyclerView? = null;
     var numSelected: TextView? = null;
+    var submitBtn: ImageButton? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_collection_book)
 
         numSelected = findViewById(R.id.num_selected);
+        submitBtn = findViewById(R.id.check);
+
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
         customBookListView = findViewById(R.id.collectionBookList);
@@ -151,8 +154,20 @@ class AddCollectionBookActivity : AppCompatActivity() {
         }
 
         numSelected!!.setText("${bookListAdapter.bookSelectedList.size} Selected");
-
-
+        val collectionName = intent.getStringExtra("name")
+        submitBtn!!.setOnClickListener{
+            println(bookListAdapter.bookSelectedList);
+            val replyIntent = Intent()
+            replyIntent.putExtra(
+                "collection",
+                CollectionReading(
+                    collectionName!!,
+                    bookListAdapter.bookSelectedList
+                )
+            );
+            setResult(Activity.RESULT_OK, replyIntent)
+            finish()
+        }
 
     }
 }

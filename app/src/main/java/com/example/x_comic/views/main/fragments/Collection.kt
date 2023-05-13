@@ -1,5 +1,6 @@
 package com.example.x_comic.views.main.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -20,10 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.x_comic.R
 import com.example.x_comic.adapters.CollectionAdapter
-import com.example.x_comic.models.Book
-import com.example.x_comic.models.BookReading
-import com.example.x_comic.models.BookSneek
-import com.example.x_comic.models.CollectionBook
+import com.example.x_comic.models.*
 import com.example.x_comic.views.main.AddCollectionBookActivity
 import com.example.x_comic.views.main.CollectionActivity
 import com.example.x_comic.views.read.ReadBookActivity
@@ -112,7 +110,8 @@ class Collection : Fragment() {
                     collectionName =  bundle.getString("1")!!
 
                     val intent = Intent(context, AddCollectionBookActivity::class.java)
-                    startActivity(intent)
+                    intent.putExtra("name", collectionName);
+                    startActivityForResult(intent, 123)
                 }
             }
 
@@ -155,6 +154,19 @@ class Collection : Fragment() {
 
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === 123) {
+            if (resultCode === Activity.RESULT_OK) {
+                val reply = data!!.getSerializableExtra("collection") as? CollectionReading;
+                if (reply != null) {
+                    println(reply);
+
+                }
+            }
+        }
     }
 
 

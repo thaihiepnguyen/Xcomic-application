@@ -169,8 +169,10 @@ class CollectionBookListAdd (
 
         rest.setText(if ((book.product.categories.size -3)>0) "+ ${book.product.categories.size -3} more" else "");
 
-      
+
     }
+
+
 
 }
 
