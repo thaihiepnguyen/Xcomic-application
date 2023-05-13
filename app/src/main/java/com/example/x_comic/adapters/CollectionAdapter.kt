@@ -17,13 +17,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.BookReading
 import com.example.x_comic.models.CollectionBook
+import com.example.x_comic.models.CollectionReading
+import com.example.x_comic.viewmodels.ProductViewModel
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CollectionAdapter (
-    private var CollectionList: MutableList<CollectionBook>,
+    private var CollectionList: MutableList<CollectionReading>,
 ) : RecyclerView.Adapter<CollectionAdapter.ViewHolder>()
 {
-    var onItemClick: ((CollectionBook) -> Unit)? = null
+    var onItemClick: ((CollectionReading) -> Unit)? = null
     var context: Context? = null;
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var cover = listItemView.findViewById(R.id.cover) as ImageView;
@@ -58,9 +60,21 @@ class CollectionAdapter (
         val cover = holder.cover;
         val title = holder.title;
         var number = holder.number;
+        var first_collection = collection.bookList[0];
+
+        var bookViewModel : ProductViewModel = ProductViewModel()
+        var imageName: String? = null;
+        bookViewModel.getBookById(first_collection){
+            book -> run {
+            imageName = book.cover;
+            Glide.with(cover.context)
+                .load(imageName)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
+        }
+        }
 
 
-        cover.setImageResource(collection.bookList[0].book.cover);
 
 
 
