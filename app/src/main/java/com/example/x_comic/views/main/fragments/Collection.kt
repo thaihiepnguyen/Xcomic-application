@@ -1,11 +1,18 @@
 package com.example.x_comic.views.main.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -19,8 +26,8 @@ import com.example.x_comic.views.main.CollectionActivity
 import kotlin.random.Random
 
 
-class Collection : Fragment() {
-
+class Collection : Fragment(), CollectionDialogFragment.OnInputListener {
+    private var collectionName: String = ""
     val bookList: MutableList<BookSneek> = mutableListOf(
         BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
         BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
@@ -60,6 +67,7 @@ class Collection : Fragment() {
     )
 
     var listCollection: MutableList<CollectionBook> = mutableListOf();
+    var btnAddCollection: Button? = null;
     fun getListCollection(){
         repeat(10)
         {
@@ -87,6 +95,13 @@ class Collection : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_collection, container, false)
 
         collectionBook = view.findViewById(R.id.collectionBook);
+
+        btnAddCollection = view.findViewById(R.id.btn_add_collection);
+
+        btnAddCollection!!.setOnClickListener{
+            val dialog = CollectionDialogFragment()
+            dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+        }
         getListCollection();
         println(listCollection);
 
@@ -126,5 +141,50 @@ class Collection : Fragment() {
         return view
     }
 
+    override fun sendInput(input: String) {
+        collectionName = input
+    }
 
+
+}
+
+class CollectionDialogFragment : DialogFragment() {
+
+
+    private lateinit var mOnInputListener: OnInputListener
+    private lateinit var mInput: EditText
+    private lateinit var mActionOk: TextView
+    private lateinit var mActionCancel: TextView
+
+    interface OnInputListener {
+        fun sendInput(input: String)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.dialog_collection_fragment, container, false)
+        mActionCancel = view.findViewById(R.id.action_cancel)
+        mActionOk = view.findViewById(R.id.action_ok)
+        mInput = view.findViewById(R.id.input)
+
+        mActionCancel.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        mActionOk.setOnClickListener {
+            val input = mInput.text.toString()
+            mOnInputListener.sendInput(input)
+            dialog?.dismiss()
+        }
+
+        return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            mOnInputListener = activity as OnInputListener
+        } catch (e: ClassCastException) {
+            Log.e("dialog", "onAttach: ClassCastException: " + e.message)
+        }
+    }
 }

@@ -111,6 +111,9 @@ dependencies {
     implementation 'com.paypal.checkout:android-sdk:0.112.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
+    //neumorphism
+    implementation 'com.github.fornewid:neumorphism:0.3.2'
+
 }
 
 kapt {
