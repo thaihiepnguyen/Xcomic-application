@@ -274,7 +274,7 @@ class ReadBookActivity : AppCompatActivity() {
             }
 
             if (isNew) {
-                list_reading.add(reading)
+                list_reading.add(0,reading)
             }
             userViewModel.updateReadingUserList(list_reading);
         }
