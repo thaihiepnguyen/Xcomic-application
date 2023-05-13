@@ -1,18 +1,20 @@
 package com.example.x_comic.views.main.fragments
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -22,11 +24,13 @@ import com.example.x_comic.models.Book
 import com.example.x_comic.models.BookReading
 import com.example.x_comic.models.BookSneek
 import com.example.x_comic.models.CollectionBook
+import com.example.x_comic.views.main.AddCollectionBookActivity
 import com.example.x_comic.views.main.CollectionActivity
+import com.example.x_comic.views.read.ReadBookActivity
 import kotlin.random.Random
 
 
-class Collection : Fragment(), CollectionDialogFragment.OnInputListener {
+class Collection : Fragment() {
     private var collectionName: String = ""
     val bookList: MutableList<BookSneek> = mutableListOf(
         BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
@@ -100,7 +104,19 @@ class Collection : Fragment(), CollectionDialogFragment.OnInputListener {
 
         btnAddCollection!!.setOnClickListener{
             val dialog = CollectionDialogFragment()
-            dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+            dialog.show(getFragmentManager()!!,"dbchau10");
+
+            dialog.setFragmentResultListener("1"){ key, bundle ->
+                if (key == "1"){
+
+                    collectionName =  bundle.getString("1")!!
+
+                    val intent = Intent(context, AddCollectionBookActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+
         }
         getListCollection();
         println(listCollection);
@@ -141,24 +157,20 @@ class Collection : Fragment(), CollectionDialogFragment.OnInputListener {
         return view
     }
 
-    override fun sendInput(input: String) {
-        collectionName = input
-    }
+
 
 
 }
 
+
 class CollectionDialogFragment : DialogFragment() {
 
-
-    private lateinit var mOnInputListener: OnInputListener
     private lateinit var mInput: EditText
     private lateinit var mActionOk: TextView
     private lateinit var mActionCancel: TextView
 
-    interface OnInputListener {
-        fun sendInput(input: String)
-    }
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.dialog_collection_fragment, container, false)
@@ -167,24 +179,28 @@ class CollectionDialogFragment : DialogFragment() {
         mInput = view.findViewById(R.id.input)
 
         mActionCancel.setOnClickListener {
+
             dialog?.dismiss()
         }
 
         mActionOk.setOnClickListener {
+
             val input = mInput.text.toString()
-            mOnInputListener.sendInput(input)
+            val bundle = Bundle()
+
+            bundle.putString("1", input)
+            setFragmentResult("1", bundle)
+
+            dismiss()
             dialog?.dismiss()
         }
 
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            mOnInputListener = activity as OnInputListener
-        } catch (e: ClassCastException) {
-            Log.e("dialog", "onAttach: ClassCastException: " + e.message)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            setCanceledOnTouchOutside(false)
         }
     }
 }
