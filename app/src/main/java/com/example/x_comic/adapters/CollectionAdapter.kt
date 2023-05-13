@@ -1,6 +1,7 @@
 package com.example.x_comic.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -13,6 +14,8 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,6 +26,8 @@ import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.main.AddCollectionBookActivity
+import com.example.x_comic.views.main.fragments.CollectionDialogFragment
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CollectionAdapter (
@@ -82,7 +87,7 @@ class CollectionAdapter (
         var option = holder.options;
 
        option.setOnClickListener{
-           showPopup(it, position)
+           showPopup(it, position, collection.name)
        }
 
 
@@ -101,7 +106,7 @@ class CollectionAdapter (
 
     }
 
-    private fun showPopup(v: View, position: Int) {
+    private fun showPopup(v: View, position: Int, name: String="") {
         val popup = PopupMenu(context, v)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.option_collection_menu, popup.menu)
@@ -118,6 +123,23 @@ class CollectionAdapter (
                     true
                 }
                 R.id.rename -> {
+                    val dialog = CollectionDialogFragment("Rename a Collection",name)
+                    dialog.show((context as? FragmentActivity)!!.supportFragmentManager,"dbchau10");
+
+                    dialog.setFragmentResultListener("1") { key, bundle ->
+                        if (key == "1") {
+
+                            val collectionName = bundle.getString("1")!!
+                            CollectionList[position].name = collectionName;
+                            notifyDataSetChanged();
+
+                            var bookViewModel: ProductViewModel = ProductViewModel()
+                            FirebaseAuthManager.auth.uid?.let {
+                                bookViewModel.updateCollection(it, CollectionList);
+                            }
+
+                        }
+                    }
                     true
                 }
                 R.id.edit -> {

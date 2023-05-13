@@ -55,7 +55,7 @@ class Collection : Fragment() {
         btnAddCollection = view.findViewById(R.id.btn_add_collection);
 
         btnAddCollection!!.setOnClickListener{
-            val dialog = CollectionDialogFragment()
+            val dialog = CollectionDialogFragment("Create a Collection")
             dialog.show(getFragmentManager()!!,"dbchau10");
 
             dialog.setFragmentResultListener("1"){ key, bundle ->
@@ -144,6 +144,7 @@ class Collection : Fragment() {
 
 
 
+
         return view
     }
 
@@ -167,17 +168,19 @@ class Collection : Fragment() {
     }
 
 
+  
 
 
 }
 
 
-class CollectionDialogFragment : DialogFragment() {
+class CollectionDialogFragment(var dialogName: String, var name: String= "") : DialogFragment() {
 
     private lateinit var mInput: EditText
     private lateinit var mActionOk: TextView
     private lateinit var mActionCancel: TextView
-
+    private  lateinit var heading: TextView
+    private  lateinit var input: EditText
 
 
 
@@ -186,6 +189,10 @@ class CollectionDialogFragment : DialogFragment() {
         mActionCancel = view.findViewById(R.id.action_cancel)
         mActionOk = view.findViewById(R.id.action_ok)
         mInput = view.findViewById(R.id.input)
+        heading = view.findViewById(R.id.heading)
+        input = view.findViewById(R.id.input)
+        heading.setText(dialogName)
+        input.setText(name);
 
         mActionCancel.setOnClickListener {
 
@@ -213,10 +220,5 @@ class CollectionDialogFragment : DialogFragment() {
         }
     }
 
-    private fun showPopup(v: View) {
-        val popup = PopupMenu(context, v)
-        val inflater: MenuInflater = popup.menuInflater
-        inflater.inflate(R.menu.option_collection_menu, popup.menu)
-        popup.show()
-    }
+
 }
