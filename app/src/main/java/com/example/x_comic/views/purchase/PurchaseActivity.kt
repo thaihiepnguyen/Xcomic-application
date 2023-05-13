@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import bolts.Task.delay
 import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
@@ -16,6 +17,7 @@ import com.example.x_comic.models.Chapter
 import com.example.x_comic.models.Order
 import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
+import com.example.x_comic.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,12 +41,13 @@ import java.util.*
 
 
 class PurchaseActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchase)
 
         val intent = intent
-
+        val userViewModel: UserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
         val stringData = intent.getStringExtra("book_data")
         var bookData = Product()
         val databaseReference = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("book").child(stringData!!)
@@ -62,6 +65,11 @@ class PurchaseActivity : AppCompatActivity() {
 
                     title.text = bookData?.title
                     author.text = bookData?.author
+                    userViewModel.getUserById(bookData!!.author) { user ->
+                        run {
+                            author.text = user.penname
+                        }
+                    }
                     favorite.text = bookData?.favorite.toString()
                     val backCover = findViewById<ImageView>(R.id.background)
 

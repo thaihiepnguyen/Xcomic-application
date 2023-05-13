@@ -49,7 +49,7 @@ class AuthorProfileActivity : AppCompatActivity() {
         binding.profileListView.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        val collectionAdapter = BookListAdapter(bookList)
+        val collectionAdapter = ProfileBookListAdapter(bookList)
         val avatarAdapter = AvatarListAdapter(followList)
 
         collectionAdapter.onItemClick = {
