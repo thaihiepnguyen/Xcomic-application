@@ -225,9 +225,10 @@ class DetailActivity : AppCompatActivity() {
                             //Click and read book
                             if(!bookData!!.chapters[i]._lock){
                                 val intent = Intent(this@DetailActivity, ReadBookActivity::class.java)
-                                intent.putExtra("book",bookData)
+                                intent.putExtra("book",bookData!!.id)
                                 intent.putExtra("id_chapter",bookData!!.chapters[i].id_chapter)
                                 ActivityCompat.startActivityForResult(this@DetailActivity, intent, 302, null)
+
                             }else{
                                 val intent = Intent(this@DetailActivity, PurchaseActivity::class.java)
                                 intent.putExtra("book_data", bookData!!.id)
@@ -382,7 +383,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
         val intent = Intent(this, ReadBookActivity::class.java)
-        intent.putExtra("book",bookData)
+        intent.putExtra("book",bookData.id)
         intent.putExtra("id_chapter", id_chap)
         ActivityCompat.startActivityForResult(this, intent, 302, null)
     }
