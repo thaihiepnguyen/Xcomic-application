@@ -270,6 +270,11 @@ class ReadBookActivity : AppCompatActivity() {
                     list_reading[list_reading.indexOf(i)].posChap = reading.posChap
                     list_reading[list_reading.indexOf(i)].numChap = reading.numChap
                     isNew = false
+                    // update list
+
+                    list_reading.remove(i)
+                    list_reading.add(0, i)
+                    break
                 }
             }
 
