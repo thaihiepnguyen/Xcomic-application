@@ -85,13 +85,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sLockChapter">
+
         <EditText
             android:id="@+id/etContent"
             android:layout_width="match_parent"
@@ -100,10 +101,10 @@
             android:background="@color/fui_transparent"
             android:ems="10"
             android:fontFamily="@font/poppins_light"
+            android:hint="Start writing"
             android:inputType="textMultiLine"
             android:maxLines="100"
             android:scrollbars="vertical"
-            android:hint="Start writing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="parent"
