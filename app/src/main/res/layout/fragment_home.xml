@@ -115,7 +115,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="30dp"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="Continue Reading"
+                                android:text="Recommend Book"
                                 android:textAlignment="textStart"
                                 android:textSize="16sp"
                                 app:layout_constraintStart_toEndOf="@+id/currentCard"

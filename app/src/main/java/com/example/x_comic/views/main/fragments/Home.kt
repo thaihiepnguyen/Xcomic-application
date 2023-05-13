@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -51,6 +52,7 @@ class Home : Fragment() {
     private val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
     private val bookCompletedList: MutableList<Product> = mutableListOf()
+    private var _bookRecommend: Product = Product()
 
     var tabsBook = mutableListOf(
         bookPopularList,bookLatestList,bookCompletedList)
@@ -60,6 +62,9 @@ class Home : Fragment() {
     var tabLayout: TabLayout? = null;
     var scrollView: NestedScrollView? = null;
     var avatar: ImageView? = null
+    var cover: ImageView? = null
+    var bookTitle: TextView? = null
+    var bookAuthor: TextView? = null
 
 
     override fun onCreateView(
@@ -80,6 +85,10 @@ class Home : Fragment() {
         customBookListView = view.findViewById(R.id.popularListBook);
         scrollView = view.findViewById(R.id.nestedScrollView);
         avatar = view.findViewById(R.id.avatar);
+        cover = view.findViewById(R.id.book)
+        bookTitle = view.findViewById(R.id.book_title)
+        bookAuthor = view.findViewById(R.id.book_author)
+
 
         tabLayout = view.findViewById(R.id.tabs_book);
 
@@ -138,6 +147,33 @@ class Home : Fragment() {
                     }
                 }
                 adapterSlideShow.notifyDataSetChanged()
+            }
+        }
+
+        productViewModel.getAllBook { books ->
+            run {
+                for (book in books.children) {
+                    val product = book.getValue(Product::class.java)
+                    if (product != null && !product.hide) {
+                        if (product.have_loved.size > _bookRecommend.have_loved.size) {
+                            _bookRecommend = product
+                        }
+                    }
+                }
+
+                bookTitle!!.text = _bookRecommend.title
+                userViewModel.getUserById(_bookRecommend.author) {user ->
+                    run {
+                        bookAuthor!!.text = user.penname
+                    }
+                }
+                cover?.let {
+                    Glide.with(it.context)
+                        .load(_bookRecommend.cover)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(cover!!)
+                }
+
             }
         }
 
