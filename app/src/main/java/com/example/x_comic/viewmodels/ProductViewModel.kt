@@ -323,9 +323,11 @@ class ProductViewModel : ViewModel() {
         val ref = db.child(bookid)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var book: Product? = dataSnapshot.getValue(Product::class.java)
-                if (book != null)
-                    callback(book)
+                if (dataSnapshot.exists()) {
+                    var book: Product? = dataSnapshot.getValue(Product::class.java)
+                    if (book != null)
+                        callback(book)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
