@@ -1,6 +1,5 @@
 package com.example.x_comic.views.main
 
-import android.R.attr
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -166,6 +165,12 @@ class CollectionActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_OK)
+        super.onBackPressed()
+    }
+
     private fun showPopup(v: View, position: Int, name: String="") {
 
         println(position)
@@ -190,6 +195,7 @@ class CollectionActivity : AppCompatActivity() {
                     );
 
                     replyIntent.putExtra("type","delete");
+                    setResult(Activity.RESULT_OK, replyIntent)
 
 
                     finish();
