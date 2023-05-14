@@ -184,19 +184,35 @@ class EditCollectionActivity : AppCompatActivity() {
 
                 }
             }
+                if (collectionBook.size > 0) {
+                    Glide.with(cover.context)
+                        .load((collectionBook[0].product.cover))
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                        .into(cover)
 
-                Glide.with(cover.context)
-                    .load((collectionBook[0].product.cover))
-                    .placeholder(R.drawable.empty_image)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                    .into(cover)
+
+                    Glide.with(thumbnail.context)
+                        .load((collectionBook[0].product.cover))
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(thumbnail)
+                }
+            else {
+
+                    Glide.with(cover.context)
+                        .load(R.drawable.empty_image)
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                        .into(cover)
 
 
-                Glide.with(thumbnail.context)
-                    .load((collectionBook[0].product.cover))
-                    .placeholder(R.drawable.empty_image)
-                    .apply(RequestOptions().override(500, 600))
-                    .into(thumbnail)
+                    Glide.with(thumbnail.context)
+                        .load(R.drawable.empty_image)
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(thumbnail)
+                }
 
             val storyText = if (collectionBook.size == 1) "Story" else "Stories"
             storyNumber!!.text = "${collectionBook.size} $storyText"
