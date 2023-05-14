@@ -1,5 +1,7 @@
 package com.example.x_comic.views.collection
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +23,7 @@ import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.ProductCheck
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.views.main.fragments.listCollection
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class EditCollectionActivity : AppCompatActivity() {
@@ -31,6 +34,9 @@ class EditCollectionActivity : AppCompatActivity() {
     var customBookListView: RecyclerView? = null;
 
     var btnDelete: ImageButton? = null;
+    var btnAdd: ImageButton? = null;
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var bookListAdapter: CollectionBookListAdd
     private val collectionBook: MutableList<ProductCheck> = mutableListOf();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +45,19 @@ class EditCollectionActivity : AppCompatActivity() {
         collectionName = findViewById(R.id.collection_name);
         storyNumber = findViewById(R.id.story_number);
         btnDelete = findViewById(R.id.btnDelete);
-
+        btnAdd = findViewById(R.id.btnAdd);
         numSelected = findViewById(R.id.num_selected);
         val cover = findViewById(R.id.cover) as ImageView;
         val thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
 
-        var productViewModel: ProductViewModel
+
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
 
 
 
         customBookListView = findViewById(R.id.collectionBookList);
-        var bookListAdapter = CollectionBookListAdd(collectionBook);
+        bookListAdapter = CollectionBookListAdd(collectionBook);
         collectionBook.clear();
         customBookListView!!.adapter = bookListAdapter;
 
@@ -70,23 +76,32 @@ class EditCollectionActivity : AppCompatActivity() {
                     productViewModel.getBookById(i){
                             product ->
                         run {
-                            if (collection.bookList.indexOf(i) == 0){
+                            if ( product!=null && !product.hide) {
+                                if (collection.bookList.indexOf(i) == 0) {
 
-                                Glide.with(cover.context)
-                                    .load(product.cover)
-                                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                                    .into(cover)
+                                    Glide.with(cover.context)
+                                        .load(product.cover)
+                                        .apply(
+                                            RequestOptions.bitmapTransform(
+                                                BlurTransformation(
+                                                    50,
+                                                    3
+                                                )
+                                            )
+                                        )
+                                        .into(cover)
 
 
-                                Glide.with(thumbnail.context)
-                                    .load(product.cover)
-                                    .apply(RequestOptions().override(500, 600))
-                                    .into(thumbnail)
+                                    Glide.with(thumbnail.context)
+                                        .load(product.cover)
+                                        .apply(RequestOptions().override(500, 600))
+                                        .into(thumbnail)
 
 
+                                }
+                                collectionBook.add(ProductCheck(product, false));
+                                bookListAdapter.notifyDataSetChanged();
                             }
-                            collectionBook.add(ProductCheck(product,false));
-                            bookListAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -176,5 +191,33 @@ class EditCollectionActivity : AppCompatActivity() {
         }
 
 
+        btnAdd!!.setOnClickListener{
+            val intent = Intent(this, AddBookEditCollectionActivity::class.java)
+            intent.putExtra("collection", CollectionReading("",collectionBook.map { it -> it.product.id }.toMutableList()));
+            startActivityForResult(intent,345);
+        }
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === 345) {
+            if (resultCode === Activity.RESULT_OK) {
+                val reply = data!!.getSerializableExtra("collection") as? CollectionReading;
+                if (reply != null) {
+                    for (i in reply.bookList){
+                        productViewModel.getBookById(i){
+                            book -> run{
+                            if ( book!=null && !book.hide) {
+                                collectionBook.add(ProductCheck(book,false));
+                            }
+                        }
+                        }
+                    }
+                     bookListAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 }

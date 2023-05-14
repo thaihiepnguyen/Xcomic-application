@@ -99,7 +99,7 @@ class CollectionBookListAdd (
 
 
         val imageName = book.product.cover
-     
+
 
         if (book.check) {
             Glide.with(cover.context)
