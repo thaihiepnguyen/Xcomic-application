@@ -61,7 +61,10 @@ class CollectionAdapter (
         val cover = holder.cover;
         val title = holder.title;
         var number = holder.number;
-        var first_collection = collection.bookList[0];
+        var first_collection: String = ""
+        if (collection.bookList.size>0) {
+            first_collection = collection.bookList[0];
+        }
 
 
         var bookViewModel : ProductViewModel = ProductViewModel()
@@ -71,6 +74,7 @@ class CollectionAdapter (
             imageName = book.cover;
             Glide.with(cover.context)
                 .load(imageName)
+                .placeholder(R.drawable.empty_image)
                 .apply(RequestOptions().override(500, 600))
                 .into(cover)
         }

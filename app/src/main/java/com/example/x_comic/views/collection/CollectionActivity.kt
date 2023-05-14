@@ -86,12 +86,14 @@ class CollectionActivity : AppCompatActivity() {
 
                                 Glide.with(cover.context)
                                     .load(product.cover)
+                                    .placeholder(R.drawable.empty_image)
                                     .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
                                     .into(cover)
 
 
                                 Glide.with(thumbnail.context)
                                     .load(product.cover)
+                                    .placeholder(R.drawable.empty_image)
                                     .apply(RequestOptions().override(500, 600))
                                     .into(thumbnail)
 

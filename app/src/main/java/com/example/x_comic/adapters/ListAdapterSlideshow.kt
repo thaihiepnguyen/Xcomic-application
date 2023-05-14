@@ -75,6 +75,7 @@ class ListAdapterSlideshow (
         val imageName = book.cover
         Glide.with(cover.context)
             .load(imageName)
+            .placeholder(R.drawable.empty_image)
             .apply(RequestOptions().override(500, 600))
             .into(cover)
         rating.text= Html.fromHtml("<font>${book.rating} </font>" +

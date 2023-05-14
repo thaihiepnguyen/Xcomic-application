@@ -84,6 +84,7 @@ class BookReadingAdapter (
             val imageName = book.book?.cover
             Glide.with(cover.context)
                 .load(imageName)
+                .placeholder(R.drawable.empty_image)
                 .apply(RequestOptions().override(500, 600))
                 .into(cover)
             title.setText(book.book?.title);

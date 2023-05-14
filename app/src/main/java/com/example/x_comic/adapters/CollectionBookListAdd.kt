@@ -104,6 +104,7 @@ class CollectionBookListAdd (
         if (book.check) {
             Glide.with(cover.context)
                 .load(imageName)
+                .placeholder(R.drawable.empty_image)
                 .apply(RequestOptions().override(500, 600))
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
 
@@ -124,6 +125,7 @@ class CollectionBookListAdd (
         else {
             Glide.with(cover.context)
                 .load(imageName)
+                .placeholder(R.drawable.empty_image)
                 .apply(RequestOptions().override(500, 600))
                 .into(cover)
             cover.clearColorFilter()

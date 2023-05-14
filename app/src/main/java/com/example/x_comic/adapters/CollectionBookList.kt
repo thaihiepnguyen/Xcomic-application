@@ -86,6 +86,7 @@ class CollectionBookList (
 
         Glide.with(cover.context)
             .load(imageName)
+            .placeholder(R.drawable.empty_image)
             .apply(RequestOptions().override(500, 600))
             .into(cover)
 

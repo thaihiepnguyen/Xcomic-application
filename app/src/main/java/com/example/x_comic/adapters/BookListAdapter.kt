@@ -110,7 +110,8 @@ class BookListAdapter (
 //                // Handle any errors
 //            }
         Glide.with(cover.context)
-            .load(imageName)
+            .load(imageName)  
+            .placeholder(R.drawable.empty_image)
             .apply(RequestOptions().override(500, 600))
             .into(cover)
 
