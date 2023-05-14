@@ -40,6 +40,9 @@ class EditCollectionActivity : AppCompatActivity() {
     var btnSave: ImageButton? =null;
     private lateinit var productViewModel: ProductViewModel
     private lateinit var bookListAdapter: CollectionBookListAdd
+
+    private lateinit var cover : ImageView;
+    private lateinit var thumbnail : ImageView;
     private val collectionBook: MutableList<ProductCheck> = mutableListOf();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +56,8 @@ class EditCollectionActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btnSave);
 
         numSelected = findViewById(R.id.num_selected);
-        val cover = findViewById(R.id.cover) as ImageView;
-        val thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
+        cover = findViewById(R.id.cover) as ImageView;
+        thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
 
 
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
@@ -258,6 +261,19 @@ class EditCollectionActivity : AppCompatActivity() {
 
                                 val storyText = if (collectionBook.size == 1) "Story" else "Stories"
                                 storyNumber!!.text = "${collectionBook.size} $storyText"
+
+                                Glide.with(cover.context)
+                                    .load((collectionBook[0].product.cover))
+                                    .placeholder(R.drawable.empty_image)
+                                    .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                                    .into(cover)
+
+
+                                Glide.with(thumbnail.context)
+                                    .load((collectionBook[0].product.cover))
+                                    .placeholder(R.drawable.empty_image)
+                                    .apply(RequestOptions().override(500, 600))
+                                    .into(thumbnail)
                                 bookListAdapter.notifyDataSetChanged();
                             }
 

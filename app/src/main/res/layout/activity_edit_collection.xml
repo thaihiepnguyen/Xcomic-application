@@ -100,13 +100,12 @@
                     >
 
 
-
                     <ImageView
                         android:id="@+id/cover"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        app:srcCompat="@drawable/bookcover"/>
+                        app:srcCompat="@drawable/empty_image" />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -119,13 +118,14 @@
                         <ImageView
                             android:id="@+id/cover_thumbnail"
                             android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="20dp"
+                            android:scaleType="fitXY"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/bookcover" />
+                            app:srcCompat="@drawable/empty_image" />
 
                         <TextView
                             android:id="@+id/collection_name"

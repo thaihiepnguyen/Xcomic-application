@@ -44,12 +44,15 @@ class CollectionActivity : AppCompatActivity() {
     var storyNumber: TextView? = null;
     lateinit var productViewModel: ProductViewModel
     private val collectionBook: MutableList<Product> = mutableListOf();
+
+    private lateinit var cover : ImageView;
+    private lateinit var thumbnail : ImageView;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_collection)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val cover = findViewById(R.id.cover) as ImageView;
-        val thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
+        cover = findViewById(R.id.cover) as ImageView;
+        thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
         val btnOption = findViewById<ImageButton>(R.id.btnOption)
         val btnReturn = findViewById<ImageButton>(R.id.btnReturn);
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
@@ -205,6 +208,21 @@ class CollectionActivity : AppCompatActivity() {
                     }
 
                     bookListAdapter.notifyDataSetChanged();
+
+
+                    Glide.with(cover.context)
+                        .load((collectionBook[0].cover))
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                        .into(cover)
+
+
+                    Glide.with(thumbnail.context)
+                        .load((collectionBook[0].cover))
+                        .placeholder(R.drawable.empty_image)
+                        .apply(RequestOptions().override(500, 600))
+                        .into(thumbnail)
+
                     val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
                     storyNumber!!.text = "${collection?.bookList?.size.toString()} $storyText"
 
