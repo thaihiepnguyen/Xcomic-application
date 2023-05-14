@@ -1,6 +1,7 @@
 package com.example.x_comic.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,7 @@ import com.example.x_comic.R
 import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.views.collection.EditCollectionActivity
 import com.example.x_comic.views.main.fragments.CollectionDialogFragment
 
 class CollectionAdapter (
@@ -132,6 +135,9 @@ class CollectionAdapter (
                     true
                 }
                 R.id.edit -> {
+                    val intent = Intent(context, EditCollectionActivity::class.java)
+                    intent.putExtra("collection", CollectionList[position])
+                    context!!.startActivity(intent);
                     true
                 }
                 else -> true

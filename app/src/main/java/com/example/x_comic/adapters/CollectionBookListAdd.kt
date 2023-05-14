@@ -99,10 +99,39 @@ class CollectionBookListAdd (
 
 
         val imageName = book.product.cover
-        Glide.with(cover.context)
-            .load(imageName)
-            .apply(RequestOptions().override(500, 600))
-            .into(cover)
+     
+
+        if (book.check) {
+            Glide.with(cover.context)
+                .load(imageName)
+                .apply(RequestOptions().override(500, 600))
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
+
+                .into(cover)
+
+            cover.setColorFilter(
+                ContextCompat.getColor(
+                    context!!,
+                    R.color.black_trans),
+                PorterDuff.Mode.SRC_OVER
+            );
+
+            being_selected.visibility = View.VISIBLE
+
+
+
+        }
+        else {
+            Glide.with(cover.context)
+                .load(imageName)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
+            cover.clearColorFilter()
+            being_selected.visibility = View.INVISIBLE
+
+        }
+
+
         title.setText(book.product.title);
         userViewModel.getUserById(book.product.author) {
                 user -> author.setText(user.penname);
