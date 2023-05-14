@@ -21,17 +21,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Book
 import com.example.x_comic.models.Product
+import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CollectionBookList (
 
-    private var bookList: MutableList<Book>,
+    private var bookList: MutableList<Product>,
 ) : RecyclerView.Adapter<CollectionBookList.ViewHolder>()
 {
     var context: Context? = null;
-    var onItemClick: ((Book) -> Unit)? = null
+    var onItemClick: ((Product) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView){
         var title = listItemView.findViewById(R.id.book_list_title) as TextView;
@@ -81,60 +82,72 @@ class CollectionBookList (
         var category_holder = arrayListOf(holder.category1,holder.category2,holder.category3)
         var rest = holder.rest;
 
-        cover.setImageResource(book.book.cover);
-        title.setText(book.book.title);
-        author.setText(book.book.author);
+        val imageName = book.cover;
+
+        Glide.with(cover.context)
+            .load(imageName)
+            .apply(RequestOptions().override(500, 600))
+            .into(cover)
+
+
+        title.setText(book.title);
+        var userViewModel: UserViewModel = UserViewModel();
+        userViewModel.getUserById(book.author) {
+                user -> author.setText(user.penname);
+        }
+
+
 
         view.setText(book.view.toString());
         favorite.setText(book.favorite.toString());
-        chapter.setText(book.chapter.toString());
+        chapter.setText(book.chapters.size.toString());
 
-        val category = book.genres.take(3);
+        val category = book.categories.take(3);
         for (i in category) {
-            when (i){
+            when (i.name){
                 "Romance" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.love
                     ));
                 }
                 "Fiction" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.yellow_green
                     ));
                 }
                 "Short Story" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.light_blue
                     ));
                 }
                 "Mystery" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList =
                         ColorStateList.valueOf(ContextCompat.getColor(context!!, R.color.violet));
                 }
                 "Thriller" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.golden
                     ));
                 }
                 "Horror" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.purple_500
                     ));
                 }
                 "Humor" -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.pink
                     ));
                 }
                 else -> {
-                    category_holder[category.indexOf(i)].setText(i)
+                    category_holder[category.indexOf(i)].setText(i.name)
                     category_holder[category.indexOf(i)].backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!,
                         R.color.lightgrey
                     ));
@@ -144,7 +157,7 @@ class CollectionBookList (
             }
         }
 
-        rest.setText(if ((book.genres.size -3)>0) "+ ${book.genres.size -3} more" else "");
+        rest.setText(if ((book.categories.size -3)>0) "+ ${book.categories.size -3} more" else "");
 
 
     }

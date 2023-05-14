@@ -33,11 +33,11 @@ import com.example.x_comic.views.main.CollectionActivity
 import com.example.x_comic.views.read.ReadBookActivity
 import kotlin.random.Random
 
-
+var listCollection: MutableList<CollectionReading> = mutableListOf();
 class Collection : Fragment() {
     private var collectionName: String = ""
 
-    var listCollection: MutableList<CollectionReading> = mutableListOf();
+
     var btnAddCollection: Button? = null;
     var adapter: CollectionAdapter? = null;
     var collectionBook: RecyclerView? = null;
@@ -119,8 +119,11 @@ class Collection : Fragment() {
 
         adapter!!.onItemClick = { collection ->
 
-            val intent = Intent(getActivity(), CollectionActivity::class.java)
-            startActivityForResult(intent, 123)
+
+            val intent = Intent(context, CollectionActivity::class.java)
+            intent.putExtra("collection", collection);
+            intent.putExtra("postion", listCollection.indexOf(collection));
+            startActivity(intent)
 
         }
 
@@ -168,7 +171,7 @@ class Collection : Fragment() {
     }
 
 
-  
+
 
 
 }
@@ -200,8 +203,14 @@ class CollectionDialogFragment(var dialogName: String, var name: String= "") : D
         }
 
         mActionOk.setOnClickListener {
+            var input: String="";
+            if (mInput.text.toString()!="") {
+               input = mInput.text.toString()
+            }else {
+               input = "Collection ${listCollection.size}"
+            }
 
-            val input = mInput.text.toString()
+
             val bundle = Bundle()
 
             bundle.putString("1", input)
