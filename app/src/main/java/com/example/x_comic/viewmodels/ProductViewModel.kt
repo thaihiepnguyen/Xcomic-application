@@ -323,6 +323,15 @@ class ProductViewModel : ViewModel() {
             .setValue(collectonList)
     }
 
+
+    fun updateBookListCollection(uid: String,position: Int, collectonList : MutableList<String> ) {
+
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").child(position.toString()).child("bookList")
+            .setValue(collectonList)
+    }
+
+
+
     inline fun getAllCollection(uid: String, crossinline callback: (DataSnapshot)->Unit) {
         FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").addValueEventListener (object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

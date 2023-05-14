@@ -137,6 +137,7 @@ class CollectionAdapter (
                 R.id.edit -> {
                     val intent = Intent(context, EditCollectionActivity::class.java)
                     intent.putExtra("collection", CollectionList[position])
+                    intent.putExtra("position",position);
                     context!!.startActivity(intent);
                     true
                 }

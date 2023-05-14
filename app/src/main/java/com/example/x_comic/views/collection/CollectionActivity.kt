@@ -73,7 +73,8 @@ class CollectionActivity : AppCompatActivity() {
         val collection = intent!!.getSerializableExtra("collection") as? CollectionReading;
         if (collection!=null) {
             collectionName!!.setText(collection?.name);
-            storyNumber!!.setText(collection?.bookList!!.size.toString());
+            val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
+            storyNumber!!.text = "${collection?.bookList?.size.toString()} $storyText"
             for (i in collection.bookList){
                 if (i!=null){
                     productViewModel.getBookById(i){

@@ -19,9 +19,11 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.listReading
+import com.example.x_comic.views.main.fragments.online_number
 
 class BookReadingAdapter (
     private var bookReadingList: MutableList<BookReading>,
+    private var online_number: TextView
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
@@ -118,6 +120,9 @@ class BookReadingAdapter (
                             }
                             childrenList.removeAt(position);
                             listReading.removeAt(position)
+
+                            val storyText = if (listReading.size == 1) "Story" else "Stories"
+                            online_number.text = "${listReading.size} $storyText"
 
                             userViewModel.updateReadingUserList(childrenList)
                             notifyDataSetChanged();

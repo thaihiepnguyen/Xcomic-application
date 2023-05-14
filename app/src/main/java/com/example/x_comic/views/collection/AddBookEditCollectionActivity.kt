@@ -104,11 +104,7 @@ class AddBookEditCollectionActivity : AppCompatActivity() {
 
 
                         }
-                        for (it in bookList){
-                            if (bookList2.contains(it)){
-                                bookList2.remove(it)
-                            }
-                        }
+
 
                         bookListAdapter.notifyDataSetChanged();
 
@@ -131,11 +127,6 @@ class AddBookEditCollectionActivity : AppCompatActivity() {
                                 }
                             }
 
-                            for (it in bookList){
-                                if (bookList2.contains(it)){
-                                    bookList2.remove(it)
-                                }
-                            }
                             recListAdapter.notifyDataSetChanged();
                         }
 
@@ -238,10 +229,12 @@ class AddBookEditCollectionActivity : AppCompatActivity() {
         numSelected!!.setText("${bookListAdapter.bookSelectedList.size + recListAdapter.bookSelectedList.size} Selected");
 
         submitBtn!!.setOnClickListener{
-            val temp: MutableList<String> = mutableListOf()
+            var temp: MutableList<String> = mutableListOf()
+
            temp.addAll(bookListAdapter.bookSelectedList)
             temp.addAll(recListAdapter.bookSelectedList);
-            println(bookListAdapter.bookSelectedList);
+
+           temp = temp.distinct().toMutableList();
             val replyIntent = Intent()
             replyIntent.putExtra(
                 "collection",

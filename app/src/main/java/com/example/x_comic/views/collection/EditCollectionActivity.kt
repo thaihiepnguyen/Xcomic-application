@@ -22,6 +22,7 @@ import com.example.x_comic.adapters.CollectionBookListAdd
 import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.ProductCheck
+import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.views.main.fragments.listCollection
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -35,6 +36,8 @@ class EditCollectionActivity : AppCompatActivity() {
 
     var btnDelete: ImageButton? = null;
     var btnAdd: ImageButton? = null;
+    var btnClose: ImageButton? = null;
+    var btnSave: ImageButton? =null;
     private lateinit var productViewModel: ProductViewModel
     private lateinit var bookListAdapter: CollectionBookListAdd
     private val collectionBook: MutableList<ProductCheck> = mutableListOf();
@@ -46,6 +49,9 @@ class EditCollectionActivity : AppCompatActivity() {
         storyNumber = findViewById(R.id.story_number);
         btnDelete = findViewById(R.id.btnDelete);
         btnAdd = findViewById(R.id.btnAdd);
+        btnClose = findViewById(R.id.btnClose);
+        btnSave = findViewById(R.id.btnSave);
+
         numSelected = findViewById(R.id.num_selected);
         val cover = findViewById(R.id.cover) as ImageView;
         val thumbnail = findViewById(R.id.cover_thumbnail) as ImageView;
@@ -66,11 +72,12 @@ class EditCollectionActivity : AppCompatActivity() {
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         customBookListView?.addItemDecoration(itemDecoration)
 
-
+        val position = intent.getIntExtra("position",0);
         val collection = intent!!.getSerializableExtra("collection") as? CollectionReading;
         if (collection!=null) {
             collectionName!!.setText(collection?.name);
-            storyNumber!!.setText(collection?.bookList!!.size.toString());
+            val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
+            storyNumber!!.text = "${collection?.bookList?.size.toString()} $storyText"
             for (i in collection.bookList){
                 if (i!=null){
                     productViewModel.getBookById(i){
@@ -182,10 +189,11 @@ class EditCollectionActivity : AppCompatActivity() {
                     .apply(RequestOptions().override(500, 600))
                     .into(thumbnail)
 
-                storyNumber!!.setText(collectionBook.size.toString());
+            val storyText = if (collectionBook.size == 1) "Story" else "Stories"
+            storyNumber!!.text = "${collectionBook.size} $storyText"
                     bookListAdapter.bookSelectedList.clear();
                     print(collectionBook)
-
+            numSelected!!.setText("${bookListAdapter.bookSelectedList.size} Selected");
                     bookListAdapter.notifyDataSetChanged();
 
         }
@@ -195,6 +203,24 @@ class EditCollectionActivity : AppCompatActivity() {
             val intent = Intent(this, AddBookEditCollectionActivity::class.java)
             intent.putExtra("collection", CollectionReading("",collectionBook.map { it -> it.product.id }.toMutableList()));
             startActivityForResult(intent,345);
+        }
+
+
+        btnClose!!.setOnClickListener{
+            finish();
+        }
+
+        btnSave!!.setOnClickListener{
+            FirebaseAuthManager.auth.uid?.let {
+                val temp : MutableList<String> = mutableListOf();
+                for (i in collectionBook){
+                    temp.add(i.product.id);
+                }
+                productViewModel.updateBookListCollection(it,position,temp);
+
+                finish();
+            }
+
         }
 
 
@@ -211,11 +237,16 @@ class EditCollectionActivity : AppCompatActivity() {
                             book -> run{
                             if ( book!=null && !book.hide) {
                                 collectionBook.add(ProductCheck(book,false));
+
+                                val storyText = if (collectionBook.size == 1) "Story" else "Stories"
+                                storyNumber!!.text = "${collectionBook.size} $storyText"
+                                bookListAdapter.notifyDataSetChanged();
                             }
+
                         }
                         }
                     }
-                     bookListAdapter.notifyDataSetChanged();
+
                 }
             }
         }
