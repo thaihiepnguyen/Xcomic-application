@@ -115,7 +115,7 @@ class Collection : Fragment() {
             intent.putExtra("collection", collection);
             println(listCollection.indexOf(collection))
             intent.putExtra("position", listCollection.indexOf(collection));
-            startActivityForResult(intent, 222)
+            startActivity(intent)
 
         }
 
@@ -161,24 +161,7 @@ class Collection : Fragment() {
             }
         }
 
-        if (requestCode == 222) {
-            if (resultCode === Activity.RESULT_OK) {
-                val type = data!!.getStringExtra("type") as String;
-                if (type == "delete") {
-                    val position = data!!.getIntExtra("position", 0) as Int;
-                    println(position);
-                    listCollection.removeAt(position);
-                    adapter!!.notifyItemRemoved(position);
 
-                } else if (type == "rename") {
-                    val position = data!!.getIntExtra("position", 0) as Int;
-                    val name = data!!.getStringExtra("name") as String;
-                    listCollection[position].name = name;
-                    adapter!!.notifyDataSetChanged();
-                }
-            }
-
-        }
     }
 
 

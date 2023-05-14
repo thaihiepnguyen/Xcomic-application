@@ -166,6 +166,7 @@ class CollectionActivity : AppCompatActivity() {
 
     }
 
+
     override fun onBackPressed() {
         setResult(Activity.RESULT_OK)
         super.onBackPressed()
@@ -187,15 +188,6 @@ class CollectionActivity : AppCompatActivity() {
                     FirebaseAuthManager.auth.uid?.let {
                         bookViewModel.updateCollection(it, tempCollection);
                     }
-
-                    val replyIntent = Intent()
-                    replyIntent.putExtra(
-                        "position",
-                        position
-                    );
-
-                    replyIntent.putExtra("type","delete");
-                    setResult(Activity.RESULT_OK, replyIntent)
 
 
                     finish();
@@ -219,19 +211,6 @@ class CollectionActivity : AppCompatActivity() {
                             }
 
 
-                            val replyIntent = Intent()
-                            replyIntent.putExtra(
-                                "position",
-                                position
-                            );
-
-                            replyIntent.putExtra("type","rename");
-                            replyIntent.putExtra("name",txt);
-
-                            setResult(Activity.RESULT_OK, replyIntent)
-
-
-                            finish();
 
                         }
                     }

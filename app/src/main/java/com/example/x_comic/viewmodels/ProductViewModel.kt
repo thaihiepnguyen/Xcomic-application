@@ -324,13 +324,17 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllCollection(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                callback(task.result)
-            } else {
-
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").addValueEventListener (object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+
     }
 
 
