@@ -33,6 +33,7 @@ import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.read.ReadBookActivity
 
 var listReading: MutableList<BookReading> = mutableListOf();
+lateinit var online_number: TextView
 class Reading : Fragment() {
 
     var listReadingOffline: MutableList<BookReading> = mutableListOf()
@@ -56,11 +57,10 @@ class Reading : Fragment() {
 
 
         customOnlineBookList = view.findViewById(R.id.online_books);
-        var online_number = view.findViewById<TextView>(R.id.number_online)
+        online_number = view.findViewById<TextView>(R.id.number_online)
 
-        val adapter = BookReadingAdapter(listReadingOffline);
 
-        val OnlineAdapter = BookReadingAdapter(listReading);
+        val OnlineAdapter = BookReadingAdapter(listReading, online_number);
 
 
 
@@ -70,7 +70,7 @@ class Reading : Fragment() {
 
 
         customOnlineBookList!!.layoutManager = GridLayoutManager(this.context,3);
-
+        listReading.clear();
 
 
 
@@ -104,14 +104,15 @@ class Reading : Fragment() {
 
                                             println(listReading);
 
-                                      OnlineAdapter.notifyItemInserted(listReading.size);
-                                           // OnlineAdapter.notifyDataSetChanged()
+                                      //OnlineAdapter.notifyItemInserted(listReading.size);
+                                        OnlineAdapter.notifyDataSetChanged()
                                         }
                                    //     OnlineAdapter.notifyDataSetChanged()
 
                                     }
                                   //
-                                    online_number.text = "${cnt} Stories"
+                                    val storyText = if (cnt == 1) "Story" else "Stories"
+                                    online_number.text = "${cnt} $storyText"
 
 
 
@@ -174,7 +175,7 @@ class BookDialog(private val book: BookReading, private val position: Int, priva
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let { // Use the Builder class for convenient dialog construction
             var builder = AlertDialog.Builder(it)
-            builder.setTitle(book.book.title)
+            builder.setTitle(book.book?.title)
 
                 builder.setItems(arrayOf("Read", "Story Info", "Remove from Library"),
                     DialogInterface.OnClickListener { dialog, which ->
@@ -231,7 +232,8 @@ class BookDialog(private val book: BookReading, private val position: Int, priva
                     }
                     childrenList.removeAt(position);
                     listReading.removeAt(position)
-
+                    val storyText = if (listReading.size == 1) "Story" else "Stories"
+                    online_number.text = "${listReading.size} $storyText"
                     userViewModel.updateReadingUserList(childrenList)
                     adapter.notifyDataSetChanged();
                 }

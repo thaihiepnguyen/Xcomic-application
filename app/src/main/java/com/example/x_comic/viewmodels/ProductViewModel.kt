@@ -10,10 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.adapters.ListAdapterSlideshow
-import com.example.x_comic.models.Category
-import com.example.x_comic.models.Chapter
-import com.example.x_comic.models.Product
-import com.example.x_comic.models.User
+import com.example.x_comic.models.*
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -318,6 +315,38 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+
+    fun updateCollection(uid: String, collectonList : MutableList<CollectionReading> ) {
+
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book")
+            .setValue(collectonList)
+    }
+
+
+    fun updateBookListCollection(uid: String,position: Int, collectonList : MutableList<String> ) {
+
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").child(position.toString()).child("bookList")
+            .setValue(collectonList)
+    }
+
+
+
+    inline fun getAllCollection(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection_book").addValueEventListener (object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+
+    }
+
+
 
     inline fun getBookById(bookid: String, crossinline callback: (Product)->Unit) {
         val ref = db.child(bookid)

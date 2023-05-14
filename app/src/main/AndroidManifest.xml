@@ -36,6 +36,23 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="notification_channel" />
         <activity
+            android:name=".views.collection.AddBookEditCollectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".views.collection.EditCollectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".views.collection.AddCollectionBookActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.profile.BlockUserActivity"
             android:exported="false" />
         <activity
@@ -104,7 +121,7 @@
             android:name=".views.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".views.main.CollectionActivity"
+            android:name=".views.collection.CollectionActivity"
             android:exported="false" />
         <activity
             android:name=".views.main.MainActivity"

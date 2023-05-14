@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -21,8 +21,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="100dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                >
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +41,7 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
-                        android:text="Other Books"
+                        android:text="Reading List"
                         android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
 
@@ -70,32 +71,22 @@
                     app:layout_constraintTop_toBottomOf="@+id/online_header" />
 
 
-                <LinearLayout
-                    android:id="@+id/online_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="675dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line2"
-
-                    >
 
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
+
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/online_books"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="10dp" />
-                    </FrameLayout>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/line2"
 
-                </LinearLayout>
+                            android:paddingHorizontal="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="120dp"
+                            />
+
 
 
             </LinearLayout>

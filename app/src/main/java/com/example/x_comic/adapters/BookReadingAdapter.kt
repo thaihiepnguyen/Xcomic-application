@@ -19,9 +19,11 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.listReading
+import com.example.x_comic.views.main.fragments.online_number
 
 class BookReadingAdapter (
     private var bookReadingList: MutableList<BookReading>,
+    private var online_number: TextView
 ) : RecyclerView.Adapter<BookReadingAdapter.ViewHolder>()
 {
     var onItemClick: ((BookReading) -> Unit)? = null
@@ -62,9 +64,6 @@ class BookReadingAdapter (
     }
 
     override fun getItemCount(): Int {
-        println("hello "+bookReadingList.size);
-
-       
         return bookReadingList.size;
     }
 
@@ -81,55 +80,58 @@ class BookReadingAdapter (
 
        // cover.setImageResource(book.book.book.cover);
 
+        if (book!=null) {
+            val imageName = book.book?.cover
+            Glide.with(cover.context)
+                .load(imageName)
+                .apply(RequestOptions().override(500, 600))
+                .into(cover)
+            title.setText(book.book?.title);
 
-        val imageName = book.book.cover
-        Glide.with(cover.context)
-            .load(imageName)
-            .apply(RequestOptions().override(500, 600))
-            .into(cover)
-        title.setText(book.book.title);
+            var total = book.chapter;
+            var current = book.current;
 
-        var total = book.chapter;
-        var current = book.current;
+            progressbar.progress = current * 100 / total;
 
-        progressbar.progress = current*100/total;
+            holder.itemView.setOnLongClickListener {
 
-        holder.itemView.setOnLongClickListener {
+                longClickListener?.invoke(book, position)
+                true // Return true to indicate the event has been consumed
+            }
 
-            longClickListener?.invoke(book,position)
-            true // Return true to indicate the event has been consumed
-        }
+            var userViewModel: UserViewModel = UserViewModel()
+            var productViewModel: ProductViewModel = ProductViewModel()
 
-        var userViewModel : UserViewModel = UserViewModel()
-        var productViewModel : ProductViewModel = ProductViewModel()
+            remove.setOnClickListener {
 
-        remove.setOnClickListener{
-
-            val uid = FirebaseAuthManager.auth.uid
-            if (uid != null) {
-                productViewModel.getAllReadingBook(uid) { booksID ->
-                    run {
-                        //  productViewModel.removeBookReading(uid,position)
-                        val childrenList: ArrayList<com.example.x_comic.models.Reading> =
-                            arrayListOf();
-                        for (snapshot in booksID.children) {
-                            var bookid =
-                                snapshot.getValue(com.example.x_comic.models.Reading::class.java)
-                            if (bookid != null) {
-                                childrenList.add(bookid!!)
+                val uid = FirebaseAuthManager.auth.uid
+                if (uid != null) {
+                    productViewModel.getAllReadingBook(uid) { booksID ->
+                        run {
+                            //  productViewModel.removeBookReading(uid,position)
+                            val childrenList: ArrayList<com.example.x_comic.models.Reading> =
+                                arrayListOf();
+                            for (snapshot in booksID.children) {
+                                var bookid =
+                                    snapshot.getValue(com.example.x_comic.models.Reading::class.java)
+                                if (bookid != null) {
+                                    childrenList.add(bookid!!)
+                                }
                             }
-                        }
-                        childrenList.removeAt(position);
-                        listReading.removeAt(position)
+                            childrenList.removeAt(position);
+                            listReading.removeAt(position)
 
-                        userViewModel.updateReadingUserList(childrenList)
-                        notifyDataSetChanged();
+                            val storyText = if (listReading.size == 1) "Story" else "Stories"
+                            online_number.text = "${listReading.size} $storyText"
+
+                            userViewModel.updateReadingUserList(childrenList)
+                            notifyDataSetChanged();
+                        }
                     }
                 }
             }
+
         }
-
-
 
 
     }

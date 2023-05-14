@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content_2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.collection.EditCollectionActivity">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nestedScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+
+                    >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/below_shadow"
+                    android:padding="5dp"
+                   >
+
+
+                    <ImageButton
+                        android:id="@+id/btnClose"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+
+                        android:layout_margin="10dp"
+
+                        android:background="@drawable/x"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+
+                        android:layout_margin="10dp"
+                        android:background="@drawable/check_black"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+                        app:layout_constraintStart_toEndOf="@id/btnClose"
+                        app:layout_constraintTop_toTopOf="@+id/btnClose" />
+
+                    <TextView
+                        android:id="@+id/num_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:fontFamily="@font/poppins"
+                        android:textColor="#8A000000"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnSave"
+                        app:layout_constraintStart_toEndOf="@id/btnSave"
+                        app:layout_constraintTop_toTopOf="@+id/btnSave" />
+
+                    <ImageButton
+                        android:id="@+id/btnAdd"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/add"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+                        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+                        app:layout_constraintTop_toTopOf="@+id/btnClose" />
+
+                    <ImageButton
+                        android:id="@+id/btnDelete"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_margin="10dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/trash"
+                       app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/btnAdd"
+                        app:layout_constraintBottom_toBottomOf="@id/btnAdd"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:id="@+id/cover_collection"
+                    >
+
+
+
+                    <ImageView
+                        android:id="@+id/cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/bookcover"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/black_trans"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/cover_thumbnail"
+                            android:layout_width="100dp"
+                            android:layout_height="200dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/bookcover" />
+
+                        <TextView
+                            android:id="@+id/collection_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Collection 1"
+                            android:textSize="20sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/poppins_semibold"
+                            app:layout_constraintBottom_toBottomOf="@+id/cover_thumbnail"
+                            app:layout_constraintStart_toEndOf="@+id/cover_thumbnail"
+                            app:layout_constraintTop_toTopOf="@+id/cover_thumbnail" />
+
+                        <TextView
+                            android:id="@+id/story_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="122 stories"
+                            android:textColor="@color/white"
+                            app:layout_constraintStart_toStartOf="@+id/collection_name"
+                            app:layout_constraintTop_toBottomOf="@+id/collection_name" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/collectionBookList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/cover_collection"
+                    android:paddingBottom="50dp"
+
+                   >
+
+                </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>
