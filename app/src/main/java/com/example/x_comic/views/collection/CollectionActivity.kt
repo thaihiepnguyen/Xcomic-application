@@ -1,4 +1,4 @@
-package com.example.x_comic.views.main
+package com.example.x_comic.views.collection
 
 import android.app.Activity
 import android.content.Intent
@@ -227,6 +227,11 @@ class CollectionActivity : AppCompatActivity() {
 
                             replyIntent.putExtra("type","rename");
                             replyIntent.putExtra("name",txt);
+
+                            setResult(Activity.RESULT_OK, replyIntent)
+
+
+                            finish();
 
                         }
                     }

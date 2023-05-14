@@ -1,7 +1,6 @@
 package com.example.x_comic.views.main.fragments
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -21,8 +20,8 @@ import com.example.x_comic.models.*
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
-import com.example.x_comic.views.main.AddCollectionBookActivity
-import com.example.x_comic.views.main.CollectionActivity
+import com.example.x_comic.views.collection.AddCollectionBookActivity
+import com.example.x_comic.views.collection.CollectionActivity
 
 
 var listCollection: MutableList<CollectionReading> = mutableListOf();

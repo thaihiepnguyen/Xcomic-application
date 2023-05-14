@@ -1,4 +1,4 @@
-package com.example.x_comic.views.main
+package com.example.x_comic.views.collection
 
 import android.app.Activity
 import android.content.Intent
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.CollectionBookList
 import com.example.x_comic.adapters.CollectionBookListAdd
 import com.example.x_comic.models.*
 import com.example.x_comic.viewmodels.FirebaseAuthManager

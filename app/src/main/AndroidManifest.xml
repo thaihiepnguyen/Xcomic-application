@@ -19,12 +19,15 @@
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
         <activity
-            android:name=".views.main.AddCollectionBookActivity"
+            android:name=".views.collection.EditCollectionActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".views.collection.AddCollectionBookActivity"
+            android:exported="false"></activity>
         <activity
             android:name=".views.profile.BlockUserActivity"
             android:exported="false" />
@@ -94,7 +97,7 @@
             android:name=".views.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".views.main.CollectionActivity"
+            android:name=".views.collection.CollectionActivity"
             android:exported="false" />
         <activity
             android:name=".views.main.MainActivity"

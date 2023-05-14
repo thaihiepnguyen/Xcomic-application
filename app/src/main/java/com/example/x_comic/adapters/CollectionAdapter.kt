@@ -1,18 +1,12 @@
 package com.example.x_comic.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.setFragmentResultListener
@@ -20,15 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.models.BookReading
-import com.example.x_comic.models.CollectionBook
 import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
-import com.example.x_comic.viewmodels.UserViewModel
-import com.example.x_comic.views.main.AddCollectionBookActivity
 import com.example.x_comic.views.main.fragments.CollectionDialogFragment
-import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CollectionAdapter (
     private var CollectionList: MutableList<CollectionReading>,
