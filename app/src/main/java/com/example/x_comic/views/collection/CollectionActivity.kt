@@ -198,8 +198,24 @@ class CollectionActivity : AppCompatActivity() {
                             run {
 
                                 if (product!=null){
+
                                     collectionBook.add(product);
                                     bookListAdapter.notifyDataSetChanged();
+                                    if (reply.bookList.indexOf(i) == 0){
+                                        Glide.with(cover.context)
+                                            .load((collectionBook[0].cover))
+                                            .placeholder(R.drawable.empty_image)
+                                            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+                                            .into(cover)
+
+
+                                        Glide.with(thumbnail.context)
+                                            .load((collectionBook[0].cover))
+                                            .placeholder(R.drawable.empty_image)
+                                            .apply(RequestOptions().override(500, 600))
+                                            .into(thumbnail)
+
+                                    }
 
 
                                 }
@@ -210,18 +226,6 @@ class CollectionActivity : AppCompatActivity() {
                     bookListAdapter.notifyDataSetChanged();
 
 
-                    Glide.with(cover.context)
-                        .load((collectionBook[0].cover))
-                        .placeholder(R.drawable.empty_image)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                        .into(cover)
-
-
-                    Glide.with(thumbnail.context)
-                        .load((collectionBook[0].cover))
-                        .placeholder(R.drawable.empty_image)
-                        .apply(RequestOptions().override(500, 600))
-                        .into(thumbnail)
 
                     val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
                     storyNumber!!.text = "${collection?.bookList?.size.toString()} $storyText"
