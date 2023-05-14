@@ -30,8 +30,7 @@ import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.AddCollectionBookActivity
 import com.example.x_comic.views.main.CollectionActivity
-import com.example.x_comic.views.read.ReadBookActivity
-import kotlin.random.Random
+
 
 var listCollection: MutableList<CollectionReading> = mutableListOf();
 class Collection : Fragment() {
@@ -122,8 +121,9 @@ class Collection : Fragment() {
 
             val intent = Intent(context, CollectionActivity::class.java)
             intent.putExtra("collection", collection);
-            intent.putExtra("postion", listCollection.indexOf(collection));
-            startActivity(intent)
+            println(listCollection.indexOf(collection))
+            intent.putExtra("position", listCollection.indexOf(collection));
+            startActivityForResult(intent, 222)
 
         }
 
@@ -167,6 +167,25 @@ class Collection : Fragment() {
 
                 }
             }
+        }
+
+        if (requestCode == 222) {
+            if (resultCode === Activity.RESULT_OK) {
+                val type = data!!.getStringExtra("type") as String;
+                if (type == "delete") {
+                    val position = data!!.getIntExtra("position", 0) as Int;
+                    println(position);
+                    listCollection.removeAt(position);
+                    adapter!!.notifyItemRemoved(position);
+
+                } else if (type == "rename") {
+                    val position = data!!.getIntExtra("position", 0) as Int;
+                    val name = data!!.getStringExtra("name") as String;
+                    listCollection[position].name = name;
+                    adapter!!.notifyDataSetChanged();
+                }
+            }
+
         }
     }
 
