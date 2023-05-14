@@ -1,11 +1,20 @@
 package com.example.x_comic.views.purchase
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import bolts.Task.delay
@@ -18,6 +27,7 @@ import com.example.x_comic.models.Order
 import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.UserViewModel
+import com.example.x_comic.views.main.LocalNotification
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -129,9 +139,10 @@ class PurchaseActivity : AppCompatActivity() {
                                 val newOrderId = newOrderRef.key
                                 order.id = newOrderId!!
                                 newOrderRef.setValue(order)
-                                Handler().postDelayed({
-                                    finish()
-                                }, 500)
+                                Toast.makeText(this@PurchaseActivity, "Purchase success", Toast.LENGTH_SHORT).show()
+                                createNotificationChannel()
+                                scheduleNotification()
+                                finish()
                             }
                         },
                         onCancel = OnCancel {
@@ -150,4 +161,38 @@ class PurchaseActivity : AppCompatActivity() {
                 }
             })
 
-    }}
+    }
+    fun scheduleNotification(){
+        val intent = Intent(applicationContext, LocalNotification::class.java)
+        val title = "X BOOK NOTIFICATION"
+        val message = "Thank you <3 You have purchased a chapter"
+        intent.putExtra(com.example.x_comic.views.main.titleExtra, title)
+        intent.putExtra(com.example.x_comic.views.main.messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            com.example.x_comic.views.main.notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val currentTimeMillis = System.currentTimeMillis()
+        val futureTimeMillis = currentTimeMillis + 100
+        val time = futureTimeMillis
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createNotificationChannel(){
+        val name = "Notif Channel"
+        val desc = "A description of the channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(com.example.x_comic.views.main.channelID, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
