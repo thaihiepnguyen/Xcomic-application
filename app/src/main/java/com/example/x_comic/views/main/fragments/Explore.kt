@@ -276,24 +276,24 @@ class Explore : Fragment() {
             }
             false
         })
-        val bookListSlideShow: MutableList<Product> = mutableListOf()
-        val gridView = view.findViewById<RecyclerView>(R.id.gridView)
-        val exploreGridBookAdapter = ExploreGridBookAdapter(requireActivity(), bookListSlideShow)
-        gridView.adapter = exploreGridBookAdapter
-        gridView.layoutManager = GridLayoutManager(requireContext(), 2)
-        var productViewModel: ProductViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
-        productViewModel.getAllBook { books ->
-            run {
-                bookListSlideShow.clear()
-                for (book in books.children) {
-                    val product = book.getValue(Product::class.java)
-                    if (product != null && !product.hide) {
-                        bookListSlideShow.add(product)
-                    }
-                }
-                exploreGridBookAdapter.notifyDataSetChanged()
-            }
-        }
+//        val bookListSlideShow: MutableList<Product> = mutableListOf()
+//        val gridView = view.findViewById<RecyclerView>(R.id.gridView)
+//        val exploreGridBookAdapter = ExploreGridBookAdapter(requireActivity(), bookListSlideShow)
+//        gridView.adapter = exploreGridBookAdapter
+//        gridView.layoutManager = GridLayoutManager(requireContext(), 2)
+//        var productViewModel: ProductViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+//        productViewModel.getAllBook { books ->
+//            run {
+//                bookListSlideShow.clear()
+//                for (book in books.children) {
+//                    val product = book.getValue(Product::class.java)
+//                    if (product != null && !product.hide) {
+//                        bookListSlideShow.add(product)
+//                    }
+//                }
+//                exploreGridBookAdapter.notifyDataSetChanged()
+//            }
+//        }
         return view
     }
     fun hideKeyboard(view: View) {
