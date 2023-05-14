@@ -22,6 +22,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="280dp">
 
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:backgroundTint="@color/white"
+                    android:text="Logout"
+                    android:textColor="@color/love"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/background"
                     android:layout_width="match_parent"
@@ -30,15 +41,26 @@
                     android:src="@drawable/background"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/ivAvatar"
-                    android:layout_width="123dp"
-                    android:layout_height="138dp"
-                    android:layout_marginStart="40dp"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
+                    app:cardCornerRadius="100dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/avatar_1" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/oval"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/avatar_1" />
+                </androidx.cardview.widget.CardView>
+
+
 
                 <TextView
                     android:id="@+id/tvNameAdmin"
@@ -50,7 +72,7 @@
                     android:text="John Wick"
                     android:textColor="@color/white"
                     android:textSize="25dp"
-                    app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+                    app:layout_constraintStart_toEndOf="@+id/cv"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -62,7 +84,7 @@
                     android:text="johnwick@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="20dp"
-                    app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+                    app:layout_constraintStart_toEndOf="@+id/cv"
                     app:layout_constraintTop_toBottomOf="@+id/tvNameAdmin" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +104,7 @@
                     app:srcCompat="@drawable/users" />
 
                 <ImageView
-                    android:id="@+id/tvBooks"
+                    android:id="@+id/ivadBooks"
                     android:layout_width="90dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="10dp"
@@ -104,16 +126,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/tvBooks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="40dp"
+                    android:layout_marginEnd="50dp"
                     android:fontFamily="@font/poppins_bold"
                     android:text="20000 Books"
                     android:textSize="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvBooks" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivadBooks" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
@@ -139,14 +161,7 @@
                 android:padding="10dp"
                 android:textStyle="bold"
                 android:background="@drawable/mybutton" />
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:text="Logout"
-                android:textColor="@color/love"
-                />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
