@@ -39,8 +39,10 @@ class CollectionActivity : AppCompatActivity() {
 
 
     var customBookListView: RecyclerView? = null;
-
+    lateinit var collection: CollectionReading
+    lateinit var bookListAdapter: CollectionBookList
     var storyNumber: TextView? = null;
+    lateinit var productViewModel: ProductViewModel
     private val collectionBook: MutableList<Product> = mutableListOf();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +58,12 @@ class CollectionActivity : AppCompatActivity() {
         val position = intent!!.getIntExtra("position",0);
 
 
-        var productViewModel: ProductViewModel
+
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         setSupportActionBar(toolbar)
         customBookListView = findViewById(R.id.collectionBookList);
-        val bookListAdapter = CollectionBookList(collectionBook);
+        bookListAdapter = CollectionBookList(collectionBook);
         collectionBook.clear();
         customBookListView!!.adapter = bookListAdapter;
 
@@ -70,7 +72,7 @@ class CollectionActivity : AppCompatActivity() {
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         customBookListView?.addItemDecoration(itemDecoration)
 
-        val collection = intent!!.getSerializableExtra("collection") as? CollectionReading;
+        collection = intent!!.getSerializableExtra("collection") as CollectionReading;
         if (collection!=null) {
             collectionName!!.setText(collection?.name);
             val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
@@ -141,15 +143,23 @@ class CollectionActivity : AppCompatActivity() {
                     scrollRange = appBarLayout?.totalScrollRange ?: 0
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.title = "Collection 1" // Set an empty title when fully collapsed
+                    collapsingToolbarLayout.title = collectionName!!.text // Set an empty title when fully collapsed
                     btnOption.backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(this@CollectionActivity,
                         R.color.black))
+
+                    btnReturn.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.black))
 
                     isShow = true
                 } else if (isShow) {
                     collapsingToolbarLayout.title = "" // Set your desired title when fully expanded
                     btnOption.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@CollectionActivity,
+                            R.color.white))
+
+                    btnReturn.backgroundTintList = ColorStateList.valueOf(
                         ContextCompat.getColor(this@CollectionActivity,
                             R.color.white))
 
@@ -160,7 +170,9 @@ class CollectionActivity : AppCompatActivity() {
 
 
 
-
+        btnReturn.setOnClickListener{
+            finish();
+        }
         btnOption.setOnClickListener { v ->
             showPopup(v,position, collection!!.name);
         }
@@ -168,9 +180,37 @@ class CollectionActivity : AppCompatActivity() {
     }
 
 
-    override fun onBackPressed() {
-        setResult(Activity.RESULT_OK)
-        super.onBackPressed()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 246){
+            if (resultCode === Activity.RESULT_OK) {
+                val reply = data!!.getSerializableExtra("collection") as? CollectionReading;
+                if (reply != null) {
+                    collectionBook.clear();
+                    for (i in reply.bookList){
+                        productViewModel.getBookById(i){
+                            product ->
+                            run {
+
+                                if (product!=null){
+                                    collectionBook.add(product);
+                                    bookListAdapter.notifyDataSetChanged();
+
+
+                                }
+                            }
+                        }
+                    }
+
+                    bookListAdapter.notifyDataSetChanged();
+                    val storyText = if (collection?.bookList?.size == 1) "Story" else "Stories"
+                    storyNumber!!.text = "${collection?.bookList?.size.toString()} $storyText"
+
+
+                }
+            }
+
+        }
     }
 
     private fun showPopup(v: View, position: Int, name: String="") {
@@ -218,6 +258,11 @@ class CollectionActivity : AppCompatActivity() {
                     true
                 }
                 R.id.edit -> {
+                    val intent = Intent(this, EditCollectionActivity::class.java)
+                    intent.putExtra("collection", collection)
+                    intent.putExtra("position",position);
+                    startActivityForResult(intent,246)
+
                     true
                 }
                 else -> true

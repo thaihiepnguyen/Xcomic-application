@@ -213,10 +213,22 @@ class EditCollectionActivity : AppCompatActivity() {
         btnSave!!.setOnClickListener{
             FirebaseAuthManager.auth.uid?.let {
                 val temp : MutableList<String> = mutableListOf();
+
                 for (i in collectionBook){
                     temp.add(i.product.id);
+
                 }
                 productViewModel.updateBookListCollection(it,position,temp);
+
+                val replyIntent = Intent()
+                replyIntent.putExtra(
+                    "collection",
+                    CollectionReading(
+                        "",
+                        temp
+                    )
+                );
+                setResult(Activity.RESULT_OK, replyIntent)
 
                 finish();
             }
