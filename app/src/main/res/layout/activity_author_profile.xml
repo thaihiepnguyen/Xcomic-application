@@ -25,19 +25,14 @@
                 android:layout_height="match_parent">
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/backBtn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-
-                    android:text="◁"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="30dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/arrow_left_white"
                     android:focusable="true"
-
-                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <RelativeLayout
                     android:id="@+id/relativeLayout"
                     android:layout_width="match_parent"
