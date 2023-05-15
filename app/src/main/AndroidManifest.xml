@@ -20,7 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
-<<<<<<< HEAD
 
         <activity
             android:name=".views.SplashActivity"
@@ -31,8 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-=======
->>>>>>> 8d4287c (view more)
         <activity
             android:name=".views.more.AllActivity"
             android:exported="false" />
