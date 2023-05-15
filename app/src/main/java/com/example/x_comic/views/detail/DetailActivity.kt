@@ -83,6 +83,8 @@ class DetailActivity : AppCompatActivity() {
                     val backCover = findViewById<ImageView>(R.id.background)
                     //assign data to view
                     title.text = bookData?.title
+                    var name_book = findViewById<TextView>(R.id.name_book);
+                    name_book.text = bookData?.title
 
                     userViewModel.getUserById(bookData!!.author) {
                             user -> run {
@@ -167,10 +169,13 @@ class DetailActivity : AppCompatActivity() {
                     chooseChapterBtn.text = "☰ " +  bookData!!.chapters.size.toString()  +" Chapters"
 
                     //button back to previous activity
-                    val backBtn = findViewById<Button>(R.id.backBtn)
+                    val backBtn = findViewById<ImageButton>(R.id.backBtn)
                     backBtn.setOnClickListener {
                         finish()
                     }
+
+
+
                     //process favorite feature
                     favorBtn.setOnClickListener{
                         favourite = !favourite
