@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityMainProfileBinding
-import com.example.x_comic.databinding.ActivityProfileBinding
+
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
