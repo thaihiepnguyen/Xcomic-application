@@ -139,13 +139,15 @@ class UserViewModel : ViewModel() {
     }
 
     inline fun getAllUserFollow(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        db.child(uid).child("have_followed").get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                callback(task.result)
-            } else {
-
+        db.child(uid).child("have_followed").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     inline fun getUserById(uid: String, crossinline callback: (User)->Unit) {

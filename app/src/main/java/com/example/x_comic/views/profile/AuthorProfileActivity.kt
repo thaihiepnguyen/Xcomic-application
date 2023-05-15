@@ -78,20 +78,19 @@ class AuthorProfileActivity : AppCompatActivity() {
         userViewModel.getAllUserFollow(_currentAuthor!!.id) {
                 usersID -> run {
             followList.clear()
-            var cnt: Int = 0
             for (userid in usersID.children) {
                 userViewModel.getUserById(userid.value as String) {
                         user -> run {
                     if (user.isFollowing(_currentAuthor!!.id)) {
-                        cnt++
-                        followList.add(user)
+                        followList.add(0, user)
                     }
                 }
-                    avatarAdapter.notifyDataSetChanged()
-                    binding.followProfileTV.text = "${cnt} Profiles"
+                    avatarAdapter.notifyItemInserted(0)
+                    binding.followProfileTV.text = "${followList.size} Profiles"
                 }
-                avatarAdapter.notifyDataSetChanged()
             }
+            if (followList.size == 0) binding.followProfileTV.text = "0 Profiles"
+            avatarAdapter.notifyDataSetChanged()
         }
         }
 
