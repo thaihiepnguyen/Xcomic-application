@@ -20,13 +20,15 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="70dp"
+        android:fontFamily="More Fonts..."
         android:gravity="center"
         android:text="@string/sign_in"
         android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"
-        android:layout_margin="70dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="70dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="330dp"
