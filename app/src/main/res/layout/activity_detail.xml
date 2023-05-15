@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,58 +29,62 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/backBtn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
 
+                        android:background="?attr/selectableItemBackground"
+                        android:focusable="true"
                         android:text="◁"
-                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="30dp"
-                        android:focusable="true"
 
-                        android:background="?attr/selectableItemBackground"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/shareBtn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
 
+                        android:background="?attr/selectableItemBackground"
+                        android:focusable="true"
                         android:text="︙"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
                         android:textSize="30dp"
-                        android:focusable="true"
 
-                        android:background="?attr/selectableItemBackground"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
 
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
                             android:id="@+id/background"
                             android:layout_width="match_parent"
                             android:layout_height="260dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/background" />
+                            android:scaleType="fitXY"
+                            android:src="@drawable/empty_image" />
 
 
                     </RelativeLayout>
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/currentCard"
                         android:layout_width="200dp"
                         android:layout_height="260dp"
-                        android:elevation="0dp"
-
                         android:layout_marginTop="20dp"
+
+                        android:elevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -94,7 +97,7 @@
 
                             android:clipToOutline="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/bookcover"
+                            android:src="@drawable/empty_image"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.cardview.widget.CardView>
@@ -114,43 +117,53 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_marginTop="4dp"
-                        android:text="How to Burn The Bad Boy"
+                        android:fontFamily="@font/montserrat"
 
+                        android:text="How to Burn The Bad Boy"
                         android:textAlignment="center"
-                        android:textSize="25sp"
+                        android:textSize="23sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/avatar_picture"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/oval"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/avatar"
-                        app:layout_constraintEnd_toStartOf="@+id/book_author"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/book_title" />
-
-                    <TextView
-                        android:id="@+id/book_author"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_author"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="alsophanie"
-                        android:textAlignment="center"
-                        android:textSize="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.501"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/book_title" />
+                        app:layout_constraintTop_toBottomOf="@+id/book_title"
+
+                        >
+
+                        <ImageView
+                            android:id="@+id/avatar_picture"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/oval"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/avatar"
+
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/book_author"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/montserrat"
+                            android:text="alsophanie"
+                            android:textAlignment="center"
+                            android:textSize="16dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/avatar_picture"
+                            app:layout_constraintStart_toEndOf="@+id/avatar_picture"
+                            app:layout_constraintTop_toTopOf="@+id/avatar_picture" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout3"
@@ -159,57 +172,98 @@
 
                         android:layout_marginTop="20dp"
 
+                        android:gravity="center"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/book_author"
+                        app:layout_constraintTop_toBottomOf="@id/layout_author"
                         tools:layout_editor_absoluteX="30dp">
 
-                        <ImageView
-                            android:id="@+id/viewIcon"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+
+
+                            >
+
+                            <ImageView
+                                android:id="@+id/viewIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_view" />
+
+                            <TextView
+                                android:id="@+id/viewTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/montserrat"
+                                android:text="200K"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/viewIcon"
+                                app:layout_constraintStart_toEndOf="@id/viewIcon"
+                                app:layout_constraintTop_toTopOf="@id/viewIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/ic_view"
-                            tools:layout_editor_absoluteY="49dp" />
+                            android:layout_marginStart="5dp">
 
-                        <TextView
-                            android:id="@+id/viewTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="200K view"
-                            android:textAlignment="center" />
+                            <ImageView
+                                android:id="@+id/favoriteIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/heart" />
 
-                        <ImageView
-                            android:id="@+id/favoriteIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/favorite_icon"
-                            tools:layout_editor_absoluteY="49dp" />
+                            <TextView
+                                android:id="@+id/favoriteTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/montserrat"
+                                android:text="167K"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/favoriteIcon"
 
-                        <TextView
-                            android:id="@+id/favoriteTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="167K favor"
-                            android:textAlignment="center" />
+                                app:layout_constraintStart_toEndOf="@id/favoriteIcon"
+                                app:layout_constraintTop_toTopOf="@id/favoriteIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
-                            android:id="@+id/chapterIcon"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/ic_list_chapter"
-                            tools:layout_editor_absoluteY="49dp" />
+                            android:layout_marginStart="5dp">
 
-                        <TextView
-                            android:id="@+id/numOfChapterTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="4 Chapters"
-                            android:textAlignment="center" />
+                            <ImageView
+                                android:id="@+id/chapterIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_list_chapter" />
+
+                            <TextView
+                                android:id="@+id/numOfChapterTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+
+                                android:fontFamily="@font/montserrat"
+                                android:text="4"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/chapterIcon"
+                                app:layout_constraintStart_toEndOf="@id/chapterIcon"
+                                app:layout_constraintTop_toTopOf="@id/chapterIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
@@ -220,6 +274,7 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/readbutton"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:padding="10dp"
                         android:text="READ"
                         android:textColor="@color/azure"
@@ -239,7 +294,6 @@
                         android:layout_width="52dp"
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="48dp"
                         android:background="@drawable/favorbutton"
                         android:padding="10dp"
@@ -248,19 +302,19 @@
                         android:textSize="20dp"
                         android:textStyle=""
 
-                        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+                        app:layout_constraintBottom_toBottomOf="@+id/readBtn"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-                        app:layout_constraintVertical_bias="1.0" />
+                        app:layout_constraintTop_toTopOf="@+id/readBtn" />
 
-                    <EditText
-                        android:id="@+id/editTextTextPersonName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:ems="10"
-                        android:inputType="none"
-                        android:text=""
+
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/lightgrey"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/readBtn" />
@@ -270,20 +324,29 @@
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:layout_marginTop="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName">
+                        app:layout_constraintTop_toBottomOf="@+id/line1">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
                             android:text="Status: " />
 
                         <TextView
                             android:id="@+id/statusTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Done" />
+                            android:background="@drawable/status"
+                            android:backgroundTint="#8BC34A"
+
+                            android:fontFamily="@font/montserrat"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Done"
+                            android:textColor="@color/white" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -298,16 +361,18 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
                             android:text="Age: " />
 
                         <TextView
                             android:id="@+id/ageTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
                             android:text="16+" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ratingTextView"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
@@ -319,20 +384,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:id="@+id/rating_header"
                             android:text="Rating: " />
 
                         <TextView
                             android:id="@+id/ratingTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            app:layout_constraintStart_toEndOf="@id/rating_header"
+                            app:layout_constraintTop_toTopOf="@id/rating_header"
                             android:text="4.3" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="17dp"
                             android:layout_height="wrap_content"
-                            android:text=" ☆"
-                            android:textSize="17dp" />
-                    </LinearLayout>
+                            android:backgroundTint="#FFC107"
+                            app:layout_constraintStart_toEndOf="@id/ratingTV"
+                            app:layout_constraintTop_toTopOf="@id/ratingTV"
+                            app:layout_constraintBottom_toBottomOf="@id/ratingTV"
+                            android:src="@drawable/ic_star_golden" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/linearLayout2"
@@ -349,6 +424,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
+                            android:fontFamily="@font/montserrat"
                             android:text="Categories"
                             app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
                             app:layout_constraintStart_toStartOf="parent"
@@ -358,8 +434,6 @@
                             android:id="@+id/category_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
-                            android:paddingHorizontal="10dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/line">
 
@@ -371,6 +445,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
+                            android:fontFamily="@font/montserrat"
                             android:textColor="@color/black"
                             android:textSize="10sp"
 
@@ -384,6 +459,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:singleLine="false"
+                        android:fontFamily="@font/montserrat"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in consequat magna, in tincidunt risus. Vestibulum sodales posuere bibendum. Proin eu iaculis risus. Suspendisse ultricies vulputate velit a fermentum. Etiam luctus sagittis mauris, nec consequat mauris pellentesque a. Nulla consequat egestas diam, id venenatis lorem ultrices vel. Donec vestibulum at justo at elementum. Morbi a congue dui. Nunc rutrum metus non tellus commodo mattis. Donec pharetra maximus leo vel facilisis. Morbi id rutrum lacus. Quisque bibendum dolor at odio hendrerit, a ullamcorper nisl vehicula. Donec et tincidunt diam.
 
 Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt diam vel elit blandit dapibus. Phasellus convallis molestie sem, nec pulvinar justo lacinia viverra. Proin euismod at sapien a hendrerit. Aliquam vitae ante in nisi pretium laoreet. Curabitur eu mattis arcu, eget viverra urna. Aliquam facilisis odio non erat sodales eleifend. Etiam eget orci id justo convallis condimentum. Duis orci ante, sodales at efficitur sit amet, vulputate vitae augue."
@@ -391,12 +467,13 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:orientation="horizontal"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border"
+                    android:orientation="horizontal">
 
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -404,23 +481,24 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
+                        android:background="?attr/selectableItemBackground"
+                        android:focusable="true"
                         android:padding="16dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="☰ 4 Chapters"
                         android:textAlignment="center"
-                        android:textSize="20sp"
-                        android:focusable="true"
 
-                        android:background="?attr/selectableItemBackground"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -430,17 +508,19 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/readbutton"
+                        android:clickable="true"
                         android:padding="10dp"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="☆ Leave a rating ☆"
                         android:textColor="@color/azure"
+
                         android:textSize="15dp"
                         android:textStyle="italic"
-
-                        android:clickable="true"
-                        android:text="☆ Leave a rating ☆"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </LinearLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -452,6 +532,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Others Feedback"
+                        android:fontFamily="@font/montserrat"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -467,6 +548,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                     app:layout_constraintTop_toBottomOf="@+id/feedback">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -479,6 +561,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_height="wrap_content"
                         android:text="For You"
                         android:textSize="16sp"
+                        android:fontFamily="@font/montserrat"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -488,6 +571,7 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:text="View more"
+                        android:fontFamily="@font/montserrat"
                         android:textSize="12sp"
                         android:textStyle="italic"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -504,7 +588,6 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                     app:layout_constraintTop_toBottomOf="@+id/for_you">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
 
 
             </LinearLayout>

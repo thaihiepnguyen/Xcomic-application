@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/montserrat_bold"
         android:text="Ophelia Price"
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/cvAvatarUser"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="1dp"
-        android:fontFamily="@font/poppins_light"
+        android:fontFamily="@font/montserrat_light"
         android:text="01/01/2000"
         app:layout_constraintStart_toEndOf="@+id/cvAvatarUser"
         app:layout_constraintTop_toBottomOf="@+id/tvNameAccount" />
@@ -56,6 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="1dp"
+        android:fontFamily="@font/montserrat_light"
         android:text="opheliaPrice@gmail.com"
         app:layout_constraintStart_toEndOf="@+id/cvAvatarUser"
         app:layout_constraintTop_toBottomOf="@+id/tvDOBAccount" />
@@ -67,6 +68,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/readbutton"
+        android:fontFamily="@font/montserrat_semibold"
         android:padding="10dp"
         android:text="Block"
         android:textColor="@color/azure"

@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
+            android:fontFamily="@font/montserrat_semibold"
             android:gravity="center"
             android:text="Change Penname"
             android:textColor="@color/black"
@@ -38,13 +39,15 @@
         android:id="@+id/basicInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/montserrat_semibold"
         android:text="New Penname"
         android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_layout" />
+
     <EditText
         android:id="@+id/pennameET"
         android:layout_width="match_parent"
@@ -52,6 +55,7 @@
         android:layout_margin="10dp"
         android:drawableEnd="@drawable/baseline_info_24_gray"
         android:drawablePadding="20dp"
+        android:fontFamily="@font/montserrat"
         android:hint="New Penname"
         android:padding="20dp"
         android:singleLine="true"
@@ -65,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
+        android:fontFamily="@font/montserrat_medium"
         android:text="Save penname"
         android:textColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent" />

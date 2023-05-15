@@ -67,22 +67,23 @@
                     app:srcCompat="@drawable/alime_avt"/>
 
                 <Button
-                    android:layout_marginTop="10dp"
                     android:id="@+id/followBT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/follow"
+                    android:drawableLeft="@drawable/baseline_person_add_alt_1_24"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="Follow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/avtImg"
-                    android:drawableLeft="@drawable/baseline_person_add_alt_1_24"
-                    android:background="@drawable/follow"
-                    android:text="Follow">
-                </Button>
+                    app:layout_constraintTop_toBottomOf="@+id/avtImg"></Button>
 
                 <TextView
                     android:id="@+id/usernameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:text="Nguyễn Thái Hiệp"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -90,10 +91,12 @@
                     app:layout_constraintEnd_toEndOf="@+id/followBT"
                     app:layout_constraintStart_toStartOf="@+id/followBT"
                     app:layout_constraintTop_toBottomOf="@+id/followBT" />
+
                 <TextView
                     android:id="@+id/emailTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
                     android:text="thaihiep232002@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="18sp"
@@ -115,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="100dp"
                         android:layout_marginTop="20dp"
+                        android:fontFamily="@font/montserrat"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -127,6 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/montserrat"
                         android:text="STORIES"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -141,6 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="100dp"
+                        android:fontFamily="@font/montserrat"
                         android:text="345"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -153,6 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/montserrat"
                         android:text="FOLLOWERS"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -174,10 +181,11 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="ABOUT ME"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,13 +193,14 @@
                     android:id="@+id/aboutme"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
                     android:ems="10"
+                    android:fontFamily="@font/montserrat"
                     android:gravity="start|top"
-                    android:textColor="@color/black"
                     android:text="Nguyễn thái hiệp\n :))))"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/aboutMeTV" />
@@ -216,20 +225,24 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Followers"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/followProfileTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="0 Profiles"/>
+                        android:fontFamily="@font/montserrat"
+                        android:text="0 Profiles" />
                 </LinearLayout>
 
                 <ImageView
@@ -263,20 +276,24 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Stories"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/readingTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="0 Stories"/>
+                        android:fontFamily="@font/montserrat"
+                        android:text="0 Stories" />
                 </LinearLayout>
 
                 <ImageView
