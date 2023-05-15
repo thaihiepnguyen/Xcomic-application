@@ -203,7 +203,7 @@ class DetailActivity : AppCompatActivity() {
                         dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         dl.setContentView(R.layout.list_chapter_dialog)
                         dl.show()
-                        val bgCover = dl.findViewById<ImageView>(R.id.background)
+
                         val miniCover = dl.findViewById<ImageView>(R.id.book)
                         val miniTitle = dl.findViewById<TextView>(R.id.book_title)
                         miniTitle.text = bookData!!.title
@@ -211,10 +211,7 @@ class DetailActivity : AppCompatActivity() {
                             .load(imageName)
                             .apply(RequestOptions().override(500, 600))
                             .into(miniCover)
-                        Glide.with(this@DetailActivity)
-                            .load(imageName)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                            .into(bgCover)
+
                         val chapterListView = dl.findViewById<ListView>(R.id.chapterListView)
                         val adapter = ChapterAdapter(this@DetailActivity, bookData!!.chapters)
                         chapterListView.adapter = adapter
