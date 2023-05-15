@@ -20,7 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.X_comic"
         tools:targetApi="31">
-
+        <activity
+            android:name=".views.more.AuthorListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.more.ReadingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.more.FavoriteActivity"
+            android:exported="false" />
         <activity
             android:name=".views.SplashActivity"
             android:exported="true">

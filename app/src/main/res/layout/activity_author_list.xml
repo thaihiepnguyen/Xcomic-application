@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.more.LastestActivity">
+    tools:context=".views.more.AuthorListActivity">
     <LinearLayout
         android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
@@ -27,11 +27,12 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="The Lastest Books"
+            android:text="The Followed Authors"
             android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="bold" />
     </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
@@ -50,5 +51,4 @@
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

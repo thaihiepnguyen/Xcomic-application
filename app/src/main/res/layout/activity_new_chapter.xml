@@ -7,15 +7,11 @@
     tools:context=".views.post.NewChapterActivity"
     android:background="@drawable/pattern">
 
-
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/below_shadow"
+        android:background="@drawable/taskbar"
         android:padding="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,56 +20,53 @@
         <Button
             android:id="@+id/btnNext"
             android:layout_width="80dp"
-            android:layout_height="40dp"
-
+            android:layout_height="38dp"
+            android:layout_marginEnd="30dp"
             android:background="@color/fui_transparent"
-            android:fontFamily="@font/montserrat_semibold"
             android:text="Done"
-            android:textColor="@color/azure"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <ImageButton
             android:id="@+id/btn_menu"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_margin="10dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/fui_transparent"
+            android:src="@drawable/ellipsis"
+            android:textColor="@color/white"
             android:visibility="invisible"
-            android:background="@drawable/dots"
-            app:layout_collapseMode="pin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/titleChapter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="50dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="Add new book"
-            android:textColor="@color/black_trans"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Add new chapter"
+            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/btnNext"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imgbtnBack" />
+            app:layout_constraintTop_toTopOf="@+id/btnNext" />
 
-        <TextView
+        <ImageButton
             android:id="@+id/imgbtnBack"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/arrow_left"
-            android:clickable="true"
+            android:layout_height="30dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/fui_transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
@@ -82,10 +75,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:ems="10"
-        android:fontFamily="@font/montserrat_semibold"
-        android:gravity="center"
-        android:hint="Title for chapter"
+        android:fontFamily="@font/poppins_bold"
         android:inputType="textMultiLine"
+        android:hint="Title for chapter"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header" />
@@ -107,17 +100,17 @@
 
             android:background="@color/fui_transparent"
             android:ems="10"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/poppins_light"
             android:hint="Start writing"
             android:inputType="textMultiLine"
             android:maxLines="100"
             android:scrollbars="vertical"
-            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
     </androidx.core.widget.NestedScrollView>
+
 
 
     <TextView
@@ -126,7 +119,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/montserrat"
         android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />
@@ -137,7 +129,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
-        android:fontFamily="@font/montserrat_medium"
         android:text="Lock"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTitleChapter" />

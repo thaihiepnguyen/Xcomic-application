@@ -10,15 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.*
 import com.example.x_comic.databinding.ActivityMainProfileBinding
-
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.Reading
 import com.example.x_comic.models.User
@@ -26,6 +22,9 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
+import com.example.x_comic.views.more.AuthorListActivity
+import com.example.x_comic.views.more.FavoriteActivity
+import com.example.x_comic.views.more.ReadingActivity
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.IOException
 
@@ -89,6 +88,17 @@ class MainProfileActivity : AppCompatActivity() {
         }
 
         val uid = FirebaseAuthManager.auth.uid
+
+        binding.favoriteLL.setOnClickListener {
+            nextFavoriteActivity()
+        }
+        binding.readingLL.setOnClickListener {
+            nextReadingActivity()
+        }
+        binding.followLL.setOnClickListener {
+            nextFollowActivity()
+        }
+
         if (uid != null) {
             userViewModel.getAllUserIsFollowed(uid) {
                 usersID -> run {
@@ -197,6 +207,11 @@ class MainProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun nextFollowActivity() {
+        val intent = Intent(this, AuthorListActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
@@ -232,6 +247,16 @@ class MainProfileActivity : AppCompatActivity() {
 
     private fun nextSettingActivity() {
         val intent = Intent(this, EditProfileActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextFavoriteActivity() {
+        val intent = Intent(this, FavoriteActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextReadingActivity() {
+        val intent = Intent(this, ReadingActivity::class.java)
         startActivity(intent)
     }
     fun nextAuthorProfileActivity(author: User) {

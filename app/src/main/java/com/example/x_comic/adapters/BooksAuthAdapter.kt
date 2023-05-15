@@ -1,6 +1,5 @@
 package com.example.x_comic.adapters
 
-import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -53,12 +52,10 @@ class BooksAuthAdapter (private val books: MutableList<Product>) : RecyclerView.
         holder.title.text = books[position].title
         if (!books[position].status) {
             holder.status.text = "In progress"
-
-            holder.status.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext()!!,
-                R.color.golden))
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.yellow));
         } else {
-            holder.status.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext()!!,
-                R.color.done))
+            holder.status.text = "Done"
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
         }
 
         holder.chapter.text = "${countChapterIsPosted(books[position])} of ${books[position].chapters.size} Chapter was posted"

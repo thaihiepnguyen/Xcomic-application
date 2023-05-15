@@ -84,7 +84,7 @@ class NewChapterActivity : AppCompatActivity() {
             finish()
         }
 
-        val backButton = findViewById<TextView>(R.id.imgbtnBack)
+        val backButton = findViewById<ImageButton>(R.id.imgbtnBack)
         backButton.setOnClickListener {
             finish()
         }

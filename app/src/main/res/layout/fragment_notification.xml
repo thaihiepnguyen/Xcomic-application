@@ -6,19 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".views.main.fragments.Notification">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="1dp"
             android:outlineProvider="bounds"
+            android:elevation="1dp"
             android:padding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,7 +28,7 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/montserrat"
+                android:fontFamily="@font/montserrat_medium"
 
                 android:text="Notification"
                 android:textSize="24sp"
@@ -48,6 +46,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -42,7 +42,46 @@ class Writing : Fragment() {
 
     var REQUEST_CODE_PICK_PRODUCT = 1111
     var REQUEST_CODE_PICK_UPDATE_PRODUCT = 2222
-    val bookList: MutableList<BookSneek> = mutableListOf()
+    val bookList: MutableList<BookSneek> = mutableListOf(
+        BookSneek("How to Burn The Bad Boy", "alsophanie", R.drawable.bookcover, 4.9),
+        BookSneek("Temporarily", "bbiboo123", R.drawable.book_cover_1, 4.5),
+        BookSneek("Rome Is Us", "ann_beyond", R.drawable.book_cover_2, 4.0),
+        BookSneek("Fool Man", "landyshere", R.drawable.book_cover_3, 4.7),
+        BookSneek("The Mind Of A Leader", "vivianneee", R.drawable.book_cover_4, 4.3),
+        BookSneek("The Light Beyond The Garden Wall", "pixiequinn", R.drawable.book_cover_5, 4.5),
+        BookSneek("The Secret At The Joneses", "rhjulxie", R.drawable.book_cover_6, 3.9),
+        BookSneek("The Victim's Picture", "gizashey", R.drawable.book_cover_7, 4.2)
+
+    )
+
+    var bookDetailList: MutableList<Book> = mutableListOf(
+
+        Book(
+            bookList[0],
+            253.2,
+            125.5,
+            20,
+            arrayListOf("Romance", "Thriller", "Short Story", "Humor")
+        ),
+        Book(bookList[1], 154.4, 100.3, 50, arrayListOf("Fiction", "Horror", "Mystery", "Humor")),
+        Book(bookList[2], 179.6, 122.2, 13, arrayListOf("School Life", "Humor", "Short Story")),
+        Book(
+            bookList[3],
+            211.3,
+            112.6,
+            7,
+            arrayListOf("Romance", "Mystery", "Short Story", "Humor")
+        ),
+        Book(
+            bookList[4],
+            236.2,
+            109.7,
+            36,
+            arrayListOf("Fiction", "Thriller", "Mystery", "Horror", "Humor", "Romance")
+        )
+    )
+
+    var bookAuthorlList: MutableList<Product> = mutableListOf()
 
     var customBookListView: RecyclerView? = null;
     var scrollView: NestedScrollView? = null;
@@ -81,7 +120,6 @@ class Writing : Fragment() {
                                     DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL)
                                 customBookListView?.addItemDecoration(itemDecoration)
 
-
                                 bookListAdapter!!.onItemClick = {book, position ->
                                     // TODO: Edit activity
                                     book.chapters = ArrayList()
@@ -100,8 +138,25 @@ class Writing : Fragment() {
             startActivityForResult(intent, REQUEST_CODE_PICK_PRODUCT)
 //            (activity as MainActivity).replaceFragment(PostNewActivity())
         }
+        var avatar: ImageButton? = null
+        avatar = view.findViewById(R.id.avatar);
+        var userViewModel: UserViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-
+        var currentUser = FirebaseAuthManager.getUser()
+        userViewModel.callApi(currentUser!!.uid).observe(this, Observer { user ->
+            run {
+                if (user.avatar !== "") {
+                    Glide.with(this)
+                        .load(user.avatar)
+                        .apply(
+                            RequestOptions().override(100, 100).transform(CenterCrop()).transform(
+                                RoundedCorners(150)
+                            ))
+                        .into(avatar!!)
+                }
+            }
+        })
 
 //        return inflater.inflate(R.layout.fragment_writing, container, false)
         return view

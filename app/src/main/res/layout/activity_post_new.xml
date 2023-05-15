@@ -11,7 +11,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/below_shadow"
+        android:background="@drawable/taskbar"
         android:padding="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,9 +24,8 @@
 
             android:layout_marginEnd="10dp"
             android:background="@color/fui_transparent"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/poppins_bold"
             android:text="Done"
-            android:textColor="@color/azure"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,27 +33,27 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="50dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/montserrat_medium"
+            android:fontFamily="@font/poppins_medium"
             android:text="Add new book"
-            android:textColor="@color/black_trans"
+            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/btnNext"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imgbtnBack" />
+            app:layout_constraintTop_toTopOf="@+id/btnNext" />
 
-        <TextView
+        <ImageButton
             android:id="@+id/imgbtnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:background="@drawable/arrow_left"
-            android:clickable="true"
+            android:layout_marginTop="7dp"
+            android:background="@color/fui_transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -79,7 +78,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
                     android:layout_marginHorizontal="120dp"
-                    android:layout_marginTop="10dp"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.462"
@@ -99,7 +97,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/empty_image" />
+                            android:src="@drawable/empty_image"/>
 
                     </androidx.cardview.widget.CardView>
 
@@ -140,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/montserrat_semibold"
+                android:fontFamily="@font/poppins_bold"
                 android:text="Title" />
 
             <EditText
@@ -149,9 +147,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:ems="10"
-                android:fontFamily="@font/montserrat"
-                android:hint="Name book"
                 android:inputType="textPersonName"
+                android:hint="Name book"
+                android:fontFamily="@font/poppins_light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnNewCover" />
@@ -162,8 +160,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Description" />
+                android:text="Description"
+                android:fontFamily="@font/poppins_bold"/>
 
             <EditText
                 android:id="@+id/etDescription"
@@ -172,11 +170,11 @@
                 android:layout_marginHorizontal="20dp"
 
                 android:ems="10"
-                android:fontFamily="@font/montserrat"
-                android:hint="Description"
+                android:fontFamily="@font/poppins_light"
                 android:inputType="textMultiLine"
                 android:maxLines="100"
                 android:scrollbars="vertical"
+                android:hint="Description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etTitle" />
@@ -187,9 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:fontFamily="@font/montserrat_semibold"
                 android:text="Status"
-                android:textColor="@color/black_trans"
                 app:layout_constraintTop_toBottomOf="@+id/etDescription" />
 
             <Switch
@@ -198,9 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Hide"
-                android:textColor="@color/black_trans" />
+                android:text="Hide" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -208,8 +202,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Age legal" />
+                android:text="Age legal"
+                android:fontFamily="@font/poppins_bold"/>
 
             <Spinner
                 android:id="@+id/ageSpinner"
@@ -225,8 +219,8 @@
                 android:layout_marginHorizontal="20dp"
 
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Category" />
+                android:text="Category"
+                android:fontFamily="@font/poppins_bold"/>
 
 <!--            <Spinner-->
 <!--                android:id="@+id/spCategory"-->
@@ -253,7 +247,6 @@ android:paddingHorizontal="20dp"
             android:layout_marginVertical="10dp"
             android:orientation="horizontal"
             android:background="@drawable/border">
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnNewChapter"
                 android:layout_width="match_parent"
@@ -262,7 +255,6 @@ android:paddingHorizontal="20dp"
                 android:background="@drawable/dot_border"
 
                 android:drawableTop="@drawable/baseline_playlist_add_24"
-                android:fontFamily="@font/montserrat_medium"
                 android:text="Add new chapter"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -270,13 +262,13 @@ android:paddingHorizontal="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/header" />
         </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="5dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Table of content" />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/poppins_bold"
+    android:text="Table of content"
+    android:layout_marginVertical="5dp"
+    android:layout_marginHorizontal="20dp"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listViewChapter"
                 android:layout_width="match_parent"
