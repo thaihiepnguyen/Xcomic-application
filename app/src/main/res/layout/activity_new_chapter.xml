@@ -26,27 +26,28 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
 
-            android:layout_marginEnd="10dp"
             android:background="@color/fui_transparent"
             android:fontFamily="@font/montserrat_semibold"
             android:text="Done"
             android:textColor="@color/azure"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
             app:layout_constraintTop_toTopOf="parent" />
+
+
         <ImageButton
             android:id="@+id/btn_menu"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/fui_transparent"
-            android:src="@drawable/ellipsis"
-            android:textColor="@color/white"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="10dp"
             android:visibility="invisible"
+            android:background="@drawable/dots"
+            app:layout_collapseMode="pin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
 
         <TextView
