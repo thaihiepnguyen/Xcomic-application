@@ -25,6 +25,7 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.main.fragments.*
+import com.example.x_comic.views.more.AllActivity
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.purchase.PurchaseActivity
 import com.example.x_comic.views.read.ReadBookActivity
@@ -81,9 +82,13 @@ class DetailActivity : AppCompatActivity() {
                     val chooseChapterBtn = findViewById<Button>(R.id.chooseChapterBtn)
                     val favorBtn = findViewById<Button>(R.id.favorBtn)
                     val backCover = findViewById<ImageView>(R.id.background)
+                    val viewmore = findViewById<TextView>(R.id.view_more)
                     //assign data to view
                     title.text = bookData?.title
 
+                    viewmore.setOnClickListener {
+                        nextAllActivity()
+                    }
                     userViewModel.getUserById(bookData!!.author) {
                             user -> run {
                         _currentAuthor = user
@@ -386,6 +391,10 @@ class DetailActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)
         intent.putExtras(bundle)
+        startActivity(intent)
+    }
+    private fun nextAllActivity() {
+        val intent = Intent(this, AllActivity::class.java)
         startActivity(intent)
     }
 }
