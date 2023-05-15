@@ -156,20 +156,14 @@ class DetailActivity : AppCompatActivity() {
                     if (bookData!!.status){
                         status.text = "Completed"
                         status.backgroundTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                this,
                                 R.color.done
                             )
-                        );
 
                     }else{
                         status.text = "Ongoing"
                         status.backgroundTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                this,
                                 R.color.golden
                             )
-                        );
 
                     }
 

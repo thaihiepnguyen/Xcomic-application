@@ -339,6 +339,8 @@
                         app:paypal_button_label="pay"
                         app:paypal_button_shape="rectangle"
                         app:paypal_button_size="large"
+                        android:padding="10dp"
+                        android:layout_marginBottom="50dp"
                         app:paypal_button_enabled="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
