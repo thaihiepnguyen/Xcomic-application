@@ -162,7 +162,7 @@
 
                         android:gravity="center"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/layout_author"
+                        app:layout_constraintTop_toBottomOf="@id/book_author"
                         tools:layout_editor_absoluteX="30dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
