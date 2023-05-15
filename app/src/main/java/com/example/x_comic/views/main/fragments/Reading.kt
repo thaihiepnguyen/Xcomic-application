@@ -156,8 +156,8 @@ class Reading : Fragment() {
         if (book != null) {
 
             val intent = Intent(context, ReadBookActivity::class.java)
-            intent.putExtra("book", book.book)
-            intent.putExtra("id_chapter", book.current.toString())
+            intent.putExtra("book", book.book!!.id)
+            intent.putExtra("id_chapter", book.book!!.chapters[book.current - 1].id_chapter)
             ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
         } else {
             // Handle the case when the book is null

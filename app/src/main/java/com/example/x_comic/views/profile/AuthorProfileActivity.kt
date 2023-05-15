@@ -22,6 +22,8 @@ import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
+import com.example.x_comic.views.more.StoriesActivity
+import com.example.x_comic.views.more.UserFollowActivity
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 
@@ -92,6 +94,13 @@ class AuthorProfileActivity : AppCompatActivity() {
             if (followList.size == 0) binding.followProfileTV.text = "0 Profiles"
             avatarAdapter.notifyDataSetChanged()
         }
+        }
+
+        binding.storiesLL.setOnClickListener {
+            nextStoriesActivity(_currentAuthor!!)
+        }
+        binding.followLL.setOnClickListener {
+            nextUserFollowActivity(_currentAuthor!!)
         }
 
         // uid ở đây là người click vào xem profile của author
@@ -186,6 +195,14 @@ class AuthorProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun nextStoriesActivity(author: User) {
+        val intent = Intent(this, StoriesActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
     fun setFollowingUI(follow: Button) {
         follow.setText("Following")
         val drawable = resources.getDrawable(R.drawable.baseline_group_24)
@@ -197,8 +214,17 @@ class AuthorProfileActivity : AppCompatActivity() {
         val drawable = resources.getDrawable(R.drawable.baseline_person_add_alt_1_24)
         follow.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
+
     fun nextAuthorProfileActivity(author: User) {
         val intent = Intent(this, AuthorProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("authorKey", author)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    fun nextUserFollowActivity(author: User) {
+        val intent = Intent(this, UserFollowActivity::class.java)
         val bundle = Bundle()
         bundle.putSerializable("authorKey", author)
         intent.putExtras(bundle)
