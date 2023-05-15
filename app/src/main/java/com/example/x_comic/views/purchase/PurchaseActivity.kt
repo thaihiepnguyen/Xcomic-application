@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -67,13 +68,20 @@ class PurchaseActivity : AppCompatActivity() {
                 if (tmp != null){
                     bookData = Product(tmp)
                     val title = findViewById<TextView>(R.id.book_title)
+                    val name_book = findViewById<TextView>(R.id.name_book)
                     val author = findViewById<TextView>(R.id.book_author)
                     val cover = findViewById<ImageView>(R.id.book_cover)
                     val view = findViewById<TextView>(R.id.viewTextView)
                     val favorite = findViewById<TextView>(R.id.favoriteTextView)
                     val chapter = findViewById<TextView>(R.id.numOfChapterTextView)
 
+                    val backBtn = findViewById<ImageButton>(R.id.backBtn);
+                    backBtn.setOnClickListener{
+                        finish();
+                    }
+
                     title.text = bookData?.title
+                    name_book.text = bookData?.title
                     author.text = bookData?.author
                     userViewModel.getUserById(bookData!!.author) { user ->
                         run {

@@ -72,12 +72,16 @@
                         android:src="@drawable/background" />
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/card_holder"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_margin="30dp"
+                        android:layout_marginStart="30dp"
+
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginBottom="30dp"
                         android:clickable="true"
                         android:focusable="true"
-
                         app:cardBackgroundColor="#E6FFFFFF"
                         app:cardCornerRadius="10dp">
 

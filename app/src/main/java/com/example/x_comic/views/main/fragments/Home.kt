@@ -2,16 +2,18 @@ package com.example.x_comic.views.main.fragments
 
 
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,24 +28,24 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.adapters.*
 import com.example.x_comic.models.Avatar
+import com.example.x_comic.models.BookReading
+
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
-import com.example.x_comic.views.login.LoginActivity
 import com.example.x_comic.views.more.AllActivity
 import com.example.x_comic.views.more.CompletedActivity
 import com.example.x_comic.views.more.LastestActivity
 import com.example.x_comic.views.more.PopularActivity
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.profile.MainProfileActivity
-import com.example.x_comic.views.read.OnSwipeTouchListener
 import com.example.x_comic.views.read.ReadBookActivity
+
 import com.google.android.material.tabs.TabLayout
-import org.w3c.dom.Text
-import kotlin.math.log
+
 
 
 class Home : Fragment() {
@@ -57,7 +59,7 @@ class Home : Fragment() {
     private val bookPopularList: MutableList<Product> = mutableListOf()
     private val bookLatestList: MutableList<Product> = mutableListOf()
     private val bookCompletedList: MutableList<Product> = mutableListOf()
-    private var _bookRecommend: Product = Product()
+
 
     var tabsBook = mutableListOf(
         bookPopularList,bookLatestList,bookCompletedList)
@@ -72,6 +74,7 @@ class Home : Fragment() {
     var bookAuthor: TextView? = null
     var viewmore: TextView? = null
     var viewmoreAll: TextView? = null
+    var progressBar: ProgressBar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,8 +97,12 @@ class Home : Fragment() {
         cover = view.findViewById(R.id.book)
         bookTitle = view.findViewById(R.id.book_title)
         bookAuthor = view.findViewById(R.id.book_author)
+        progressBar = view.findViewById(R.id.progressBar)
         viewmore = view.findViewById(R.id.view_more_vertical)
         viewmoreAll = view.findViewById(R.id.view_more)
+
+        var book_reading: com.example.x_comic.models.Reading? = null;
+        var book_reading_info: BookReading? = null;
 
 
         tabLayout = view.findViewById(R.id.tabs_book);
@@ -145,6 +152,58 @@ class Home : Fragment() {
                 }
             })
 
+        val uid = FirebaseAuthManager.auth.uid
+        if (uid != null) {
+            productViewModel.getAllReadingBook(uid) { book ->
+                run {
+
+                    val firstSnapshot = if (book.hasChildren()) {
+                        book.children.iterator().next()
+                    } else {
+                        null
+                    }
+                    val bookid =
+                        firstSnapshot?.getValue(com.example.x_comic.models.Reading::class.java)
+
+                    book_reading = bookid;
+
+                    productViewModel.getBookById(bookid!!.id_book) { bookInner ->
+                        run {
+
+                            bookTitle!!.text = bookInner.title
+                            userViewModel.getUserById(bookInner.author) { user ->
+                                run {
+                                    bookAuthor!!.text = user.penname
+                                }
+                            }
+
+                            cover?.let {
+                                Glide.with(it.context)
+                                    .load(bookInner.cover)
+                                    .apply(RequestOptions().override(500, 600))
+                                    .into(cover!!)
+                            }
+
+                            progressBar!!.progress = bookid.posChap * 100 / bookid.numChap;
+
+                            book_reading_info = BookReading(bookInner,bookid.posChap,bookid.numChap)
+                        }
+                    }
+                }
+            }
+        }
+
+        val card_holder = view.findViewById<CardView>(R.id.card_holder);
+
+        card_holder.setOnClickListener {
+            if (book_reading_info != null){
+            val intent = Intent(context, ReadBookActivity::class.java)
+
+                intent.putExtra("book", book_reading_info!!.book!!.id)
+                intent.putExtra("id_chapter", book_reading_info!!.book!!.chapters[book_reading_info!!.current - 1].id_chapter)
+            ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
+        }
+        }
         productViewModel.getAllBook { books ->
             run {
                 bookListSlideShow.clear()
@@ -158,32 +217,7 @@ class Home : Fragment() {
             }
         }
 
-        productViewModel.getAllBook { books ->
-            run {
-                for (book in books.children) {
-                    val product = book.getValue(Product::class.java)
-                    if (product != null && !product.hide) {
-                        if (product.have_loved.size > _bookRecommend.have_loved.size) {
-                            _bookRecommend = product
-                        }
-                    }
-                }
 
-                bookTitle!!.text = _bookRecommend.title
-                userViewModel.getUserById(_bookRecommend.author) {user ->
-                    run {
-                        bookAuthor!!.text = user.penname
-                    }
-                }
-                cover?.let {
-                    Glide.with(it.context)
-                        .load(_bookRecommend.cover)
-                        .apply(RequestOptions().override(500, 600))
-                        .into(cover!!)
-                }
-
-            }
-        }
 
         // TODO: code được comment ở đây tương đương với dòng 155
         // tùy TH mình sài nhe
