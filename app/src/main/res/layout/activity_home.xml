@@ -57,6 +57,7 @@
                     android:id="@+id/tvNameAdmin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="John Wick"
                     android:textColor="@color/white"
