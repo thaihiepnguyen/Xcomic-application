@@ -136,6 +136,14 @@ class ReadBookActivity : AppCompatActivity() {
         textViewContentBook = findViewById(R.id.tvContentChapterBook)
         btnNext = findViewById(R.id.btnNextChapter)
         btnBack = findViewById(R.id.btnBackChapter)
+
+        val btnReturn = findViewById<ImageButton>(R.id.btnReturn);
+
+        btnReturn.setOnClickListener{
+            finish()
+        }
+
+
         val intent = intent
         var id_book = intent.getStringExtra("book") as? String
         val id_chapter = intent.getStringExtra("id_chapter") as String

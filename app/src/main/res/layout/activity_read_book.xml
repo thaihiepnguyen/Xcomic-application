@@ -26,7 +26,19 @@
 
                 app:layout_constraintTop_toTopOf="parent">
 
+                <ImageButton
+                    android:id="@+id/btnReturn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/arrow_left"
+                    app:layout_collapseMode="pin"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
 
+                    />
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="250dp"
@@ -38,9 +50,9 @@
                     android:text="How to Burn The Bad Boy"
                     android:textColor="#8A000000"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="@id/btnReturn"
+                    app:layout_constraintStart_toEndOf="@id/btnReturn"
+                    app:layout_constraintTop_toTopOf="@id/btnReturn" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ProgressBar
