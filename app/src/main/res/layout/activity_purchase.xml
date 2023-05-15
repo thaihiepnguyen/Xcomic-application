@@ -16,6 +16,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/below_shadow"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/oval"
+                android:scaleType="fitXY"
+                android:src="@drawable/arrow_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/name_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="#8A000000"
+                android:text="How to Burn the Boy Down"
+                android:ellipsize="end"
+                android:width="200dp"
+                android:lines="1"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+                app:layout_constraintStart_toEndOf="@+id/backBtn"
+                app:layout_constraintTop_toTopOf="@+id/backBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.core.widget.NestedScrollView
@@ -25,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/header">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,36 +75,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/backBtn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-
-                        android:background="?attr/selectableItemBackground"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:text="◁"
-                        android:textColor="@color/white"
-                        android:textSize="30dp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/shareBtn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-
-                        android:background="?attr/selectableItemBackground"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:text="︙"
-                        android:textColor="@color/white"
-                        android:textSize="30dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -114,7 +123,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:layout_margin="20dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -124,10 +133,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:layout_marginTop="4dp"
-                        android:text="How to Burn The Bad Boy"
+                        android:fontFamily="@font/montserrat"
 
+                        android:text="How to Burn The Bad Boy"
                         android:textAlignment="center"
-                        android:textSize="20sp"
+                        android:textSize="23sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -147,70 +157,114 @@
                         android:id="@+id/linearLayout3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="10dp"
+
+                        android:layout_marginTop="20dp"
+
+                        android:gravity="center"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/book_author"
+                        app:layout_constraintTop_toBottomOf="@id/layout_author"
                         tools:layout_editor_absoluteX="30dp">
 
-                        <ImageView
-                            android:id="@+id/viewIcon"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+
+
+                            >
+
+                            <ImageView
+                                android:id="@+id/viewIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_view" />
+
+                            <TextView
+                                android:id="@+id/viewTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/montserrat"
+                                android:text="200K"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/viewIcon"
+                                app:layout_constraintStart_toEndOf="@id/viewIcon"
+                                app:layout_constraintTop_toTopOf="@id/viewIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/ic_view"
-                            tools:layout_editor_absoluteY="49dp" />
+                            android:layout_marginStart="5dp">
 
-                        <TextView
-                            android:id="@+id/viewTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="200K view"
-                            android:textAlignment="center" />
+                            <ImageView
+                                android:id="@+id/favoriteIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/heart" />
 
-                        <ImageView
-                            android:id="@+id/favoriteIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/favorite_icon"
-                            tools:layout_editor_absoluteY="49dp" />
+                            <TextView
+                                android:id="@+id/favoriteTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/montserrat"
+                                android:text="167K"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/favoriteIcon"
 
-                        <TextView
-                            android:id="@+id/favoriteTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="167K"
-                            android:textAlignment="center" />
+                                app:layout_constraintStart_toEndOf="@id/favoriteIcon"
+                                app:layout_constraintTop_toTopOf="@id/favoriteIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
-                            android:id="@+id/chapterIcon"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:srcCompat="@drawable/ic_list_chapter"
-                            tools:layout_editor_absoluteY="49dp" />
+                            android:layout_marginStart="5dp">
 
-                        <TextView
-                            android:id="@+id/numOfChapterTextView"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="4 Chapters"
-                            android:textAlignment="center" />
+                            <ImageView
+                                android:id="@+id/chapterIcon"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_list_chapter" />
+
+                            <TextView
+                                android:id="@+id/numOfChapterTextView"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_weight="1"
+
+                                android:fontFamily="@font/montserrat"
+                                android:text="4"
+                                android:textAlignment="center"
+                                app:layout_constraintBottom_toBottomOf="@id/chapterIcon"
+                                app:layout_constraintStart_toEndOf="@id/chapterIcon"
+                                app:layout_constraintTop_toTopOf="@id/chapterIcon" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
 
 
-                    <EditText
-                        android:id="@+id/editTextTextPersonName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:ems="10"
-                        android:inputType="none"
-                        android:text=""
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="200dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@color/lightgrey"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
@@ -239,6 +293,7 @@
                         android:gravity="center"
                         android:text="Purchase Chapter"
                         android:textColor="@color/azure"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:textSize="40dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -254,6 +309,7 @@
                         android:drawableEnd="@drawable/ic_unlock"
                         android:drawablePadding="20dp"
                         android:text="Chapter 4"
+                        android:fontFamily="@font/montserrat"
                         android:inputType="none"
                         android:editable="false"
                         android:padding="20dp"
@@ -268,6 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="$10"
+                        android:fontFamily="@font/montserrat"
                         android:textSize="30dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.502"
