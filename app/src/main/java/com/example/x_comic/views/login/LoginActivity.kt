@@ -74,33 +74,7 @@ class LoginActivity : AppCompatActivity() {
         }
         }
         // TODO: Lúc này người dùng đã đăng nhập rồi.
-        if (FirebaseAuthManager.auth.currentUser != null) {
-            // Show Man hinh Block nhung ma chua hop ly lam
-            var id_user = FirebaseAuthManager.auth.uid
-            id_user?.let {
-                userViewModel.getUserById(id_user) { user ->
-                    kotlin.run {
-                        if (user.hide)
-                            nextBlockUserActivity()
-                        else {
-                            if (sharedPreferences.contains("currentRole")) {
-                                val currentRole = sharedPreferences.getLong("currentRole", 1)
-                                // parse có lỗi gì thì mặc định vô main
-                                if (currentRole.compareTo(3) == 0) {
-                                    nextHomeActivity()
-                                } else {
-                                    nextMainActivity()
-                                }
-                            } else {
-                                // lỡ đâu code lỗi gì thì vô main; tránh crash
-                                // hoặc đăng nhập bằng gg thì vô main; chắc chắn không phải là admin
-                                nextMainActivity()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
