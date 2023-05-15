@@ -27,6 +27,7 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:fontFamily="@font/montserrat_medium"
             android:text="The All Books"
             android:textColor="@color/black"
             android:textSize="16dp"

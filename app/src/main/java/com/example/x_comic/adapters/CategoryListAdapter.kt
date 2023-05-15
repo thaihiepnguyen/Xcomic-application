@@ -36,7 +36,7 @@ class CategoryListAdapter (
     override fun onCreateViewHolder (parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context;
         val inflater = LayoutInflater.from(context)
-        var columnView =  inflater.inflate(R.layout.category, parent, false)
+        var columnView =  inflater.inflate(R.layout.category_2, parent, false)
         return ViewHolder(columnView)
 
     }
@@ -53,7 +53,7 @@ class CategoryListAdapter (
 
 
 
-
+        genre.setTextColor(R.color.white);
         genre.setText(category.name);
         genre.setTextColor(R.color.white);
 

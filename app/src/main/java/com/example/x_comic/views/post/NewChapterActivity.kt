@@ -67,7 +67,7 @@ class NewChapterActivity : AppCompatActivity() {
             }
         })
 
-        var btnDone = findViewById<Button>(R.id.btnNext)
+        var btnDone = findViewById<TextView>(R.id.btnNext)
         btnDone.setOnClickListener {
             chapter.name = findViewById<EditText>(R.id.etTitleChapter).text.toString()
             chapter._lock = findViewById<Switch>(R.id.sLockChapter).isChecked
