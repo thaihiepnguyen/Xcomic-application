@@ -156,7 +156,7 @@ class ReadBookActivity : AppCompatActivity() {
                         if (i.id_chapter!!.equals(id_chapter))
                             curChapter = i
                     titleTv.text = curChapter.name
-                    title.text = curChapter.name
+                    title.text = book.title
                     textViewContentBook?.text = curChapter.content
                     findViewById<TextView>(R.id.viewTextView).text = book?.view.toString() + " view";
                     findViewById<TextView>(R.id.favoriteTextView).text = book?.have_loved!!.size.toString() + " favor";
@@ -165,7 +165,8 @@ class ReadBookActivity : AppCompatActivity() {
                     var cover = findViewById(R.id.ivCoverChapter) as ImageView;
                     Glide.with(cover.context)
                         .load(book?.cover)
-                        .apply(RequestOptions().override(500, 600))
+                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
+
                         .into(cover)
                 }
 
@@ -182,7 +183,7 @@ class ReadBookActivity : AppCompatActivity() {
                     dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     dl.setContentView(R.layout.list_chapter_dialog)
                     dl.show()
-                    var bgcover = dl.findViewById<ImageView>(R.id.background)
+
                     var minicover = dl.findViewById<ImageView>(R.id.book)
                     var minititle = dl.findViewById<TextView>(R.id.book_title)
                     val storage = FirebaseStorage.getInstance()
@@ -192,12 +193,8 @@ class ReadBookActivity : AppCompatActivity() {
                     Glide.with(minicover.context)
                         .load(book?.cover)
                         .apply(RequestOptions().override(500, 600))
-                        .into(minicover)
-                    Glide.with(this@ReadBookActivity)
-                        .load(book?.cover)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(50, 3)))
-                        .into(bgcover)
 
+                        .into(minicover)
 
 
                     var chapterListView = dl.findViewById<ListView>(R.id.chapterListView)
