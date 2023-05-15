@@ -33,11 +33,16 @@ import com.example.x_comic.viewmodels.ProductViewModel
 import com.example.x_comic.viewmodels.UserViewModel
 import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.login.LoginActivity
+import com.example.x_comic.views.more.AllActivity
+import com.example.x_comic.views.more.CompletedActivity
+import com.example.x_comic.views.more.LastestActivity
+import com.example.x_comic.views.more.PopularActivity
 import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.example.x_comic.views.profile.MainProfileActivity
 import com.example.x_comic.views.read.OnSwipeTouchListener
 import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.material.tabs.TabLayout
+import org.w3c.dom.Text
 import kotlin.math.log
 
 
@@ -65,7 +70,8 @@ class Home : Fragment() {
     var cover: ImageView? = null
     var bookTitle: TextView? = null
     var bookAuthor: TextView? = null
-
+    var viewmore: TextView? = null
+    var viewmoreAll: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +94,8 @@ class Home : Fragment() {
         cover = view.findViewById(R.id.book)
         bookTitle = view.findViewById(R.id.book_title)
         bookAuthor = view.findViewById(R.id.book_author)
+        viewmore = view.findViewById(R.id.view_more_vertical)
+        viewmoreAll = view.findViewById(R.id.view_more)
 
 
         tabLayout = view.findViewById(R.id.tabs_book);
@@ -317,6 +325,22 @@ class Home : Fragment() {
                 }
             })
 
+        viewmore!!.setOnClickListener {
+            if (tabLayout!!.selectedTabPosition == 0) {
+                nextPopularActivity()
+            }
+            if (tabLayout!!.selectedTabPosition == 1) {
+                nextLastestActivity()
+            }
+            if (tabLayout!!.selectedTabPosition == 2) {
+                nextCompletedActivity()
+            }
+        }
+
+        viewmoreAll!!.setOnClickListener {
+            nextAllActivity()
+        }
+
         return view
     }
 
@@ -335,7 +359,25 @@ class Home : Fragment() {
         startActivity(intent)
     }
 
+    private fun nextPopularActivity() {
+        val intent = Intent(context, PopularActivity::class.java)
+        startActivity(intent)
+    }
 
+    private fun nextCompletedActivity() {
+        val intent = Intent(context, CompletedActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextAllActivity() {
+        val intent = Intent(context, AllActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun nextLastestActivity() {
+        val intent = Intent(context, LastestActivity::class.java)
+        startActivity(intent)
+    }
 
 
     fun nextAuthorProfileActivity(author: User) {

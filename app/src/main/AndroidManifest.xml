@@ -30,6 +30,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".views.more.AllActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.more.CompletedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.more.LastestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.more.PopularActivity"
+            android:exported="false" />
 
         <receiver
             android:name=".views.main.LocalNotification"

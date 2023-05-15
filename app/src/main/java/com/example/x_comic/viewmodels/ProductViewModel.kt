@@ -124,6 +124,20 @@ class ProductViewModel : ViewModel() {
         })
     }
 
+    inline fun getAllCompletedBook(crossinline callback: (DataSnapshot)->Unit){
+        // tạo thread mới.
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
     inline fun getPopularBook(crossinline callback: (DataSnapshot)->Unit){
         // tạo thread mới.
         db.orderByChild("favorite").limitToFirst(5).addValueEventListener(object : ValueEventListener {
@@ -137,6 +151,21 @@ class ProductViewModel : ViewModel() {
             }
         })
     }
+
+    inline fun getAllPopularBook(crossinline callback: (DataSnapshot)->Unit){
+        // tạo thread mới.
+        db.orderByChild("favorite").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
     fun getPopularBook():MutableLiveData<ArrayList<Product>>{
         if (_productsPopular.value == null) {
             // tạo thread mới.
@@ -214,6 +243,21 @@ class ProductViewModel : ViewModel() {
             }
         })
     }
+
+    inline fun getAllLatestBook(crossinline callback: (DataSnapshot)->Unit){
+        // tạo thread mới.
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
     fun getLatestBook():MutableLiveData<ArrayList<Product>>{
         if (_productsLatest.value == null) {
             // tạo thread mới.
@@ -449,7 +493,8 @@ class ProductViewModel : ViewModel() {
         // tạo thread mới.
         db.child(bid).child("chapters").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                callback(dataSnapshot)
+                if (dataSnapshot.exists())
+                    callback(dataSnapshot)
             }
 
             override fun onCancelled(error: DatabaseError) {
