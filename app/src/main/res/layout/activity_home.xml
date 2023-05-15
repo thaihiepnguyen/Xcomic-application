@@ -22,32 +22,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="280dp">
 
-                <Button
-                    android:id="@+id/logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:backgroundTint="@color/white"
-                    android:text="Logout"
-                    android:textColor="@color/love"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <ImageView
                     android:id="@+id/background"
                     android:layout_width="match_parent"
                     android:layout_height="280dp"
-                    android:scaleType="fitStart"
-                    android:src="@drawable/background"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginBottom="20dp"
+                    android:scaleType="fitXY"
+                    android:src="@color/black_trans"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="-16dp" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     app:cardCornerRadius="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -65,32 +57,31 @@
                     android:id="@+id/tvNameAdmin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="40dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="John Wick"
                     android:textColor="@color/white"
                     android:textSize="25dp"
-                    app:layout_constraintStart_toEndOf="@+id/cv"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="@+id/cv"
+                    app:layout_constraintTop_toBottomOf="@+id/cv" />
 
                 <TextView
                     android:id="@+id/tvGmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/montserrat"
                     android:text="johnwick@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="20dp"
-                    app:layout_constraintStart_toEndOf="@+id/cv"
+                    app:layout_constraintEnd_toEndOf="@+id/cv"
+                    app:layout_constraintStart_toStartOf="@+id/tvNameAdmin"
                     app:layout_constraintTop_toBottomOf="@+id/tvNameAdmin" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp">
 
 
                 <ImageView
@@ -143,26 +134,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/mybutton"
                 android:fontFamily="@font/montserrat_medium"
                 android:padding="10dp"
                 android:text="Books Management"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnAccountsManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="30dp"
                 android:background="@drawable/mybutton"
                 android:fontFamily="@font/montserrat_medium"
                 android:padding="10dp"
                 android:text="Accounts Management"
-                android:textSize="20dp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Logout"
+                android:textColor="@color/love" />
 
         </LinearLayout>
     </ScrollView>

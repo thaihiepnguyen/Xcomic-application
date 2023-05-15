@@ -29,12 +29,14 @@
 
     <TextView
         android:id="@+id/tvNameAccount"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat_bold"
         android:text="Ophelia Price"
+        android:ellipsize="end"
+        android:lines="1"
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/cvAvatarUser"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,11 +54,13 @@
 
     <TextView
         android:id="@+id/tvEmailAccount"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="1dp"
         android:fontFamily="@font/montserrat_light"
+        android:ellipsize="end"
+        android:lines="1"
         android:text="opheliaPrice@gmail.com"
         app:layout_constraintStart_toEndOf="@+id/cvAvatarUser"
         app:layout_constraintTop_toBottomOf="@+id/tvDOBAccount" />
