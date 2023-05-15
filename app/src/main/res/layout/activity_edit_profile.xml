@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
                 android:gravity="center"
                 android:text="Account Setting"
                 android:textColor="@color/black"
@@ -48,9 +49,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
+                android:fontFamily="@font/montserrat_medium"
                 android:text="Logout"
-                android:textColor="@color/love"
-                />
+                android:textColor="@color/love" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -66,11 +67,12 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_marginTop="30dp"
                     android:id="@+id/avatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="PROFILE"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -96,15 +98,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/alime_avt"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Update Avatar"
-                        android:textStyle="bold"
                         android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="Update Avatar"
                         android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="-1dp"
@@ -118,23 +122,27 @@
                     android:padding="15dp"
                     app:layout_constraintTop_toBottomOf="@+id/avt_layout"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
+                        android:text="About me"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:text="About me"/>
+                        android:textSize="16sp" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Introduction"/>
+                            android:fontFamily="@font/montserrat_light"
+                            android:text="Introduction" />
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -148,6 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="BASIC INFORMATION"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/aboutme_layout" />
@@ -163,23 +172,27 @@
                     android:padding="15dp"
                     app:layout_constraintTop_toBottomOf="@+id/basicInfo"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
+                        android:text="Email"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:text="Email"/>
+                        android:textSize="16sp" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{User.email}"/>
+                            android:fontFamily="@font/montserrat_light"
+                            android:text="@{User.email}" />
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -204,6 +217,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Password"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -219,6 +233,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="**************" />
 
                         <ImageView
@@ -232,11 +247,12 @@
                     android:id="@+id/userInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="USER INFORMATION"
-                    app:layout_constraintTop_toBottomOf="@+id/password_layout"
-                    tools:layout_editor_absoluteX="20dp" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/password_layout" />
 
                 <LinearLayout
                     android:id="@+id/fullname_layout"
@@ -255,6 +271,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Full Name"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -270,6 +287,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="@{User.full_name}" />
 
                         <ImageView
@@ -296,6 +314,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Gender"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -311,6 +330,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="@{User.gender}" />
 
                         <ImageView
@@ -337,6 +357,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Age"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -352,6 +373,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="@{String.valueOf(User.age)}" />
 
                         <ImageView
@@ -378,6 +400,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Pen Name"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -393,6 +416,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="@{User.penname}" />
 
                         <ImageView
@@ -419,6 +443,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat"
                         android:text="Phone"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
@@ -434,6 +459,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@font/montserrat"
                             android:text="@{User.phone}" />
 
                         <ImageView
@@ -445,21 +471,22 @@
 
                 <Button
                     android:id="@+id/button2"
-                    android:layout_marginTop="60dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
                     android:layout_marginBottom="10dp"
                     android:backgroundTint="@color/white"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="Remove Account"
                     android:textColor="@color/love"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/phone_layout" />
 
                 <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="30dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="2023 Xmad"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

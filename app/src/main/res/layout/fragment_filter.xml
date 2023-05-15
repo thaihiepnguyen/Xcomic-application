@@ -31,9 +31,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins_medium"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/montserrat_medium"
                 android:text="Filter"
                 android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +64,7 @@
                         android:id="@+id/category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
                         android:text="Category"
@@ -107,7 +109,7 @@
                         android:clickable="true"
                         android:drawableEnd="@drawable/chevrondown"
                         android:focusable="true"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
                         android:text="Length"
@@ -161,7 +163,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="1-10" />
 
                                     <CheckBox
@@ -169,7 +171,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="10-20" />
 
                                     <CheckBox
@@ -177,7 +179,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="20-50" />
 
                                     <CheckBox
@@ -185,7 +187,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="50+" />
 
                                     <CheckBox
@@ -194,7 +196,7 @@
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
                                         android:checked="true"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="All" />
                                 </GridLayout>
                             </FrameLayout>
@@ -217,7 +219,7 @@
                         android:clickable="true"
                         android:drawableEnd="@drawable/chevrondown"
                         android:focusable="true"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
                         android:text="Status"
@@ -270,7 +272,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Completed" />
 
                                     <CheckBox
@@ -278,7 +280,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Pending" />
 
                                     <CheckBox
@@ -286,7 +288,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Ongoing" />
 
                                     <CheckBox
@@ -294,7 +296,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Drop" />
 
                                     <CheckBox
@@ -303,7 +305,7 @@
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
                                         android:checked="true"
-                                        android:fontFamily="@font/poppins"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="All" />
                                 </GridLayout>
                             </FrameLayout>
@@ -319,11 +321,10 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/badge"
                     android:elevation="0dp"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="0dp"
-                    android:text="Apply"
-                    />
+                    android:text="Apply" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

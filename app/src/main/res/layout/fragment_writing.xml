@@ -9,73 +9,57 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/pattern">
+       >
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/header"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/taskbar"
+            android:outlineProvider="bounds"
+            android:elevation="1dp"
             android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <ImageButton
-                android:id="@+id/avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/oval"
-                android:scaleType="centerInside"
-                android:src="@drawable/avatar"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/poppins_medium"
-                android:text="Writting"
-                android:textColor="@color/white"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/montserrat_medium"
+
+                android:text="Writing"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/avatar"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/avatar" />
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/background"
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:scaleType="fitXY"
 
-            app:layout_constraintTop_toBottomOf="@+id/header" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnWriteNewBook"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="25dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="5dp"
 
-            android:background="@drawable/readbutton"
-            android:drawableLeft="@drawable/notebook"
-            android:drawableTint="@color/button_blue"
-            android:fontFamily="@font/poppins_medium"
-            android:padding="8dp"
-            android:text=" Write a new book"
-            android:textAlignment="textStart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+    <Button
+        android:id="@+id/btnWriteNewBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_style"
+
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Write New Book"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/azure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+         />
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"

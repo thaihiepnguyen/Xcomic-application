@@ -61,14 +61,13 @@
                 </androidx.cardview.widget.CardView>
 
 
-
                 <TextView
                     android:id="@+id/tvNameAdmin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="40dp"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:text="John Wick"
                     android:textColor="@color/white"
                     android:textSize="25dp"
@@ -81,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="20dp"
+                    android:fontFamily="@font/montserrat"
                     android:text="johnwick@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="20dp"
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:text="1580 Users"
                     android:textSize="20dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="50dp"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:text="20000 Books"
                     android:textSize="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -142,25 +142,27 @@
                 android:id="@+id/btnBooksManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Books Management"
-                android:layout_marginTop="30dp"
                 android:layout_marginHorizontal="10dp"
-                android:textSize="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/mybutton"
+                android:fontFamily="@font/montserrat_medium"
                 android:padding="10dp"
-                android:textStyle="bold"
-                android:background="@drawable/mybutton" />
+                android:text="Books Management"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnAccountsManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Accounts Management"
-                android:layout_marginTop="30dp"
                 android:layout_marginHorizontal="10dp"
-                android:textSize="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/mybutton"
+                android:fontFamily="@font/montserrat_medium"
                 android:padding="10dp"
-                android:textStyle="bold"
-                android:background="@drawable/mybutton" />
+                android:text="Accounts Management"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

@@ -33,6 +33,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
 
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="Explore"
                     android:textColor="@color/white"
                     android:textSize="24sp"
@@ -53,6 +54,7 @@
                         android:id="@+id/searchEditText"
                         android:layout_width="290dp"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat"
                         android:gravity="center|left"
                         android:hint="Search"
                         android:maxLines="1"
@@ -92,17 +94,18 @@
                     android:layout_height="match_parent"
 
                     >
+
                     <TextView
                         android:id="@+id/category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Category"
-                        android:fontFamily="@font/poppins_bold"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
+                        android:text="Category"
                         android:textAllCaps="true"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <View
@@ -132,21 +135,22 @@
                         android:background="@color/lightgrey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/category_list" />
+
                     <TextView
                         android:id="@+id/length"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Length"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/chevrondown"
+                        android:focusable="true"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
+                        android:text="Length"
                         android:textAllCaps="true"
-                        app:layout_constraintTop_toBottomOf="@+id/line2"
-                        android:drawableEnd="@drawable/chevrondown"
-                        android:clickable="true"
-                        android:focusable="true"
-                        />
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line2" />
                     <View
                         android:id="@+id/line3"
                         android:layout_width="match_parent"
@@ -194,6 +198,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="1-10" />
 
                                     <CheckBox
@@ -201,6 +206,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="10-20" />
 
                                     <CheckBox
@@ -208,6 +214,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="20-50" />
 
                                     <CheckBox
@@ -215,6 +222,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="50+" />
 
                                     <CheckBox
@@ -223,6 +231,7 @@
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
                                         android:checked="true"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="All" />
                                 </GridLayout>
                             </FrameLayout>
@@ -236,21 +245,22 @@
                         android:background="@color/lightgrey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/length_layout" />
+
                     <TextView
                         android:id="@+id/status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Status"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/chevrondown"
+                        android:focusable="true"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
+                        android:text="Status"
                         android:textAllCaps="true"
-                        app:layout_constraintTop_toBottomOf="@+id/line4"
-                        android:drawableEnd="@drawable/chevrondown"
-                        android:clickable="true"
-                        android:focusable="true"
-                        />
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line4" />
                     <View
                         android:id="@+id/line5"
                         android:layout_width="match_parent"
@@ -295,6 +305,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Completed" />
 
                                     <CheckBox
@@ -302,6 +313,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Pending" />
 
                                     <CheckBox
@@ -309,6 +321,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Ongoing" />
 
                                     <CheckBox
@@ -316,6 +329,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="Drop" />
 
                                     <CheckBox
@@ -324,6 +338,7 @@
                                         android:layout_height="wrap_content"
                                         android:buttonTint="@color/azure"
                                         android:checked="true"
+                                        android:fontFamily="@font/montserrat"
                                         android:text="All" />
                                 </GridLayout>
                             </FrameLayout>

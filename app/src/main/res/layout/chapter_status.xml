@@ -12,9 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:singleLine="true"
         android:ellipsize="end"
+        android:fontFamily="@font/montserrat"
 
+        android:singleLine="true"
         android:text="Chapter 1"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
-        android:text="updated 1/1/2023"
+        android:fontFamily="@font/montserrat"
+        android:text="Updated 1/1/2023"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvChapterName" />
 

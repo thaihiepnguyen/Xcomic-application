@@ -29,30 +29,33 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please Press Your Email"
-            android:textSize="14sp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Your Email"
             android:textColor="@color/black"
-            />
+            android:textSize="14sp" />
+
         <EditText
             android:id="@+id/sendEmailET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:hint="Your email"/>
+            android:fontFamily="@font/montserrat"
+            android:hint="Your email"
+            android:padding="12dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            
+
             <Button
                 android:id="@+id/sendBtn"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Send"
-                android:textSize="14sp"
                 android:background="@drawable/mybutton"
-                android:layout_height="wrap_content"/>
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Send"
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>

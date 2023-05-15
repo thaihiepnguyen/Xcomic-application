@@ -19,9 +19,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
                 android:text="Rate this novel"
                 android:textSize="24dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -30,27 +31,32 @@
                 android:layout_marginTop="16dp"
                 android:numStars="5"
                 android:stepSize="0.5" />
+
             <TextView
+                android:id="@+id/ratingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ratingTextView"
-                android:text="(0.0)"/>
+                android:fontFamily="@font/montserrat"
+                android:text="(0.0)" />
 
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/editbox_background"
+                android:fontFamily="@font/montserrat"
+                android:hint="Enter your feedback here"
                 android:padding="16dp"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:hint="Enter your feedback here" />
+                android:textSize="16sp" />
+
             <Button
+                android:id="@+id/submitBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/submitBtn"
-                android:text="Submit"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Submit" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

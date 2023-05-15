@@ -17,10 +17,7 @@ import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
-import com.example.x_comic.adapters.CategoryAdapter
-import com.example.x_comic.adapters.ChapterAdapter
-import com.example.x_comic.adapters.FeedbackAdapter
-import com.example.x_comic.adapters.ListAdapterSlideshow
+import com.example.x_comic.adapters.*
 import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.Product
 import com.example.x_comic.models.User
@@ -159,7 +156,7 @@ class DetailActivity : AppCompatActivity() {
 
                     ratingTextView.text = bookData!!.rating.toString()
                     //display categories of the book
-                    val adapter = CategoryAdapter(bookData!!.categories)
+                    val adapter = CategoryListAdapter(bookData!!.categories)
                     categoryView.adapter = adapter
                     val layoutManager = FlexboxLayoutManager(this@DetailActivity)
                     layoutManager.flexWrap = FlexWrap.WRAP

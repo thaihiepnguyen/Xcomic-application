@@ -43,6 +43,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="30dp"
 
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="Explore"
                     android:textColor="@color/white"
                     android:textSize="24sp"
@@ -72,6 +73,7 @@
                             android:background="@drawable/badge"
                             android:drawableRight="@drawable/search"
                             android:drawablePadding="22dp"
+                            android:fontFamily="@font/montserrat"
                             android:gravity="center|left"
                             android:hint="Search"
                             android:inputType="text"

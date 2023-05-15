@@ -38,7 +38,7 @@
                         android:id="@+id/online"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
                         android:text="Reading List"
@@ -51,7 +51,7 @@
                         android:id="@+id/number_online"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
+                        android:fontFamily="@font/montserrat"
                         android:paddingHorizontal="30dp"
                         android:paddingVertical="10dp"
 

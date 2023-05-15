@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
 
 
+        android:fontFamily="@font/montserrat"
         android:text="Chapter 1"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,7 +24,8 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="updated 1/1/2023"
+        android:fontFamily='@font/montserrat'
+        android:text="Updated 1/1/2023"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
