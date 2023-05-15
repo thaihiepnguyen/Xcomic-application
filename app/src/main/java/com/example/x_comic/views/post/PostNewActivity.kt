@@ -138,6 +138,13 @@ class PostNewActivity : AppCompatActivity() {
             }
         }
 
+        if (is_new) {
+            var temp = Product()
+            temp.id = curBook.id
+
+            productViewModel.updateProduct(temp)
+        }
+
         // Category
         categoryView()
         // Chapter
@@ -291,13 +298,6 @@ class PostNewActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
-
-            if (is_new) {
-                var temp = Product()
-                temp.id = curBook.id
-
-                productViewModel.updateProduct(temp)
-            }
 
             chapterList.add(reply)
             chapterListAdapter?.notifyDataSetChanged()
