@@ -53,9 +53,9 @@ class CategoryListAdapter (
 
 
 
-        genre.setTextColor(R.color.white);
+
         genre.setText(category.name);
-        genre.setTextColor(R.color.white);
+
 
             when (category.name){
                 "Romance" -> {

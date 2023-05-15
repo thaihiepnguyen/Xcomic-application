@@ -191,7 +191,7 @@ class ReadBookActivity : AppCompatActivity() {
                     dl.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     dl.setContentView(R.layout.list_chapter_dialog)
                     dl.show()
-
+                    var bgcover = dl.findViewById<ImageView>(R.id.background)
                     var minicover = dl.findViewById<ImageView>(R.id.book)
                     var minititle = dl.findViewById<TextView>(R.id.book_title)
                     val storage = FirebaseStorage.getInstance()

@@ -3,6 +3,7 @@ package com.example.x_comic.views.detail
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -153,8 +155,22 @@ class DetailActivity : AppCompatActivity() {
 
                     if (bookData!!.status){
                         status.text = "Completed"
+                        status.backgroundTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.done
+                            )
+                        );
+
                     }else{
                         status.text = "Ongoing"
+                        status.backgroundTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.golden
+                            )
+                        );
+
                     }
 
                     age.text = bookData!!.age.toString() + "+"
