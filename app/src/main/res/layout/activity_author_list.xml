@@ -30,6 +30,7 @@
             android:text="The Followed Authors"
             android:textColor="@color/black"
             android:textSize="16dp"
+            android:fontFamily="@font/montserrat_medium"
             android:textStyle="bold" />
     </LinearLayout>
 

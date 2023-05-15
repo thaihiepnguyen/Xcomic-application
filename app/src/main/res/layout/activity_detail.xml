@@ -10,15 +10,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/pattern">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/below_shadow"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/oval"
+                android:scaleType="fitXY"
+                android:src="@drawable/arrow_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/name_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="#8A000000"
+                android:text="How to Burn the Boy Down"
+                android:ellipsize="end"
+                android:width="200dp"
+                android:lines="1"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+                app:layout_constraintStart_toEndOf="@+id/backBtn"
+                app:layout_constraintTop_toTopOf="@+id/backBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/header"
+
+          >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,35 +70,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/backBtn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-
-                        android:background="?attr/selectableItemBackground"
-                        android:focusable="true"
-                        android:text="◁"
-                        android:textColor="@color/white"
-                        android:textSize="30dp"
-
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/shareBtn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-
-                        android:background="?attr/selectableItemBackground"
-                        android:focusable="true"
-                        android:text="︙"
-                        android:textColor="@color/white"
-                        android:textSize="30dp"
-
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -309,12 +320,14 @@
 
                     <View
                         android:id="@+id/line1"
-                        android:layout_width="match_parent"
+                        android:layout_width="200dp"
                         android:layout_height="1dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
                         android:background="@color/lightgrey"
+                        app:layout_constraintBottom_toTopOf="@+id/statusTextView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/readBtn" />
@@ -323,7 +336,6 @@
                         android:id="@+id/statusTextView"
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
                         android:layout_marginTop="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -332,7 +344,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat"
+                            android:fontFamily="@font/montserrat_medium"
                             android:text="Status: " />
 
                         <TextView
@@ -361,7 +373,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat"
+                            android:fontFamily="@font/montserrat_medium"
                             android:text="Age: " />
 
                         <TextView
@@ -382,13 +394,13 @@
                         app:layout_constraintTop_toBottomOf="@+id/ageTextView">
 
                         <TextView
+                            android:id="@+id/rating_header"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="Rating: "
                             app:layout_constraintStart_toStartOf="parent"
-                            android:id="@+id/rating_header"
-                            android:text="Rating: " />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/ratingTV"
@@ -424,7 +436,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/montserrat"
+                            android:fontFamily="@font/montserrat_medium"
                             android:text="Categories"
                             app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
                             app:layout_constraintStart_toStartOf="parent"
@@ -458,11 +470,13 @@
                         android:layout_width="275dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:singleLine="false"
                         android:fontFamily="@font/montserrat"
+                        android:singleLine="false"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in consequat magna, in tincidunt risus. Vestibulum sodales posuere bibendum. Proin eu iaculis risus. Suspendisse ultricies vulputate velit a fermentum. Etiam luctus sagittis mauris, nec consequat mauris pellentesque a. Nulla consequat egestas diam, id venenatis lorem ultrices vel. Donec vestibulum at justo at elementum. Morbi a congue dui. Nunc rutrum metus non tellus commodo mattis. Donec pharetra maximus leo vel facilisis. Morbi id rutrum lacus. Quisque bibendum dolor at odio hendrerit, a ullamcorper nisl vehicula. Donec et tincidunt diam.
 
 Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt diam vel elit blandit dapibus. Phasellus convallis molestie sem, nec pulvinar justo lacinia viverra. Proin euismod at sapien a hendrerit. Aliquam vitae ante in nisi pretium laoreet. Curabitur eu mattis arcu, eget viverra urna. Aliquam facilisis odio non erat sodales eleifend. Etiam eget orci id justo convallis condimentum. Duis orci ante, sodales at efficitur sit amet, vulputate vitae augue."
+                        android:textSize="14dp"
+                        android:textStyle="italic"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
@@ -509,13 +523,12 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:layout_marginTop="10dp"
                         android:background="@drawable/readbutton"
                         android:clickable="true"
-                        android:padding="10dp"
                         android:fontFamily="@font/montserrat_semibold"
+                        android:padding="10dp"
                         android:text="☆ Leave a rating ☆"
                         android:textColor="@color/azure"
 
                         android:textSize="15dp"
-                        android:textStyle="italic"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -531,8 +544,9 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:id="@+id/feedback"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="Others Feedback"
-                        android:fontFamily="@font/montserrat"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -559,9 +573,9 @@ Vestibulum ornare odio dolor. Nunc congue pulvinar feugiat. Curabitur tincidunt 
                         android:id="@+id/for_you"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
                         android:text="For You"
                         android:textSize="16sp"
-                        android:fontFamily="@font/montserrat"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
