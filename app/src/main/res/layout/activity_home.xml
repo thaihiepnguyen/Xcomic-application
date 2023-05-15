@@ -61,6 +61,7 @@
                     android:text="John Wick"
                     android:textColor="@color/white"
                     android:textSize="25dp"
+                    app:layout_constraintEnd_toEndOf="@+id/cv"
                     app:layout_constraintStart_toStartOf="@+id/cv"
                     app:layout_constraintTop_toBottomOf="@+id/cv" />
 
