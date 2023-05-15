@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
+            android:fontFamily="@font/montserrat_medium"
             android:gravity="center"
             android:text="The Favorite Books"
             android:textColor="@color/black"
