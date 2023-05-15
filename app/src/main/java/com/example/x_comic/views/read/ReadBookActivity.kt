@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -117,39 +116,11 @@ class ReadBookActivity : AppCompatActivity() {
         return index;
     }
 
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navigationView: NavigationView
-    private lateinit var toolBar: androidx.appcompat.widget.Toolbar;
-
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        else {
-            super.onBackPressed()
-        }
-
-    }
-    
-   
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_book)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navigationView = findViewById(R.id.nav_view)
-        toolBar = findViewById(R.id.toolbar_btn)
-
-        setSupportActionBar(toolBar)
-
-        val actionBarToggle = ActionBarDrawerToggle(this,drawerLayout, toolBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
-        drawerLayout.addDrawerListener(actionBarToggle);
-
-        actionBarToggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener (this)
 
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
@@ -179,11 +150,13 @@ class ReadBookActivity : AppCompatActivity() {
                 var book = dataSnapshot.getValue(Product::class.java)
                 id_book?.let {
                     var titleTv = findViewById<TextView>(R.id.tvTitleChapter)
+                    var title = findViewById<TextView>(R.id.title)
 
                     for (i in book!!.chapters)
                         if (i.id_chapter!!.equals(id_chapter))
                             curChapter = i
                     titleTv.text = curChapter.name
+                    title.text = curChapter.name
                     textViewContentBook?.text = curChapter.content
                     findViewById<TextView>(R.id.viewTextView).text = book?.view.toString() + " view";
                     findViewById<TextView>(R.id.favoriteTextView).text = book?.have_loved!!.size.toString() + " favor";
@@ -317,5 +290,3 @@ class ReadBookActivity : AppCompatActivity() {
         }
     }
 }
-
-
