@@ -330,6 +330,9 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+
+
+
     fun removeBookReading(uid: String, bookid: Int) {
         val db_reading =  FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("reading").child(bookid.toString()).removeValue();
 
@@ -349,6 +352,22 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+    inline fun getAllReadingBook2(uid: String, crossinline callback: (DataSnapshot)->Unit) {
+        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("reading").addValueEventListener (object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+                db.removeEventListener(this)
+            }
+        })
+    }
+
+
+
 
     inline fun getAllCollectionBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
         FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("collection").get().addOnCompleteListener { task ->

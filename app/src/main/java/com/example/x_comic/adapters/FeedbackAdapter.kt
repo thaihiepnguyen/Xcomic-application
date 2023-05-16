@@ -1,6 +1,8 @@
 package com.example.x_comic.adapters
 
 import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +10,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
 import com.example.x_comic.models.Feedback
 import com.example.x_comic.models.User
+import com.example.x_comic.views.profile.AuthorProfileActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -55,6 +60,8 @@ class FeedbackAdapter (
         fbTextView.text = feedback.feedback;
         ratingBar.rating = feedback.rating.toFloat()
 
+        var user_bu: User? = null;
+
         val databaseRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").reference
         val userRef = databaseRef.child("users").child(feedback.uid)
 
@@ -64,6 +71,7 @@ class FeedbackAdapter (
                 val user = dataSnapshot.getValue(User::class.java)
                 if (user!=null){
                     if (user.avatar != ""){
+                        user_bu = user;
                         val avatarUrl: String = user!!.avatar
                         // Load the avatar into your ImageView using your preferred image loading library
                         Glide.with(context).load(avatarUrl).apply(RequestOptions().override(150,150)).circleCrop().into(avatarImageView)
@@ -79,6 +87,16 @@ class FeedbackAdapter (
         }
         userRef.addListenerForSingleValueEvent(userListener)
 
+
+        avatarImageView.setOnClickListener{
+
+                val intent = Intent(context, AuthorProfileActivity::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable("authorKey", user_bu);
+                intent.putExtras(bundle)
+                avatarImageView.context.startActivity(intent);
+
+        }
 
     }
 

@@ -201,15 +201,17 @@ class BookDialog(private val book: BookReading, private val position: Int, priva
 
     private fun nextBookDetailActivity(book: BookReading) {
         val intent = Intent(context, ReadBookActivity::class.java)
-        intent.putExtra("book", book.book)
-        intent.putExtra("id_chapter", book.current.toString())
+        intent.putExtra("book", book.book!!.id)
+        intent.putExtra("id_chapter", book.book!!.chapters[book.current - 1].id_chapter)
         ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
     }
 
     private fun nextBookInfoActivity(book: BookReading) {
-        val intent = Intent(context, DetailActivity::class.java)
-        intent.putExtra("book_data",  Klaxon().toJsonString(book.book))
-        startActivity(intent)
+        if (book.book!=null) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("book_data", book.book!!.id)
+            startActivity(intent)
+        }
     }
 
 

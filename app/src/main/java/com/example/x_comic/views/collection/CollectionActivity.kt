@@ -12,12 +12,14 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.x_comic.R
@@ -26,7 +28,9 @@ import com.example.x_comic.models.CollectionReading
 import com.example.x_comic.models.Product
 import com.example.x_comic.viewmodels.FirebaseAuthManager
 import com.example.x_comic.viewmodels.ProductViewModel
+import com.example.x_comic.views.detail.DetailActivity
 import com.example.x_comic.views.main.fragments.CollectionDialogFragment
+import com.example.x_comic.views.read.ReadBookActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -112,7 +116,11 @@ class CollectionActivity : AppCompatActivity() {
         }
 
 
-
+        bookListAdapter!!.onItemClick= { book ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("book_data",  book.id)
+            startActivity(intent)
+        }
 
         FirebaseAuthManager.auth.uid?.let {
             tempCollection.clear();
