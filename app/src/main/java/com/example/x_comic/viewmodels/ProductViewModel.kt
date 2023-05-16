@@ -344,7 +344,8 @@ class ProductViewModel : ViewModel() {
     }
 
     inline fun getAllReadingBook(uid: String, crossinline callback: (DataSnapshot)->Unit) {
-        FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("reading").get().addOnCompleteListener { task ->
+        var readingRef = FirebaseDatabase.getInstance("https://x-comic-e8f15-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(uid).child("reading")
+            .get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 callback(task.result)
             } else {

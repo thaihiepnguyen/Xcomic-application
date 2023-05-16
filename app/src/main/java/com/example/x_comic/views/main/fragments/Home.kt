@@ -166,27 +166,28 @@ class Home : Fragment() {
                         firstSnapshot?.getValue(com.example.x_comic.models.Reading::class.java)
 
                     book_reading = bookid;
+                    if (bookid != null) {
+                        productViewModel.getBookById(bookid!!.id_book) { bookInner ->
+                            run {
 
-                    productViewModel.getBookById(bookid!!.id_book) { bookInner ->
-                        run {
-
-                            bookTitle!!.text = bookInner.title
-                            userViewModel.getUserById(bookInner.author) { user ->
-                                run {
-                                    bookAuthor!!.text = user.penname
+                                bookTitle!!.text = bookInner.title
+                                userViewModel.getUserById(bookInner.author) { user ->
+                                    run {
+                                        bookAuthor!!.text = user.penname
+                                    }
                                 }
+
+                                cover?.let {
+                                    Glide.with(it.context)
+                                        .load(bookInner.cover)
+                                        .apply(RequestOptions().override(500, 600))
+                                        .into(cover!!)
+                                }
+
+                                progressBar!!.progress = bookid.posChap * 100 / bookid.numChap;
+
+                                book_reading_info = BookReading(bookInner,bookid.posChap,bookid.numChap)
                             }
-
-                            cover?.let {
-                                Glide.with(it.context)
-                                    .load(bookInner.cover)
-                                    .apply(RequestOptions().override(500, 600))
-                                    .into(cover!!)
-                            }
-
-                            progressBar!!.progress = bookid.posChap * 100 / bookid.numChap;
-
-                            book_reading_info = BookReading(bookInner,bookid.posChap,bookid.numChap)
                         }
                     }
                 }
