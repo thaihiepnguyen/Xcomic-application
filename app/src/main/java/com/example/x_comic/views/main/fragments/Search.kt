@@ -80,7 +80,7 @@ class Search : Fragment() {
                     bookDetailList.clear()
                     for (snapshot in dataSnapshot.children) {
                         val book = snapshot.getValue(Product::class.java)
-                        if (book != null) {
+                        if (book != null && !book.hide) {
                             if (keyword == null){
                                 bookDetailList.add(book)
                             }else if (book.title.contains(keyword!!, ignoreCase = true)){
@@ -142,7 +142,7 @@ class Search : Fragment() {
                             bookDetailList.clear()
                             for (snapshot in dataSnapshot.children) {
                                 val book = snapshot.getValue(Product::class.java)
-                                if (book != null) {
+                                if (book != null && !book.hide) {
                                     if (keyword == null){
                                         bookDetailList.add(book)
                                     }else if (book.title.contains(keyword!!, ignoreCase = true)){
