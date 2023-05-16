@@ -52,6 +52,7 @@ class PostNewActivity : AppCompatActivity() {
     var _user : User = User()
     private var curBook : Product = Product()
     var is_new = true
+    var is_exists = false
 
     lateinit var chapterListAdapter : ChaptersAdapter
 
@@ -138,13 +139,6 @@ class PostNewActivity : AppCompatActivity() {
             }
         }
 
-        if (is_new) {
-            var temp = Product()
-            temp.id = curBook.id
-
-            productViewModel.updateProduct(temp)
-        }
-
         // Category
         categoryView()
         // Chapter
@@ -168,6 +162,14 @@ class PostNewActivity : AppCompatActivity() {
 
         val nextButton = findViewById<Button>(R.id.btnNext)
         nextButton.setOnClickListener {
+
+            if (is_new && !is_exists) {
+                var temp = Product()
+                temp.id = curBook.id
+
+                productViewModel.updateProduct(temp)
+            }
+
             //TODO: Return book
             val replyIntent = Intent()
             replyIntent.putExtra(Product.MESSAGE2, getCurBook())
@@ -298,6 +300,13 @@ class PostNewActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_PICK_CHAPTER && resultCode == RESULT_OK && data != null) {
             val reply = data!!.getSerializableExtra(Chapter.MESSAGE2) as Chapter
+
+            if (is_new) {
+                var temp = Product()
+                temp.id = curBook.id
+                is_exists = true
+                productViewModel.updateProduct(temp)
+            }
 
             chapterList.add(reply)
             chapterListAdapter?.notifyDataSetChanged()
