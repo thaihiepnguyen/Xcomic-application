@@ -185,7 +185,7 @@ class PurchaseActivity : AppCompatActivity() {
         )
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val currentTimeMillis = System.currentTimeMillis()
-        val futureTimeMillis = currentTimeMillis + 100
+        val futureTimeMillis = currentTimeMillis + 30
         val time = futureTimeMillis
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

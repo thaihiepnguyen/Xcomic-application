@@ -386,20 +386,31 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun readingCurrentBook(bookData: Product) {
-        val reading = _currentUser!!.reading
-        var id_chap = bookData.chapters[0].id_chapter
-        for (i in reading)
-            if (i.id_book.equals(_currentBook!!.id)) {
-                for (j in _currentBook!!.chapters)
-                    if (i.id_chapter.equals(j.id_chapter)) {
-                        id_chap = j.id_chapter
+        var flag = 0;
+        for (c in 0 until bookData.chapters.size){
+            if (!bookData.chapters[c]._lock){
+                val reading = _currentUser!!.reading
+                var id_chap = bookData.chapters[c].id_chapter
+                for (i in reading)
+                    if (i.id_book.equals(_currentBook!!.id)) {
+                        for (j in _currentBook!!.chapters)
+                            if (i.id_chapter.equals(j.id_chapter)) {
+                                id_chap = j.id_chapter
+                            }
                     }
-            }
 
-        val intent = Intent(this, ReadBookActivity::class.java)
-        intent.putExtra("book",bookData.id)
-        intent.putExtra("id_chapter", id_chap)
-        ActivityCompat.startActivityForResult(this, intent, 302, null)
+                val intent = Intent(this, ReadBookActivity::class.java)
+                intent.putExtra("book",bookData.id)
+                intent.putExtra("id_chapter", id_chap)
+                ActivityCompat.startActivityForResult(this, intent, 302, null)
+                flag = 1
+                break
+            }
+        }
+        if (flag != 1){
+            Toast.makeText(this, "All chapters locked\nPurchase required to read", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "If you have made a purchase, select chapter from the list", Toast.LENGTH_LONG).show()
+        }
     }
     private fun nextAuthorProfileActivity(author: User) {
         val intent = Intent(this, AuthorProfileActivity::class.java)
