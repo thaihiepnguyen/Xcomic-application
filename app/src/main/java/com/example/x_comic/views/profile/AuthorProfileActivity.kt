@@ -57,8 +57,13 @@ class AuthorProfileActivity : AppCompatActivity() {
         collectionAdapter.onItemClick = {
             book -> nextBookDetailActivity(book)
         }
-        avatarAdapter.onItemClick = {
-            author -> nextAuthorProfileActivity(author)
+        avatarAdapter.onItemClick = { author -> run {
+            if (author.id == FirebaseAuthManager.auth.uid) {
+                nextProfileActivity()
+            } else {
+                nextAuthorProfileActivity(author)
+            }
+            }
         }
         binding.listView.adapter = collectionAdapter
         binding.profileListView.adapter = avatarAdapter
@@ -237,6 +242,11 @@ class AuthorProfileActivity : AppCompatActivity() {
 //        bundle.putSerializable("productKey", book)
         intent.putExtra("book_data", book.id)
 
+        startActivity(intent)
+    }
+
+    private fun nextProfileActivity() {
+        val intent = Intent(this, MainProfileActivity::class.java)
         startActivity(intent)
     }
 }

@@ -132,7 +132,13 @@ class Home : Fragment() {
         val avatarAdapter = AvatarListAdapter(authorList)
 
         avatarAdapter.onItemClick = {
-                author -> nextAuthorProfileActivity(author)
+                author -> run {
+                    if (author.id == FirebaseAuthManager.auth.uid) {
+                        nextProfileActivity()
+                    }else {
+                        nextAuthorProfileActivity(author)
+                    }
+            }
         }
 
 
@@ -199,7 +205,6 @@ class Home : Fragment() {
         card_holder.setOnClickListener {
             if (book_reading_info != null){
             val intent = Intent(context, ReadBookActivity::class.java)
-
                 intent.putExtra("book", book_reading_info!!.book!!.id)
                 intent.putExtra("id_chapter", book_reading_info!!.book!!.chapters[book_reading_info!!.current - 1].id_chapter)
             ActivityCompat.startActivityForResult(requireActivity(), intent, 302, null)
