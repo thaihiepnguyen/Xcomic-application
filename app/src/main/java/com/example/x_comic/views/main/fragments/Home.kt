@@ -4,6 +4,7 @@ package com.example.x_comic.views.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -160,7 +161,7 @@ class Home : Fragment() {
 
         val uid = FirebaseAuthManager.auth.uid
         if (uid != null) {
-            productViewModel.getAllReadingBook(uid) { book ->
+            productViewModel.getAllReadingBook2(uid) { book ->
                 run {
 
                     val firstSnapshot = if (book.hasChildren()) {
@@ -170,16 +171,19 @@ class Home : Fragment() {
                     }
                     val bookid =
                         firstSnapshot?.getValue(com.example.x_comic.models.Reading::class.java)
+                    Log.d("TEST", "1")
 
                     book_reading = bookid;
                     if (bookid != null) {
                         productViewModel.getBookById(bookid!!.id_book) { bookInner ->
                             run {
 
+                                Log.d("TEST", "2")
                                 bookTitle!!.text = bookInner.title
                                 userViewModel.getUserById(bookInner.author) { user ->
                                     run {
                                         bookAuthor!!.text = user.penname
+                                        Log.d("TEST", "3")
                                     }
                                 }
 
