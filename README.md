@@ -32,26 +32,17 @@
 
 - Video Demo: https://www.youtube.com/watch?v=kDsBFFCIygw&t=20s
 
-- DashBoardPage
-    ![dashboard](./Overview/1.PNG)
-- HomePage
-    ![home](./Overview/2.PNG)
-- DetailPage
-    ![productdetail](./Overview/8.PNG)
-- OrdersPage
-    ![orders](./Overview/5.PNG)
-- AddPordersPage
-    ![addorders](./Overview/10.PNG)
-- ReportPage
-    ![report](./Overview/7.PNG)
-- CategoriesPage
-    ![cateogries](./Overview/3.PNG)
-- AddProductPage
-    ![user](./Overview/9.PNG)
-- ReportProcuctPage
-    ![reportproduct](./Overview/6.PNG)
+    ![image](./Overview/1.png)
+    ![image](./Overview/2.png)
+    ![image](./Overview/3.png)
+    ![image](./Overview/4.png)
+    ![image](./Overview/5.png)
+    ![image](./Overview/6.png)
+    ![image](./Overview/7.png)
+    ![image](./Overview/8.png)
+    ![image](./Overview/9.png)
+    ![image](./Overview/10.png)
 
-Authors: Nguyễn Thái Hiệp, Nguyễn Thị Ngọc Hải, Đỗ Đức Duy, Nguyễn Hồng Tấn
 
 
 Thanks for watching.
