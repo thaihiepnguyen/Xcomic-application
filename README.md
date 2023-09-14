@@ -2,7 +2,7 @@
 
 - Made with Kotlin language
 - Made with Firebase
-- The Project of **Android Programming** Subject (Trần Duy Quang, M.Sc Instructor)
+- The Project of **Android Programming** Subject
 - Scores: 9.4/10
 - Members of the Group:
 
