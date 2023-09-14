@@ -1,7 +1,7 @@
-# MyShop Desktop Application
+# Xcomic Application
 
 - Made with Kotlin language
-- Made with MongoDB
+- Made with Firebase
 - The Project of **Android Programming** Subject (Trần Duy Quang, M.Sc Instructor)
 - Scores: 9.4/10
 - Members of the Group:
