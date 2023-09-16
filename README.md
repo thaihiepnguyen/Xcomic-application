@@ -3,7 +3,7 @@
 - Made with Kotlin language
 - Made with Firebase
 - The Project of **Android Programming** Subject
-- Scores: 9.4/10
+- Scores: 9.25/10
 - Members of the Group:
 
     1. Nguyễn Thái Hiệp
